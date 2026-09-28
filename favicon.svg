@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Sportwire">
-  <rect width="64" height="64" rx="13" fill="#1a130f"/>
-  <path d="M13 41.5 L51 22.5" stroke="#cc3c20" stroke-width="10" stroke-linecap="round"/>
-  <circle cx="19.5" cy="20" r="6.5" fill="#f9f6f2"/>
+  <rect width="64" height="64" rx="14" fill="#1b2230"/>
+  <text x="29" y="47" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="44" font-weight="500" fill="#faf8f3">S</text>
+  <circle cx="48" cy="44" r="4.5" fill="#d8472f"/>
 </svg>

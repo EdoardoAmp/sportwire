@@ -1,84 +1,96 @@
-/* Hallmark · genre: editorial · macrostructure: Ecosystem Index · theme: Sport · enrichment: none (typography only) · nav: N6 · footer: Ft4
- * anchor hue: 33 (signal orange-red) · paper band: light · display style: display-condensed · accent hue: warm
- * tokens: OKLCH only, un solo accento ≤3% del viewport, nessun estremo puro
+/* Sportwire · design tokens
+ * Hallmark · genre: editorial · macrostructure: Ecosystem Index (front page + section index)
+ * tone: editorial, quiet — "giornale del mattino" più che tabellone da stadio.
+ * Faces: Newsreader (titoli e lettura, optical size) + Geist (etichette, dati, UI). Due famiglie.
+ * Color: carta avorio, inchiostro blu-notte, un solo accento vermiglio usato per segnali (occhielli, diretta).
  */
 :root {
-  /* ---- superfici (tinte verso l'anchor, mai #fff) ---- */
-  --color-paper:      oklch(97.4% 0.008 70);
-  --color-paper-2:    oklch(94.6% 0.011 68);
-  --color-paper-3:    oklch(91.4% 0.013 66);
-  --color-rule:       oklch(83.5% 0.012 62);
-  --color-rule-soft:  oklch(89.5% 0.010 66);
+  color-scheme: light dark;
 
-  /* ---- inchiostro e neutri ---- */
-  --color-ink:        oklch(19.5% 0.014 58);
-  --color-muted:      oklch(42%   0.012 58);
-  --color-neutral:    oklch(56%   0.010 60);
-  --color-faint:      oklch(50%   0.010 60);
+  /* superfici */
+  --paper:        oklch(98.3% 0.006 85);
+  --paper-raised: oklch(99.4% 0.003 85);
+  --paper-sunk:   oklch(95.6% 0.009 82);
+  --media-bg:     oklch(92.8% 0.010 80);
 
-  /* ---- accento (segnale sportivo) ---- */
-  --color-accent:     oklch(56.5% 0.185 33);
-  --color-accent-ink: oklch(38%   0.145 30);
-  --color-focus:      oklch(55%   0.185 33);
+  /* inchiostro */
+  --ink:          oklch(22% 0.025 256);
+  --ink-soft:     oklch(37% 0.020 256);
+  --ink-muted:    oklch(49% 0.016 256);
 
-  /* ---- tipografia: display + body + un outlier (mono) ---- */
-  --font-display: "Big Shoulders Display", "Oswald", "Arial Narrow", ui-sans-serif, sans-serif;
-  --font-body:    "Newsreader", ui-serif, Georgia, "Times New Roman", serif;
-  --font-mono:    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* filetti */
+  --rule:         oklch(88.5% 0.010 80);
+  --rule-strong:  oklch(24% 0.025 256);
 
-  /* ---- scala tipografica: rapporto 1.25 ---- */
-  --text-xs:  0.64rem;
-  --text-sm:  0.8rem;
-  --text-base: 1rem;
-  --text-md:  1.25rem;
-  --text-lg:  1.5625rem;
-  --text-xl:  1.9531rem;
-  --text-2xl: 2.4414rem;
-  --text-3xl: 3.0518rem;
-  --text-display: clamp(2.5rem, 5vw + 1rem, 4.5rem);
+  /* accento */
+  --accent:       oklch(55.5% 0.185 31);
+  --accent-ink:   oklch(47% 0.165 29);
+  --accent-wash:  oklch(95.5% 0.028 40);
+  --live:         oklch(57% 0.21 27);
+  --on-live:      oklch(99% 0 0);
+  --focus:        oklch(52% 0.17 256);
 
-  /* ---- spazio: scala 4pt ---- */
-  --space-3xs: 0.25rem;
-  --space-2xs: 0.5rem;
-  --space-xs:  0.75rem;
-  --space-sm:  1rem;
-  --space-md:  1.5rem;
-  --space-lg:  2rem;
-  --space-xl:  3rem;
-  --space-2xl: 4rem;
-  --space-3xl: 6rem;
+  /* tipografia */
+  --serif: "Newsreader", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --sans:  "Geist", ui-sans-serif, "Helvetica Neue", Arial, sans-serif;
 
-  /* ---- movimento: solo tre easing, mai il default del browser ---- */
-  --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-in:     cubic-bezier(0.5, 0, 0.75, 0);
+  /* scala 1.25, con due passi display per titoli d'apertura */
+  --t-2xs: 0.72rem;
+  --t-xs:  0.8rem;
+  --t-sm:  0.9rem;
+  --t-base: 1.0625rem;
+  --t-md:  1.25rem;
+  --t-lg:  1.5rem;
+  --t-xl:  1.95rem;
+  --t-2xl: clamp(2rem, 1.25rem + 2.4vw, 3rem);
+  --t-wordmark: clamp(2.6rem, 1.6rem + 3.8vw, 4.4rem);
+
+  /* spazio: scala 4pt */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --s-7: 3rem;
+  --s-8: 4.5rem;
+  --s-9: 6rem;
+
+  /* forma */
+  --radius: 6px;
+  --radius-lg: 10px;
+  --hair: 1px;
+  --measure: 62ch;
+  --page-max: 76rem;
+  --gutter: clamp(1.1rem, 3.6vw, 2.5rem);
+
+  /* movimento */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-  --dur-fast: 140ms;
-  --dur-base: 240ms;
-  --dur-slow: 640ms;
+  --dur-1: 160ms;
+  --dur-2: 320ms;
+  --dur-3: 700ms;
 
-  /* ---- regole, raggi, misure ---- */
-  --rule-hair: 1px;
-  --rule-double: 3px;
-  --radius-none: 0px;
-  --radius-sm: 2px;
-  --measure: 65ch;
-  --page-max: 78rem;
-  --page-pad: clamp(1rem, 4vw, 2.5rem);
+  --shadow-lift: 0 1px 2px oklch(22% 0.02 256 / 0.05), 0 8px 24px -12px oklch(22% 0.02 256 / 0.18);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-paper:     oklch(15%   0.010 60);
-    --color-paper-2:   oklch(18.5% 0.011 60);
-    --color-paper-3:   oklch(22%   0.012 58);
-    --color-rule:      oklch(32%   0.012 58);
-    --color-rule-soft: oklch(27%   0.011 58);
-    --color-ink:       oklch(93.5% 0.008 70);
-    --color-muted:     oklch(74%   0.008 68);
-    --color-neutral:   oklch(60%   0.008 64);
-    --color-faint:     oklch(52%   0.007 64);
-    --color-accent:    oklch(64%   0.165 36);
-    --color-accent-ink: oklch(72%  0.150 38);
-    --color-focus:     oklch(70%   0.165 36);
+    --paper:        oklch(17.5% 0.012 256);
+    --paper-raised: oklch(21% 0.014 256);
+    --paper-sunk:   oklch(15% 0.011 256);
+    --media-bg:     oklch(25% 0.014 256);
+    --ink:          oklch(94% 0.008 85);
+    --ink-soft:     oklch(82% 0.010 85);
+    --ink-muted:    oklch(70% 0.012 256);
+    --rule:         oklch(30% 0.014 256);
+    --rule-strong:  oklch(88% 0.010 85);
+    --accent:       oklch(68% 0.16 36);
+    --accent-ink:   oklch(76% 0.13 40);
+    --accent-wash:  oklch(27% 0.05 35);
+    --live:         oklch(68% 0.19 28);
+    --on-live:      oklch(17% 0.03 28);
+    --focus:        oklch(74% 0.12 256);
+    --shadow-lift: 0 1px 2px oklch(0% 0 0 / 0.3), 0 10px 28px -14px oklch(0% 0 0 / 0.6);
   }
 }
