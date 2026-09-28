@@ -1,0 +1,20 @@
+{
+  "runs": [
+    {
+      "project": "Sportwire (~/sites/sport-news)",
+      "date": "2026-09-28",
+      "genre": "editorial",
+      "macrostructure": "20 Ecosystem Index",
+      "theme": "Sport",
+      "nav": "N6 Newspaper masthead",
+      "footer": "Ft4 Dense colophon",
+      "fonts": [
+        "Big Shoulders Display",
+        "Newsreader",
+        "JetBrains Mono"
+      ],
+      "enrichment": "nessuno (solo tipografia)",
+      "notes": "prima esecuzione sul progetto: nessun vincolo di diversificazione. Contenuto reale dai feed RSS."
+    }
+  ]
+}
