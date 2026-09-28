@@ -10,7 +10,7 @@ import sys
 from datetime import datetime, timedelta
 from playwright.sync_api import sync_playwright
 
-BASE = "http://127.0.0.1:8787"
+BASE = __import__("os").environ.get("QA_BASE", "http://127.0.0.1:8787")
 PAGES = ["index.html", "calcio.html", "tennis.html", "altri.html"]
 WIDTHS = [320, 375, 414, 768, 1440]
 

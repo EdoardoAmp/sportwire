@@ -1,33 +1,34 @@
 {
- "generated": "2026-09-28T19:36:37.898205+02:00",
+ "generated": "2026-09-28T19:51:40.058654+02:00",
  "window_hours": 36,
  "counts": {
-  "calcio": 102,
-  "motori": 15,
+  "calcio": 97,
+  "motori": 14,
   "tennis": 23,
-  "basket": 18,
-  "ciclismo": 11,
-  "altri": 21
+  "basket": 15,
+  "ciclismo": 9,
+  "altri": 24
  },
  "dropped": {
-  "non-sport": 5,
+  "non-sport": 4,
   "promo": 7,
   "vecchi": 0
  },
  "stories": [
   {
-   "title": "Turchia-Italia diretta Nations League: segui il match tra le nazionali di Mancini e Montella",
-   "link": "https://www.corrieredellosport.it/news/calcio/italia/2026/09/28-151529039/turchia-italia_diretta_nations_league_segui_il_match_tra_le_nazionali_di_mancini_e_montella_live/",
-   "source": "Corriere dello Sport",
+   "title": "LIVE Alle 20.45 Turchia-Italia, le ufficiali: in attacco i fratelli Esposito dal 1’ con Raspadori",
+   "link": "https://www.gazzetta.it/Calcio/nazionali/28-09-2026/turchia-italia-live-risultato-e-gol-in-diretta-nations-league-2026.shtml",
+   "source": "Gazzetta",
    "section": "calcio",
    "kicker": "Azzurri",
-   "ts": "2026-09-28T19:01:00+02:00",
-   "image": "https://cdn.corrieredellosport.it/img/2000/1000/2026/09/28/170529005-186f1db0-58cb-4d12-8ca7-16e29e72fa02.jpg",
-   "summary": "Gli Azzurri tornano in campo dopo la sconfitta contro il Belgio: partita e risultato in tempo reale",
+   "ts": "2026-09-28T19:45:58+02:00",
+   "image": "https://dimages2.gazzettaobjects.it/files/image_618_349/files/fp/uploads/2026/09/28/6abaa7cb73f30.r_d.1593-325-4447.jpeg",
+   "summary": "Tante novità di formazione per gli azzurri: da Kayode a Fagioli, sarà fondamentale invertire velocemente la rotta. Montella - senza Calha e Yildiz - punta su Arda Guler",
    "video": false,
    "live": true,
-   "score": 21.65,
+   "score": 24.78,
    "sources": [
+    "Gazzetta",
     "Corriere dello Sport",
     "Tuttosport",
     "Sky Sport",
@@ -35,6 +36,16 @@
    ],
    "on_home": true,
    "also": [
+    {
+     "source": "ANSA",
+     "title": "Nations League: Turchia-Italia in campo alle 20.45",
+     "link": "https://www.ansa.it/sito/notizie/sport/2026/09/28/nations-league-turchia-italia-in-campo-alle-20.45-diretta_270d1b30-d3fd-42cf-9020-5812108b0e17.html"
+    },
+    {
+     "source": "Corriere dello Sport",
+     "title": "Turchia-Italia diretta Nations League: segui il match tra le nazionali di Mancini e Montella",
+     "link": "https://www.corrieredellosport.it/news/calcio/italia/2026/09/28-151529039/turchia-italia_diretta_nations_league_segui_il_match_tra_le_nazionali_di_mancini_e_montella_live/"
+    },
     {
      "source": "Tuttosport",
      "title": "Turchia-Italia, diretta Nations League: formazioni e risultato in tempo reale",
@@ -44,42 +55,6 @@
      "source": "Sky Sport",
      "title": "Mancini pre Turchia-Italia: «Non è uno spareggio salvezza. Dobbiamo conoscere i giovani»",
      "link": "https://sport.sky.it/calcio/nations-league/2026/09/28/mancini-italia-turchia-intervista"
-    },
-    {
-     "source": "ANSA",
-     "title": "Nations League: Turchia-Italia in campo alle 20.45",
-     "link": "https://www.ansa.it/sito/notizie/sport/2026/09/28/nations-league-turchia-italia-in-campo-alle-20.45-diretta_270d1b30-d3fd-42cf-9020-5812108b0e17.html"
-    }
-   ]
-  },
-  {
-   "title": "Ciccone e Longo Borghini guidano l’Italia agli Europei di Lubiana: ecco gli azzurri convocati",
-   "link": "https://www.gazzetta.it/Ciclismo/28-09-2026/ciccone-e-pellizzari-ma-non-solo-italia-tutti-i-convocati-per-gli-europei-di-ciclismo.shtml",
-   "source": "Gazzetta",
-   "section": "ciclismo",
-   "kicker": "Europei",
-   "ts": "2026-09-28T18:34:39+02:00",
-   "image": "https://dimages2.gazzettaobjects.it/files/image_640_384/files/fp/uploads/2026/09/28/6aba8965427b3.r_d.1500-946-1760.jpeg",
-   "summary": "Pellizzari e Scaroni gli altri due confermati della squadra che era presente al Mondiale di Montreal. Azzurre e azzurri in gara dal 2 al 7 ottobre in Slovenia",
-   "video": false,
-   "live": false,
-   "score": 17.74,
-   "sources": [
-    "Gazzetta",
-    "ANSA",
-    "OA Sport"
-   ],
-   "on_home": true,
-   "also": [
-    {
-     "source": "OA Sport",
-     "title": "Europei ciclismo 2026: i convocati dell’Italia. Pellizzari, Ciccone e Longo Borghini al via. Assente Finn",
-     "link": "https://www.oasport.it/2026/09/europei-ciclismo-2026-i-convocati-dellitalia-pellizzari-ciccone-e-longo-borghini-rispondono-presente/"
-    },
-    {
-     "source": "ANSA",
-     "title": "Ciclismo: Longo Borghini e Ciccone guidano l’Italia anche agli Europei",
-     "link": "https://www.ansa.it/sito/notizie/sport/ciclismo/2026/09/28/ciclismo-longo-borghini-e-ciccone-guidano-litalia-anche-agli-europei_1a7a2ed2-1cff-492d-a7b8-7bc7f54973ba.html"
     }
    ]
   },
@@ -94,7 +69,7 @@
    "summary": "Un passaggio fondamentale nel percorso verso la realizzazione dell'impianto sportivo dei giallorossi",
    "video": false,
    "live": false,
-   "score": 17.04,
+   "score": 16.98,
    "sources": [
     "Corriere dello Sport",
     "Tuttosport",
@@ -121,6 +96,37 @@
    ]
   },
   {
+   "title": "Ciccone e Longo Borghini guidano l’Italia agli Europei di Lubiana: ecco gli azzurri convocati",
+   "link": "https://www.gazzetta.it/Ciclismo/28-09-2026/ciccone-e-pellizzari-ma-non-solo-italia-tutti-i-convocati-per-gli-europei-di-ciclismo.shtml",
+   "source": "Gazzetta",
+   "section": "ciclismo",
+   "kicker": "Europei",
+   "ts": "2026-09-28T18:34:39+02:00",
+   "image": "https://dimages2.gazzettaobjects.it/files/image_640_384/files/fp/uploads/2026/09/28/6aba8965427b3.r_d.1500-946-1760.jpeg",
+   "summary": "Pellizzari e Scaroni gli altri due confermati della squadra che era presente al Mondiale di Montreal. Azzurre e azzurri in gara dal 2 al 7 ottobre in Slovenia",
+   "video": false,
+   "live": false,
+   "score": 15.68,
+   "sources": [
+    "Gazzetta",
+    "ANSA",
+    "OA Sport"
+   ],
+   "on_home": true,
+   "also": [
+    {
+     "source": "OA Sport",
+     "title": "Europei ciclismo 2026: i convocati dell’Italia. Pellizzari, Ciccone e Longo Borghini al via. Assente Finn",
+     "link": "https://www.oasport.it/2026/09/europei-ciclismo-2026-i-convocati-dellitalia-pellizzari-ciccone-e-longo-borghini-rispondono-presente/"
+    },
+    {
+     "source": "ANSA",
+     "title": "Ciclismo: Longo Borghini e Ciccone guidano l’Italia anche agli Europei",
+     "link": "https://www.ansa.it/sito/notizie/sport/ciclismo/2026/09/28/ciclismo-longo-borghini-e-ciccone-guidano-litalia-anche-agli-europei_1a7a2ed2-1cff-492d-a7b8-7bc7f54973ba.html"
+    }
+   ]
+  },
+  {
    "title": "Pazzo Mondiale. McNulty è il re «Un miracolo!»",
    "link": "https://www.tuttosport.com/news/altri-sport/ciclismo/2026/09/28-151517686/pazzo_mondiale_mcnulty_il_re_un_miracolo_/",
    "source": "Tuttosport",
@@ -131,7 +137,7 @@
    "summary": "L’americano era stato iridato Juniores nel 2016: \"Da non crederci\"",
    "video": false,
    "live": false,
-   "score": 16.33,
+   "score": 15.47,
    "sources": [
     "Tuttosport",
     "Sky Sport",
@@ -152,6 +158,43 @@
    ]
   },
   {
+   "title": "Cagliari, intervento al menisco per Deiola: il comunicato del club e i tempi di recupero",
+   "link": "https://www.gazzetta.it/calcio/fantanews/strumenti-fantacalcio/indisponibili/28-09-2026/deiola-infortunio-condizioni-tempi-recupero-centrocampista-cagliari.shtml",
+   "source": "Gazzetta",
+   "section": "calcio",
+   "kicker": "Serie A",
+   "ts": "2026-09-28T19:48:33+02:00",
+   "image": "https://dimages2.gazzettaobjects.it/files/image_640_384/files/fp/uploads/2026/06/07/6a25d7d5d4404.r_d.1500-1036-1760.jpeg",
+   "summary": "Sottoposto nella giornata odierna ad un’operazione, il calciatore osserverà alcuni giorni di riposo prima di iniziare il programma riabilitativo previsto",
+   "video": false,
+   "live": false,
+   "score": 14.99,
+   "sources": [
+    "Gazzetta",
+    "Corriere dello Sport",
+    "Sky Sport",
+    "ANSA"
+   ],
+   "on_home": true,
+   "also": [
+    {
+     "source": "Sky Sport",
+     "title": "Cagliari, Deiola operato al menisco del ginocchio sinistro: stop di circa un mese",
+     "link": "https://sport.sky.it/calcio/serie-a/2026/09/28/deiola-cagliari-infortunio"
+    },
+    {
+     "source": "Corriere dello Sport",
+     "title": "Intervento al menisco per Deiola: il comunicato del Cagliari sul proprio capitano",
+     "link": "https://www.corrieredellosport.it/news/calcio/serie-a/cagliari/2026/09/28-151528514/intervento_al_menisco_per_deiola_il_comunicato_del_cagliari_sul_proprio_capitano/"
+    },
+    {
+     "source": "ANSA",
+     "title": "Cagliari: Deiola operato al menisco, starà fuori almeno un mese",
+     "link": "https://www.ansa.it/sito/notizie/sport/calcio/2026/09/28/cagliari-deiola-operato-al-menisco-stara-fuori-almeno-un-mese_30381ef3-f046-4a93-a17c-50e5c1974e78.html"
+    }
+   ]
+  },
+  {
    "title": "Alcaraz non si ferma, vuole la Davis. Carlos è una certezza, invece Sinner...",
    "link": "https://www.gazzetta.it/Tennis/Coppa-Davis/28-09-2026/alcaraz-obiettivo-coppa-davis-a-bologna-sogna-il-duello-con-sinner.shtml",
    "source": "Gazzetta",
@@ -162,7 +205,7 @@
    "summary": "Dopo il successo in Laver Cup, Carlos punta sulle Final Eight: la Spagna affronterà Austria, Germania o Gran Bretagna prima dell'eventuale finale contro gli azzurri, forse privi di Jannik",
    "video": false,
    "live": false,
-   "score": 14.93,
+   "score": 14.87,
    "sources": [
     "Gazzetta",
     "Sky Sport",
@@ -193,7 +236,7 @@
    "summary": "Daniil Medvedev conquista il derby russo contro Roman Safiullin con un netto successo in due set all'Atp 250 di Hangzhou (7-5 6-4). L'ex numero uno del mondo raggiunge così la finale, dove affronterà un altro amico e connazionale, Andrey…",
    "video": false,
    "live": false,
-   "score": 13.51,
+   "score": 13.45,
    "sources": [
     "Gazzetta",
     "Sky Sport",
@@ -224,7 +267,7 @@
    "summary": "L'Olanda batte 2-1 la Serbia con doppietta di Meerdink ed è la prima inseguitrice nel Gruppo 2 della Grecia, capolista a sorpresa dopo la vittoria in Germania con la rete di Kourbelis. Il gol di Isaksen aiuta la Danimarca a piegare il…",
    "video": false,
    "live": false,
-   "score": 12.74,
+   "score": 13.27,
    "sources": [
     "Sky Sport",
     "ANSA"
@@ -249,48 +292,17 @@
    "summary": "Infortunio per Antonio Raimondo: l'attaccante del Frosinone ha lasciato il ritiro dell'Italia U21. Di seguito i convocati di Silvio Baldini per le ultime due partite delle qualificazioni all'Europeo Under 21 del 2027. Gli Azzurrini…",
    "video": false,
    "live": false,
-   "score": 11.65,
+   "score": 11.59,
    "sources": [
     "Sky Sport",
     "ANSA"
    ],
-   "on_home": true,
+   "on_home": false,
    "also": [
     {
      "source": "ANSA",
      "title": "Calcio: Under 21, Raimondo lascia il ritiro di Tirrenia",
      "link": "https://www.ansa.it/sito/notizie/sport/calcio/2026/09/28/under-21-raimondo-lascia-il-ritiro-di-tirrenia_0c6a3103-b4b9-4a91-bbb3-2cac183d4b14.html"
-    }
-   ]
-  },
-  {
-   "title": "Cagliari, intervento al menisco per Deiola: il comunicato del club e i tempi di recupero",
-   "link": "https://www.gazzetta.it/calcio/fantanews/strumenti-fantacalcio/indisponibili/28-09-2026/deiola-infortunio-condizioni-tempi-recupero-centrocampista-cagliari.shtml",
-   "source": "Gazzetta",
-   "section": "calcio",
-   "kicker": "Serie A",
-   "ts": "2026-09-28T19:25:11+02:00",
-   "image": "https://dimages2.gazzettaobjects.it/files/image_640_384/files/fp/uploads/2026/06/07/6a25d7d5d4404.r_d.1500-1036-1760.jpeg",
-   "summary": "Sottoposto nella giornata odierna ad un’operazione, il calciatore osserverà alcuni giorni di riposo prima di iniziare il programma riabilitativo previsto",
-   "video": false,
-   "live": false,
-   "score": 11.35,
-   "sources": [
-    "Gazzetta",
-    "Corriere dello Sport",
-    "ANSA"
-   ],
-   "on_home": true,
-   "also": [
-    {
-     "source": "Corriere dello Sport",
-     "title": "Intervento al menisco per Deiola: il comunicato del Cagliari sul proprio capitano",
-     "link": "https://www.corrieredellosport.it/news/calcio/serie-a/cagliari/2026/09/28-151528514/intervento_al_menisco_per_deiola_il_comunicato_del_cagliari_sul_proprio_capitano/"
-    },
-    {
-     "source": "ANSA",
-     "title": "Cagliari: Deiola operato al menisco, starà fuori almeno un mese",
-     "link": "https://www.ansa.it/sito/notizie/sport/calcio/2026/09/28/cagliari-deiola-operato-al-menisco-stara-fuori-almeno-un-mese_30381ef3-f046-4a93-a17c-50e5c1974e78.html"
     }
    ]
   },
@@ -305,7 +317,7 @@
    "summary": "Undici anni dopo, Novak Djokovic ha scelto di riaprire il capitolo Pechino. Il ritorno al China Open non nasce soltanto da una scelta legata al calendario, ma anche dal rapporto speciale costruito negli anni con il pubblico cinese. Nella…",
    "video": false,
    "live": false,
-   "score": 11.23,
+   "score": 11.17,
    "sources": [
     "Sky Sport",
     "OA Sport"
@@ -330,7 +342,7 @@
    "summary": "Italia quarta nel medagliere ai Mondiali di Montreal, anche se resta l'amaro in bocca per il 9° posto di Giulio Ciccone nella gara regina. \"Peccato per il risultato, meritavamo di più\", le parole dell'abruzzese. Il CT Amadio: \"Un…",
    "video": false,
    "live": false,
-   "score": 10.88,
+   "score": 10.82,
    "sources": [
     "Sky Sport"
    ],
@@ -348,7 +360,7 @@
    "summary": "Flavio Cobolli è l'unico italiano al via dell'Atp 500 di Pechino, in diretta su Sky Sport e in streaming su NOW dal 30 settembre al 6 ottobre. Il romano debutterà con il russo Safiullin, poi l'incrocio con Griekspoor o Rublev. Nella parte…",
    "video": false,
    "live": false,
-   "score": 10.61,
+   "score": 10.55,
    "sources": [
     "Sky Sport"
    ],
@@ -366,9 +378,95 @@
    "summary": "I quattro Major hanno definito i rappresentanti chiamati a fare da tramite tra i protagonisti del circuito e gli organizzatori, con sei uomini e altrettante donne",
    "video": false,
    "live": false,
-   "score": 10.49,
+   "score": 10.43,
    "sources": [
     "Gazzetta"
+   ],
+   "on_home": true,
+   "also": []
+  },
+  {
+   "title": "Italia U18, Giovanni Galli è il nuovo capo delegazione: «Sfida che mi rende orgoglioso»",
+   "link": "https://www.corrieredellosport.it/news/calcio/italia/2026/09/28-151525382/italia_u18_giovanni_galli_il_nuovo_capo_delegazione_sfida_che_mi_rende_orgoglioso/",
+   "source": "Corriere dello Sport",
+   "section": "calcio",
+   "kicker": "Azzurri",
+   "ts": "2026-09-28T15:44:09+02:00",
+   "image": "https://cdn.corrieredellosport.it/img/2000/1000/2026/09/28/132804118-06500d3f-fbd3-4edc-afda-08909497fe85.jpg",
+   "summary": "L'ex estremo difensore, tra le altre, di Milan e Napoli - nonché terzo portiere dell'Italia campione del mondo nel 1982 in Spagna - entra nel Club azzurro: il ct Franceschini sorride",
+   "video": false,
+   "live": false,
+   "score": 10.17,
+   "sources": [
+    "Corriere dello Sport",
+    "ANSA"
+   ],
+   "on_home": false,
+   "also": [
+    {
+     "source": "ANSA",
+     "title": "Calcio: Giovanni Galli nuovo capo delegazione dell’Under 18 azzurra",
+     "link": "https://www.ansa.it/sito/notizie/sport/calcio/2026/09/28/calcio-giovanni-galli-nuovo-capo-delegazione-dellunder-18-azzurra_4f872eaf-4626-42be-b01a-89dd0e3373a9.html"
+    }
+   ]
+  },
+  {
+   "title": "Parma, Cuesta a Collecchio per salutare la squadra",
+   "link": "https://sport.sky.it/calcio/serie-a/video/2026/09/28/cuesta-saluto-squadra-parma-1127684",
+   "source": "Sky Sport",
+   "section": "calcio",
+   "kicker": "Serie A",
+   "ts": "2026-09-28T15:37:31+02:00",
+   "image": "https://sport.sky.it/assets/images/9ad2b3ae3aa1ee5fbbaaae1b2a8e1f0faf001d6d/skysport/it/calcio/serie-a/video/2026/09/28/1127684_1790595292982_thumb_494.0000001_1790595453085.jpg",
+   "summary": "L'ex Pisa atteso in serata in città",
+   "video": false,
+   "live": false,
+   "score": 9.74,
+   "sources": [
+    "Sky Sport",
+    "ANSA"
+   ],
+   "on_home": false,
+   "also": [
+    {
+     "source": "ANSA",
+     "title": "Parma: Cuesta saluta la squadra, in arrivo Gilardino",
+     "link": "https://www.ansa.it/sito/notizie/sport/calcio/2026/09/28/parma-cuesta-saluta-la-squadra-in-arrivo-gilardino_8fafa545-39e6-4e9e-8469-82b9a0fab49b.html"
+    }
+   ]
+  },
+  {
+   "title": "Ranking ATP (28 settembre 2026): Sinner festeggia la 91ª settimana da n.1, Musetti perde posizioni",
+   "link": "https://www.oasport.it/2026/09/ranking-atp-28-settembre-2026-sinner-festeggia-la-91a-settimana-da-n-1-musetti-perde-posizioni/",
+   "source": "OA Sport",
+   "section": "tennis",
+   "kicker": "ATP",
+   "ts": "2026-09-28T15:50:50+02:00",
+   "image": "https://www.oasport.it/wp-content/uploads/2026/08/Jannik-Sinner-LaPresse-1-e1787669149251.jpg",
+   "summary": "Jannik Sinner festeggia la sua 91ª settimana da numero 1 della classifica mondiale. Il primato del tennista altoatesino resta saldo, nonostante le scadenze imminenti e i problemi al ginocchio destro che stanno impedendo a Sinner di…",
+   "video": false,
+   "live": false,
+   "score": 9.0,
+   "sources": [
+    "OA Sport"
+   ],
+   "on_home": false,
+   "also": []
+  },
+  {
+   "title": "Da Sinner ad Alcaraz, il fisico presenta il conto: il tennis è arrivato al limite?",
+   "link": "https://www.oasport.it/2026/09/da-sinner-ad-alcaraz-il-fisico-presenta-il-conto-il-tennis-e-arrivato-al-limite/",
+   "source": "OA Sport",
+   "section": "tennis",
+   "kicker": "ATP",
+   "ts": "2026-09-28T18:09:02+02:00",
+   "image": "https://www.oasport.it/wp-content/uploads/2026/04/Sinner-Alcaraz-IPA-Sport.jpg",
+   "summary": "Il problema non è soltanto Sinner. È un tennis che corre sempre più veloce, colpisce sempre più forte e concede sempre meno tempo per recuperare. Dietro ogni forfait, ogni ritiro a partita in corso e ogni ritorno affrettato in campo c’è…",
+   "video": false,
+   "live": false,
+   "score": 8.77,
+   "sources": [
+    "OA Sport"
    ],
    "on_home": true,
    "also": []
@@ -384,7 +482,7 @@
    "summary": "Il ciclismo mondiale arriva al momento della verità e la Rai cambia canale. A 38 chilometri dal traguardo della prova in linea Uomini Élite di Montréal, quando la corsa iridata entrava nella fase decisiva, il servizio pubblico ha staccato…",
    "video": false,
    "live": false,
-   "score": 10.33,
+   "score": 8.67,
    "sources": [
     "OA Sport"
    ],
@@ -392,130 +490,19 @@
    "also": []
   },
   {
-   "title": "Parma, Cuesta a Collecchio per salutare la squadra",
-   "link": "https://sport.sky.it/calcio/serie-a/video/2026/09/28/cuesta-saluto-squadra-parma-1127684",
+   "title": "Gilardino, accordo in chiusura con il Parma: contratto fino a giugno",
+   "link": "https://sport.sky.it/calciomercato/2026/09/28/gilardino-parma-calciomercato-news",
    "source": "Sky Sport",
    "section": "calcio",
-   "kicker": "Serie A",
-   "ts": "2026-09-28T15:37:31+02:00",
-   "image": "https://sport.sky.it/assets/images/9ad2b3ae3aa1ee5fbbaaae1b2a8e1f0faf001d6d/skysport/it/calcio/serie-a/video/2026/09/28/1127684_1790595292982_thumb_494.0000001_1790595453085.jpg",
-   "summary": "L'ex Pisa atteso in serata in città",
+   "kicker": "Calciomercato",
+   "ts": "2026-09-28T20:00:00+02:00",
+   "image": "https://sport.sky.it/assets/images/d0993e590e92032111fccf0e7559fd74f7db6b73/skysport/it/calcio/calciomercato/video/2026/01/31/pisa-gilardino-esonero-giampaolo-news-1071009/ANSA_GILARDINO_PISA.jpg",
+   "summary": "Il Parma ha scelto Alberto Gilardino dopo la risoluzione consensuale con Cuesta. L'ex allenatore del Pisa si appresta a firmare la risoluzione con i toscani ed esordirà sulla sua nuova panchina a San Siro contro l'Inter di Chivu.…",
    "video": false,
    "live": false,
-   "score": 9.8,
+   "score": 8.63,
    "sources": [
-    "Sky Sport",
-    "ANSA"
-   ],
-   "on_home": false,
-   "also": [
-    {
-     "source": "ANSA",
-     "title": "Parma: Cuesta saluta la squadra, in arrivo Gilardino",
-     "link": "https://www.ansa.it/sito/notizie/sport/calcio/2026/09/28/parma-cuesta-saluta-la-squadra-in-arrivo-gilardino_8fafa545-39e6-4e9e-8469-82b9a0fab49b.html"
-    }
-   ]
-  },
-  {
-   "title": "Italia U18, Giovanni Galli è il nuovo capo delegazione: «Sfida che mi rende orgoglioso»",
-   "link": "https://www.corrieredellosport.it/news/calcio/italia/2026/09/28-151525382/italia_u18_giovanni_galli_il_nuovo_capo_delegazione_sfida_che_mi_rende_orgoglioso/",
-   "source": "Corriere dello Sport",
-   "section": "calcio",
-   "kicker": "Azzurri",
-   "ts": "2026-09-28T15:44:09+02:00",
-   "image": "https://cdn.corrieredellosport.it/img/2000/1000/2026/09/28/132804118-06500d3f-fbd3-4edc-afda-08909497fe85.jpg",
-   "summary": "L'ex estremo difensore, tra le altre, di Milan e Napoli - nonché terzo portiere dell'Italia campione del mondo nel 1982 in Spagna - entra nel Club azzurro: il ct Franceschini sorride",
-   "video": false,
-   "live": false,
-   "score": 9.63,
-   "sources": [
-    "Corriere dello Sport",
-    "ANSA"
-   ],
-   "on_home": false,
-   "also": [
-    {
-     "source": "ANSA",
-     "title": "Calcio: Giovanni Galli nuovo capo delegazione dell’Under 18 azzurra",
-     "link": "https://www.ansa.it/sito/notizie/sport/calcio/2026/09/28/calcio-giovanni-galli-nuovo-capo-delegazione-dellunder-18-azzurra_4f872eaf-4626-42be-b01a-89dd0e3373a9.html"
-    }
-   ]
-  },
-  {
-   "title": "«Boicottate gli Slam!»: il consiglio di McEnroe per i tennisti, ecco il motivo",
-   "link": "https://www.corrieredellosport.it/news/tennis/2026/09/28-151527345/boicottate_gli_slam_il_consiglio_di_mcenroe_per_i_tennisti_ecco_il_motivo/",
-   "source": "Corriere dello Sport",
-   "section": "tennis",
-   "kicker": "ATP",
-   "ts": "2026-09-28T17:28:35+02:00",
-   "image": "https://cdn.corrieredellosport.it/img/2000/1000/2026/09/28/152614106-c1712429-7f66-45f3-8503-9f84749b16d5.jpg",
-   "summary": "La proposta dell'ex campione americano per ottenere maggiore potere decisionale sui calendari e una percentuale più equa sui ricavi dei tornei",
-   "video": false,
-   "live": false,
-   "score": 9.47,
-   "sources": [
-    "Gazzetta",
-    "Corriere dello Sport"
-   ],
-   "on_home": false,
-   "also": [
-    {
-     "source": "Gazzetta",
-     "title": "McEnroe, suggerimento shock ai tennisti: «Boicottate un paio di Slam. Solo così otterrete più soldi»",
-     "link": "https://www.gazzetta.it/Tennis/28-09-2026/mcenroe-boicottate-uno-slam-per-aver-piu-soldi-le-parole-dopo-la-protesta-dei-giocator.shtml"
-    }
-   ]
-  },
-  {
-   "title": "Ranking ATP (28 settembre 2026): Sinner festeggia la 91ª settimana da n.1, Musetti perde posizioni",
-   "link": "https://www.oasport.it/2026/09/ranking-atp-28-settembre-2026-sinner-festeggia-la-91a-settimana-da-n-1-musetti-perde-posizioni/",
-   "source": "OA Sport",
-   "section": "tennis",
-   "kicker": "ATP",
-   "ts": "2026-09-28T15:50:50+02:00",
-   "image": "https://www.oasport.it/wp-content/uploads/2026/08/Jannik-Sinner-LaPresse-1-e1787669149251.jpg",
-   "summary": "Jannik Sinner festeggia la sua 91ª settimana da numero 1 della classifica mondiale. Il primato del tennista altoatesino resta saldo, nonostante le scadenze imminenti e i problemi al ginocchio destro che stanno impedendo a Sinner di…",
-   "video": false,
-   "live": false,
-   "score": 9.06,
-   "sources": [
-    "OA Sport"
-   ],
-   "on_home": false,
-   "also": []
-  },
-  {
-   "title": "Rai interrompe il Mondiale di ciclismo, protestano Usigrai e Cdr RaiSport",
-   "link": "https://www.ansa.it/sito/notizie/sport/2026/09/28/rai-interrompe-il-mondiale-di-ciclismo-protestano-usigrai-e-cdr-raisport_ac2fe5df-4589-4114-83bc-eb0d4e2c8883.html",
-   "source": "ANSA",
-   "section": "ciclismo",
-   "kicker": "Mondiali",
-   "ts": "2026-09-28T17:03:22+02:00",
-   "image": "",
-   "summary": "'E' tafazzismo comprare i diritti di grandi eventi sportivi e interromperli sul più bello'",
-   "video": false,
-   "live": false,
-   "score": 8.96,
-   "sources": [
-    "ANSA"
-   ],
-   "on_home": true,
-   "also": []
-  },
-  {
-   "title": "Da Sinner ad Alcaraz, il fisico presenta il conto: il tennis è arrivato al limite?",
-   "link": "https://www.oasport.it/2026/09/da-sinner-ad-alcaraz-il-fisico-presenta-il-conto-il-tennis-e-arrivato-al-limite/",
-   "source": "OA Sport",
-   "section": "tennis",
-   "kicker": "ATP",
-   "ts": "2026-09-28T18:09:02+02:00",
-   "image": "https://www.oasport.it/wp-content/uploads/2026/04/Sinner-Alcaraz-IPA-Sport.jpg",
-   "summary": "Il problema non è soltanto Sinner. È un tennis che corre sempre più veloce, colpisce sempre più forte e concede sempre meno tempo per recuperare. Dietro ogni forfait, ogni ritiro a partita in corso e ogni ritorno affrettato in campo c’è…",
-   "video": false,
-   "live": false,
-   "score": 8.84,
-   "sources": [
-    "OA Sport"
+    "Sky Sport"
    ],
    "on_home": true,
    "also": []
@@ -531,7 +518,7 @@
    "summary": "La Laver Cup si è chiusa con il trionfo del Team Europe, deciso proprio dalla vittoria di Alexander Zverev, ma a prendersi una parte consistente della scena durante la cerimonia conclusiva è stato Andre Agassi. Il capitano del Team World…",
    "video": false,
    "live": false,
-   "score": 8.46,
+   "score": 8.4,
    "sources": [
     "Sky Sport",
     "OA Sport"
@@ -556,7 +543,7 @@
    "summary": "A margine della Laver Cup, Andy Murray ha preso posizione nel dibattito sul miglior giocatore del tennis maschile contemporaneo. Intervistato da TNT Sports a Londra, l’ex numero uno del mondo ha indicato Carlos Alcaraz come il riferimento…",
    "video": false,
    "live": false,
-   "score": 8.33,
+   "score": 8.26,
    "sources": [
     "OA Sport"
    ],
@@ -574,29 +561,11 @@
    "summary": "Il comunicato della società dopo il via libera per l'impianto di Pietralata: \"Passaggio fondamentale e storico\"",
    "video": false,
    "live": false,
-   "score": 8.24,
+   "score": 8.18,
    "sources": [
     "Corriere dello Sport"
    ],
-   "on_home": true,
-   "also": []
-  },
-  {
-   "title": "Europei canoa slalom, nove medaglie per l’Italia a Ivrea: senatori sugli scudi e giovani in rampa di lancio",
-   "link": "https://www.oasport.it/2026/09/europei-canoa-slalom-nove-medaglie-per-litalia-a-ivrea-senatori-sugli-scudi-e-giovani-in-rampa-di-lancio/",
-   "source": "OA Sport",
-   "section": "altri",
-   "kicker": "Canoa",
-   "ts": "2026-09-28T17:00:06+02:00",
-   "image": "https://www.oasport.it/wp-content/uploads/2026/09/canoa-slalom-DE-GENNARO-Giovanni-ITA-ph.-Pier-Colombo-1.jpg",
-   "summary": "Il bilancio non può che essere ampiamente lusinghiero. La rassegna continentale di Ivrea, tre giorni di gare di straordinaria intensità susseguitesi a ritmi incalzanti, conferma la formazione tricolore come realtà di riferimento del…",
-   "video": false,
-   "live": false,
-   "score": 8.15,
-   "sources": [
-    "OA Sport"
-   ],
-   "on_home": true,
+   "on_home": false,
    "also": []
   },
   {
@@ -610,7 +579,7 @@
    "summary": "Classifica invariata in top 20 dopo la settimana dedicata alla Billie Jean King Cup, in cui si sono giocati i tornei di Singapore e Seul. Paolini resta n. 20 al mondo, mentre Cocciaretto perde quattro posizioni ed esce dalla top 70. Di…",
    "video": false,
    "live": false,
-   "score": 7.93,
+   "score": 7.87,
    "sources": [
     "Sky Sport",
     "ANSA"
@@ -635,11 +604,29 @@
    "summary": "Un vero e proprio show quello messo in scena dal capitano del Team World durante la cerimonia di premiazione della Laver Cup",
    "video": false,
    "live": false,
-   "score": 7.93,
+   "score": 7.87,
    "sources": [
     "Corriere dello Sport"
    ],
-   "on_home": true,
+   "on_home": false,
+   "also": []
+  },
+  {
+   "title": "La Juve ufficializza Neto, contratto fino a giugno 2027",
+   "link": "https://www.ansa.it/sito/notizie/sport/calcio/2026/09/28/la-juve-ufficializza-neto-contratto-fino-a-giugno-2027_cc8be429-52cd-44ce-8e0c-c58d3a9a8ed8.html",
+   "source": "ANSA",
+   "section": "calcio",
+   "kicker": "Serie A",
+   "ts": "2026-09-28T16:45:42+02:00",
+   "image": "",
+   "summary": "Il portiere torna in bianconero, sostituirà Grabara",
+   "video": false,
+   "live": false,
+   "score": 7.83,
+   "sources": [
+    "ANSA"
+   ],
+   "on_home": false,
    "also": []
   },
   {
@@ -653,11 +640,11 @@
    "summary": "La stagione 2026-2027 della nazionale italiana maschile di hockey su ghiaccio è alle porte. Il Blue Team, che nelle prossime settimane renderà noto il proprio staff tecnico in vista della lunghissima volata che porterà ai Mondiali di…",
    "video": false,
    "live": false,
-   "score": 7.83,
+   "score": 7.77,
    "sources": [
     "OA Sport"
    ],
-   "on_home": false,
+   "on_home": true,
    "also": []
   },
   {
@@ -671,7 +658,7 @@
    "summary": "Il 28 settembre 2026 la conferenza dei servizi decisoria ha dato parere positivo sulla fattibilità del progetto del nuovo stadio della Roma nella zona di Pietralata. Il parere positivo è stato annunciato dal commissario straordinario del…",
    "video": false,
    "live": false,
-   "score": 7.82,
+   "score": 7.76,
    "sources": [
     "Sky Sport"
    ],
@@ -679,40 +666,29 @@
    "also": []
   },
   {
-   "title": "Classiche, Giri, Mondiale e non solo: il calendario 2026 del ciclismo",
-   "link": "https://sport.sky.it/ciclismo/ciclismo-calendario-corse-uci-2026",
+   "title": "Domenicali: «Antonelli sa gestire la pressione. Ferrari? Barra dritta nella tempesta»",
+   "link": "https://sport.sky.it/formula-1/2026/09/28/f1-domenicali-antonelli-ferrari-intervista",
    "source": "Sky Sport",
-   "section": "ciclismo",
-   "kicker": "Mondiali",
-   "ts": "2026-09-27T23:50:00+02:00",
-   "image": "https://sport.sky.it/assets/images/dad83e54cc937349f0467a6f2cadc9ead355338a/skysport/it/ciclismo/ciclismo-calendario-corse-uci-2026/Ciclismo_2026.jpg",
-   "summary": "Anche il 2026 finora è stato un grande anno di ciclismo . L'ultimo successo in ordine di tempo è quello di Brandon McNulty , a sorpresa nuovo campione del mondo dopo un Mondiale pazzesco sulle strade di Montreal. Una gara che non ha visto…",
+   "section": "motori",
+   "kicker": "F1",
+   "ts": "2026-09-28T19:26:48+02:00",
+   "image": "https://sport.sky.it/assets/images/0b9d32fbf02abfa4dbf09be20ace0f58e4402bdf/skysport/it/motori/formula-1/video/2026/09/06/f1-gp-monza-domenicali-intervista-video-1122553/domenicali_kimi_getty.jpg",
+   "summary": "Il Ceo di F1 Stefano Domenicali, ospite di 'Radio anch'io sport', ha parlato della stagione straordinaria di Kimi Antonelli, attuale leader del Mondiale, della sua forza e dell'importanza che riveste per tutto il movimento. Il Ceo della…",
    "video": false,
    "live": false,
-   "score": 7.8,
+   "score": 7.7,
    "sources": [
-    "Sky Sport"
+    "Sky Sport",
+    "ANSA"
    ],
-   "on_home": false,
-   "also": []
-  },
-  {
-   "title": "Mondiali di ciclismo, l’albo d’oro dei campioni del mondo",
-   "link": "https://sport.sky.it/ciclismo/mondiali-ciclismo-albo-d-oro",
-   "source": "Sky Sport",
-   "section": "ciclismo",
-   "kicker": "Mondiali",
-   "ts": "2026-09-27T23:40:00+02:00",
-   "image": "https://sport.sky.it/assets/images/81ae0b83ad565adfc3932ded89ba3d232e7be942/skysport/it/ciclismo/mondiali-ciclismo-albo-d-oro/mondiali_ciclismo_podio_getty.jpg",
-   "summary": "Da Armstrong a McNulty: dopo 33 anni di \"digiuno\" gli Stati Uniti tornano a vincere la prova maschile élite in linea ai Mondiali di ciclismo grazie al 28enne della UAE Team Emirates, campione sulle strade di Montreal. McNulty succede…",
-   "video": false,
-   "live": false,
-   "score": 7.8,
-   "sources": [
-    "Sky Sport"
-   ],
-   "on_home": false,
-   "also": []
+   "on_home": true,
+   "also": [
+    {
+     "source": "ANSA",
+     "title": "Domenicali indica la rotta alla Ferrari: ’Nella tempesta barra dritta’",
+     "link": "https://www.ansa.it/sito/notizie/sport/f1/2026/09/28/domenicali-indica-la-rotta-alla-ferrari-nella-tempesta-barra-dritta_08ab84eb-215f-4511-aee9-6c46bf3e26e1.html"
+    }
+   ]
   },
   {
    "title": "Tennis: a Pechino c’é Cobolli, l’ombra di Zverev sul n.1 di Sinner",
@@ -725,7 +701,7 @@
    "summary": "Il tedesco si avvicina, per superarlo deve vincere sia nella capitale che a Shanghai",
    "video": false,
    "live": false,
-   "score": 7.74,
+   "score": 7.68,
    "sources": [
     "ANSA"
    ],
@@ -743,7 +719,7 @@
    "summary": "I bianconeri hanno annunciato la firma del sostituto dell'infortunato Grabara: il comunicato",
    "video": false,
    "live": false,
-   "score": 7.58,
+   "score": 7.52,
    "sources": [
     "Corriere dello Sport"
    ],
@@ -761,7 +737,7 @@
    "summary": "Il brasiliano ha messo nero su bianco ed è pronto a dare una mano a Spalletti: il numero di maglia e le prime parole",
    "video": false,
    "live": false,
-   "score": 7.52,
+   "score": 7.46,
    "sources": [
     "Tuttosport"
    ],
@@ -769,19 +745,37 @@
    "also": []
   },
   {
-   "title": "Eurolega, 2^ giornata: Olimpia Milano-Virtus Bologna su Sky",
-   "link": "https://sport.sky.it/basket/eurolega/video/2026/09/28/eurolega-2-giornata-olimpia-milano-virtus-bologna-su-sky-1127692",
-   "source": "Sky Sport",
-   "section": "basket",
-   "kicker": "Eurolega",
-   "ts": "2026-09-28T18:24:33+02:00",
-   "image": "https://sport.sky.it/assets/images/c85aa7ab4dcc47ad4d4c1a039ca32fdc5637b053/skysport/it/basket/eurolega/video/2026/09/28/1127692_1790605350350_thumb_494.0000001_1790605476055.jpg",
-   "summary": "",
-   "video": true,
+   "title": "Nations League, il ct dell’Irlanda: ’Abbiamo attirato l’attenzione del mondo su Gaza’",
+   "link": "https://www.ansa.it/sito/notizie/sport/calcio/2026/09/28/il-ct-dellirlanda-abbiamo-attirato-lattenzione-del-mondo-su-gaza_fc78b1bc-fd69-48d1-973e-02e374deb686.html",
+   "source": "ANSA",
+   "section": "calcio",
+   "kicker": "Nazionali",
+   "ts": "2026-09-28T15:00:37+02:00",
+   "image": "",
+   "summary": "Hallgrimsson: 'Per i giocatori é stato difficile, spero che la gente lo capisca'",
+   "video": false,
+   "live": false,
+   "score": 7.39,
+   "sources": [
+    "ANSA"
+   ],
+   "on_home": false,
+   "also": []
+  },
+  {
+   "title": "Rai interrompe il Mondiale di ciclismo, protestano Usigrai e Cdr RaiSport",
+   "link": "https://www.ansa.it/sito/notizie/sport/2026/09/28/rai-interrompe-il-mondiale-di-ciclismo-protestano-usigrai-e-cdr-raisport_ac2fe5df-4589-4114-83bc-eb0d4e2c8883.html",
+   "source": "ANSA",
+   "section": "ciclismo",
+   "kicker": "Mondiali",
+   "ts": "2026-09-28T17:03:22+02:00",
+   "image": "",
+   "summary": "'E' tafazzismo comprare i diritti di grandi eventi sportivi e interromperli sul più bello'",
+   "video": false,
    "live": false,
    "score": 7.3,
    "sources": [
-    "Sky Sport"
+    "ANSA"
    ],
    "on_home": true,
    "also": []
@@ -797,7 +791,7 @@
    "summary": "Sascha Zverev accorcia nel ranking Atp su Sinner: il tedesco è a 1.370 punti da Jannik che perde i 500 punti del titolo 2025 a Pechino. L’azzurro è comunque certo di restare al numero 1 del mondo almeno fino a Shanghai: il tedesco…",
    "video": false,
    "live": false,
-   "score": 7.3,
+   "score": 7.23,
    "sources": [
     "Sky Sport"
    ],
@@ -815,7 +809,7 @@
    "summary": "Il palazzetto un quadrangolare al quale prenderanno parte Klubi Sportiv Tirana, tra le società più titolate della pallavolo albanese; Kvf Pristina 75, protagonista del massimo campionato del Kosovo; Lory Volley Pizzo e Pallavolo Rossano",
    "video": false,
    "live": false,
-   "score": 7.28,
+   "score": 7.22,
    "sources": [
     "Corriere dello Sport",
     "Tuttosport"
@@ -858,7 +852,7 @@
    "summary": "Il tedesco con Alcaraz è stato fra i protagonisti della vittoria europea in Laver Cup",
    "video": false,
    "live": false,
-   "score": 7.12,
+   "score": 7.06,
    "sources": [
     "ANSA"
    ],
@@ -876,7 +870,7 @@
    "summary": "L'azzurro rinvia il rientro e rischia il sorpasso in classifica se il tedesco trionferà a Pechino e Shangai. Novità in Top 10 e gli altri italiani",
    "video": false,
    "live": false,
-   "score": 6.99,
+   "score": 6.93,
    "sources": [
     "Corriere dello Sport"
    ],
@@ -894,7 +888,7 @@
    "summary": "Il calendario di Eurolega mette già di fronte alla seconda giornata Olimpia Milano e Virtus Bologna. Un derby italiano che arriva in una primissima parte di stagione, ma che è già significativo, visto che entrambe sono state sconfitte…",
    "video": false,
    "live": false,
-   "score": 6.9,
+   "score": 6.83,
    "sources": [
     "OA Sport"
    ],
@@ -902,19 +896,19 @@
    "also": []
   },
   {
-   "title": "Nations League, il ct dell’Irlanda: ’Abbiamo attirato l’attenzione del mondo su Gaza’",
-   "link": "https://www.ansa.it/sito/notizie/sport/calcio/2026/09/28/il-ct-dellirlanda-abbiamo-attirato-lattenzione-del-mondo-su-gaza_fc78b1bc-fd69-48d1-973e-02e374deb686.html",
-   "source": "ANSA",
+   "title": "Nations League 2026-2027, le classifiche dei gironi",
+   "link": "https://sport.sky.it/calcio/nations-league/nations-league-2026-2027-classifica-italia-gironi",
+   "source": "Sky Sport",
    "section": "calcio",
    "kicker": "Nazionali",
-   "ts": "2026-09-28T15:00:37+02:00",
-   "image": "",
-   "summary": "Hallgrimsson: 'Per i giocatori é stato difficile, spero che la gente lo capisca'",
+   "ts": "2026-09-28T00:50:00+02:00",
+   "image": "https://sport.sky.it/assets/images/bc44872d88c3253ebaa87dbc6330aebe5ef716c4/skysport/it/calcio/nations-league/nations-league-2026-2027-classifica-italia-gironi/nations_league_trofeo_ansa.jpg",
+   "summary": "Grecia e Portogallo a punteggio pieno dopo le prime due giornate di Nations League. La selezione greca guida il gruppo 2 grazie alla vittoria a sorpresa sulla Germania di Klopp che, finora, ha raccolto un solo punto. I lusitani, invece…",
    "video": false,
    "live": false,
-   "score": 6.85,
+   "score": 6.8,
    "sources": [
-    "ANSA"
+    "Sky Sport"
    ],
    "on_home": false,
    "also": []
@@ -930,7 +924,7 @@
    "summary": "Dalla sorpresa Asvel all'avvio del Barcellona fino alle nuove posizioni delle italiane: le gerarchie dopo la settimana della 1ª giornata",
    "video": false,
    "live": false,
-   "score": 6.73,
+   "score": 6.66,
    "sources": [
     "Gazzetta"
    ],
@@ -948,7 +942,7 @@
    "summary": "Ad oggi la Walk of Life ha permesso di raccogliere oltre 735.000 euro a sostegno della ricerca scientifica sulle malattie genetiche rare",
    "video": false,
    "live": false,
-   "score": 6.72,
+   "score": 6.66,
    "sources": [
     "Corriere dello Sport",
     "Tuttosport"
@@ -963,6 +957,24 @@
    ]
   },
   {
+   "title": "Mancini, ’il tempo non è un nemico, nessuno deve essere massacrato’",
+   "link": "https://www.ansa.it/sito/notizie/sport/calcio/2026/09/28/mancini-il-tempo-non-e-un-nemico-nessuno-deve-essere-massacrato_dc034299-4a5d-4085-b09e-c37fc135dd1f.html",
+   "source": "ANSA",
+   "section": "calcio",
+   "kicker": "Azzurri",
+   "ts": "2026-09-28T18:23:12+02:00",
+   "image": "",
+   "summary": "Il ct prima della Turchia: \"Non dobbiamo pensare che è uno spareggio salvezza\"",
+   "video": false,
+   "live": false,
+   "score": 6.63,
+   "sources": [
+    "ANSA"
+   ],
+   "on_home": false,
+   "also": []
+  },
+  {
    "title": "Media Day, Giannis: «A Miami si gioca a 1000 all’ora, arrivo per ultimo!». Leonard: «Voglio la pressione»",
    "link": "https://www.gazzetta.it/Nba/storie/28-09-2026/nba-2026-2027-le-conferenze-stampa-del-media-day-di-tutte-le-squadre/media-day.shtml",
    "source": "Gazzetta",
@@ -973,7 +985,7 @@
    "summary": "Le foto e le dichiarazioni del Media Day della stagione 2026/2027",
    "video": false,
    "live": false,
-   "score": 6.65,
+   "score": 6.59,
    "sources": [
     "Gazzetta"
    ],
@@ -991,11 +1003,29 @@
    "summary": "La Juventus ha ufficializzato l'arrivo di Neto: contratto fino al 2027 per il portiere brasiliano. Jadon Sancho, scaduto il contratto con il Manchester United, non riesce a trovare una nuova squadra. Fallito il tentativo di accarsarsi al…",
    "video": false,
    "live": false,
-   "score": 6.61,
+   "score": 6.54,
    "sources": [
     "Sky Sport"
    ],
    "on_home": false,
+   "also": []
+  },
+  {
+   "title": "Eurolega, 2^ giornata: Olimpia Milano-Virtus Bologna su Sky",
+   "link": "https://sport.sky.it/basket/eurolega/video/2026/09/28/eurolega-2-giornata-olimpia-milano-virtus-bologna-su-sky-1127692",
+   "source": "Sky Sport",
+   "section": "basket",
+   "kicker": "Eurolega",
+   "ts": "2026-09-28T18:24:33+02:00",
+   "image": "https://sport.sky.it/assets/images/c85aa7ab4dcc47ad4d4c1a039ca32fdc5637b053/skysport/it/basket/eurolega/video/2026/09/28/1127692_1790605350350_thumb_494.0000001_1790605476055.jpg",
+   "summary": "",
+   "video": true,
+   "live": false,
+   "score": 6.44,
+   "sources": [
+    "Sky Sport"
+   ],
+   "on_home": true,
    "also": []
   },
   {
@@ -1009,7 +1039,25 @@
    "summary": "En plein per la formazione di Francavilla Fontana. Successi anche di Bisceglie, Turris, Nocerina, Real Aversa, Martina e Manfredonia",
    "video": false,
    "live": false,
-   "score": 6.49,
+   "score": 6.43,
+   "sources": [
+    "Corriere dello Sport"
+   ],
+   "on_home": false,
+   "also": []
+  },
+  {
+   "title": "«Boicottate gli Slam!»: il consiglio di McEnroe per i tennisti, ecco il motivo",
+   "link": "https://www.corrieredellosport.it/news/tennis/2026/09/28-151527345/boicottate_gli_slam_il_consiglio_di_mcenroe_per_i_tennisti_ecco_il_motivo/",
+   "source": "Corriere dello Sport",
+   "section": "tennis",
+   "kicker": "ATP",
+   "ts": "2026-09-28T17:28:35+02:00",
+   "image": "https://cdn.corrieredellosport.it/img/2000/1000/2026/09/28/152614106-c1712429-7f66-45f3-8503-9f84749b16d5.jpg",
+   "summary": "La proposta dell'ex campione americano per ottenere maggiore potere decisionale sui calendari e una percentuale più equa sui ricavi dei tornei",
+   "video": false,
+   "live": false,
+   "score": 6.4,
    "sources": [
     "Corriere dello Sport"
    ],
@@ -1027,7 +1075,7 @@
    "summary": "Flavio Cobolli chiude con il sorriso la parentesi dedicata alla Laver Cup nel Team Europe e ora si concentra sul finale di stagione. Un 2026 che lo ha visto salire di livello in maniera evidente, tanto da raggiungere addirittura la finale…",
    "video": false,
    "live": false,
-   "score": 6.46,
+   "score": 6.4,
    "sources": [
     "OA Sport"
    ],
@@ -1045,7 +1093,7 @@
    "summary": "Dopo la lunga regular season e la pausa per i Mondiali, la WNBA entra nella fase più calda della stagione con le sfide playoff . Cecilia Zandalasini è impegnata con le sue Golden State Valkyries nella serie di primo turno contro le Dallas…",
    "video": false,
    "live": false,
-   "score": 6.41,
+   "score": 6.35,
    "sources": [
     "Sky Sport"
    ],
@@ -1063,47 +1111,11 @@
    "summary": "Il ct portoghese ha parlato del bianconero dopo la vittoria su lla Norvegia",
    "video": false,
    "live": false,
-   "score": 6.32,
+   "score": 6.25,
    "sources": [
     "Gazzetta"
    ],
    "on_home": true,
-   "also": []
-  },
-  {
-   "title": "Spagna, otto volte regina: dalla Roja alle Under, il calcio è tutto suo",
-   "link": "https://www.gazzetta.it/Calcio/nazionali/28-09-2026/spagna-domina-il-calcio-mondiale-8-titoli-tra-nazionali-maschili-femminili-e-giovanili.shtml",
-   "source": "Gazzetta",
-   "section": "calcio",
-   "kicker": "Femminile",
-   "ts": "2026-09-28T16:47:32+02:00",
-   "image": "https://dimages2.gazzettaobjects.it/files/image_640_384/uploads/2026/09/28/6aba7b443d32f.jpeg",
-   "summary": "Dal Mondiale maschile all’Under 20 femminile, la Spagna detiene otto titoli tra nazionali maggiori e giovanili",
-   "video": false,
-   "live": false,
-   "score": 6.3,
-   "sources": [
-    "Gazzetta"
-   ],
-   "on_home": false,
-   "also": []
-  },
-  {
-   "title": "Nations League 2026-2027, le classifiche dei gironi",
-   "link": "https://sport.sky.it/calcio/nations-league/nations-league-2026-2027-classifica-italia-gironi",
-   "source": "Sky Sport",
-   "section": "calcio",
-   "kicker": "Nazionali",
-   "ts": "2026-09-28T00:50:00+02:00",
-   "image": "https://sport.sky.it/assets/images/bc44872d88c3253ebaa87dbc6330aebe5ef716c4/skysport/it/calcio/nations-league/nations-league-2026-2027-classifica-italia-gironi/nations_league_trofeo_ansa.jpg",
-   "summary": "Grecia e Portogallo a punteggio pieno dopo le prime due giornate di Nations League. La selezione greca guida il gruppo 2 grazie alla vittoria a sorpresa sulla Germania di Klopp che, finora, ha raccolto un solo punto. I lusitani, invece…",
-   "video": false,
-   "live": false,
-   "score": 6.2,
-   "sources": [
-    "Sky Sport"
-   ],
-   "on_home": false,
    "also": []
   },
   {
@@ -1117,81 +1129,9 @@
    "summary": "Il portoghese racconta del trasferimento nel club turco",
    "video": false,
    "live": false,
-   "score": 6.19,
+   "score": 6.13,
    "sources": [
     "Gazzetta"
-   ],
-   "on_home": false,
-   "also": []
-  },
-  {
-   "title": "Italia, Bastoni ci sarà contro la Turchia",
-   "link": "https://sport.sky.it/calcio/nations-league/video/2026/09/28/italia-bastoni-formazione-turchia-1127716",
-   "source": "Sky Sport",
-   "section": "calcio",
-   "kicker": "Azzurri",
-   "ts": "2026-09-28T17:51:51+02:00",
-   "image": "https://sport.sky.it/assets/images/99dbed06d08ed0cdacf3bd006ecff48b87e558ad/skysport/it/calcio/nations-league/video/2026/09/28/1127716_1790603435129_thumb_494.0000001_1790603513254.jpg",
-   "summary": "",
-   "video": true,
-   "live": false,
-   "score": 6.16,
-   "sources": [
-    "Sky Sport"
-   ],
-   "on_home": false,
-   "also": []
-  },
-  {
-   "title": "Gilardino, accordo in chiusura con il Parma",
-   "link": "https://sport.sky.it/calciomercato/2026/09/28/gilardino-parma-calciomercato-news",
-   "source": "Sky Sport",
-   "section": "calcio",
-   "kicker": "Calciomercato",
-   "ts": "2026-09-28T13:02:45+02:00",
-   "image": "https://sport.sky.it/assets/images/d0993e590e92032111fccf0e7559fd74f7db6b73/skysport/it/calcio/calciomercato/video/2026/01/31/pisa-gilardino-esonero-giampaolo-news-1071009/ANSA_GILARDINO_PISA.jpg",
-   "summary": "Il Parma ha scelto Alberto Gilardino dopo la risoluzione consensuale con Cuesta. L'ex allenatore del Pisa esordirà sulla sua nuova panchina a San Siro contro l'Inter di Chivu",
-   "video": false,
-   "live": false,
-   "score": 6.16,
-   "sources": [
-    "Sky Sport"
-   ],
-   "on_home": false,
-   "also": []
-  },
-  {
-   "title": "La provocazione di John McEnroe: “I giocatori dovrebbero boicottare uno o due Slam”",
-   "link": "https://www.oasport.it/2026/09/la-provocazione-di-john-mcenroe-i-giocatori-dovrebbero-boicottare-uno-o-due-slam/",
-   "source": "OA Sport",
-   "section": "tennis",
-   "kicker": "ATP",
-   "ts": "2026-09-28T19:21:03+02:00",
-   "image": "https://www.oasport.it/wp-content/uploads/2026/09/John-McEnroe-IPA-Sport.jpg",
-   "summary": "Il tennis professionistico continua a fare i conti con una frattura che riguarda denaro, potere e rappresentanza. A riaccendere la discussione è John McEnroe, che dalla Laver Cup di Londra ha scelto ancora una volta una strada senza mezze…",
-   "video": false,
-   "live": false,
-   "score": 6.14,
-   "sources": [
-    "OA Sport"
-   ],
-   "on_home": true,
-   "also": []
-  },
-  {
-   "title": "Mancini, ’il tempo non è un nemico, nessuno deve essere massacrato’",
-   "link": "https://www.ansa.it/sito/notizie/sport/calcio/2026/09/28/mancini-il-tempo-non-e-un-nemico-nessuno-deve-essere-massacrato_dc034299-4a5d-4085-b09e-c37fc135dd1f.html",
-   "source": "ANSA",
-   "section": "calcio",
-   "kicker": "Azzurri",
-   "ts": "2026-09-28T18:23:12+02:00",
-   "image": "",
-   "summary": "Il ct prima della Turchia: \"Non dobbiamo pensare che è uno spareggio salvezza\"",
-   "video": false,
-   "live": false,
-   "score": 6.09,
-   "sources": [
-    "ANSA"
    ],
    "on_home": false,
    "also": []
@@ -1207,9 +1147,27 @@
    "summary": "Spettatore per tutta la gara contro la Norvegia, l'ex Juve e Real non si è unito ai festeggiamenti per il successo sulla Norvegia di Haaland",
    "video": false,
    "live": false,
-   "score": 5.97,
+   "score": 5.91,
    "sources": [
     "Tuttosport"
+   ],
+   "on_home": false,
+   "also": []
+  },
+  {
+   "title": "Italia, Bastoni ci sarà contro la Turchia",
+   "link": "https://sport.sky.it/calcio/nations-league/video/2026/09/28/italia-bastoni-formazione-turchia-1127716",
+   "source": "Sky Sport",
+   "section": "calcio",
+   "kicker": "Azzurri",
+   "ts": "2026-09-28T17:51:51+02:00",
+   "image": "https://sport.sky.it/assets/images/99dbed06d08ed0cdacf3bd006ecff48b87e558ad/skysport/it/calcio/nations-league/video/2026/09/28/1127716_1790603435129_thumb_494.0000001_1790603513254.jpg",
+   "summary": "",
+   "video": true,
+   "live": false,
+   "score": 5.9,
+   "sources": [
+    "Sky Sport"
    ],
    "on_home": false,
    "also": []
@@ -1225,7 +1183,7 @@
    "summary": "Il tecnico biellese pronto a fare il suo ritorno nel Ducato dopo gli anni da calciatore: prima la risoluzione col Pisa e poi la firma sul contratto con gli emiliani",
    "video": false,
    "live": false,
-   "score": 5.91,
+   "score": 5.85,
    "sources": [
     "Tuttosport"
    ],
@@ -1243,7 +1201,7 @@
    "summary": "Il ministro, 'entro tre giorni la lista per Euro 2032, deciderà l'Uefa'",
    "video": false,
    "live": false,
-   "score": 5.82,
+   "score": 5.75,
    "sources": [
     "ANSA"
    ],
@@ -1261,169 +1219,7 @@
    "summary": "Il serbo dopo 11 anni all'Atp cinese dove non ha mai perso in 29 incontri",
    "video": false,
    "live": false,
-   "score": 5.7,
-   "sources": [
-    "ANSA"
-   ],
-   "on_home": false,
-   "also": []
-  },
-  {
-   "title": "Parma, Gilardino sarà il nuovo allenatore: le news",
-   "link": "https://sport.sky.it/calcio/serie-a/video/2026/09/28/gilardino-nuovo-allenatore-parma-news-1127666",
-   "source": "Sky Sport",
-   "section": "calcio",
-   "kicker": "Serie A",
-   "ts": "2026-09-28T14:22:21+02:00",
-   "image": "https://sport.sky.it/assets/images/609b57f444fa01576cae0cbc07818f722a4fe3c2/skysport/it/calcio/serie-a/video/2026/09/28/1127666_1790590764879_thumb_494.0000001_1790590943122.jpg",
-   "summary": "",
-   "video": true,
-   "live": false,
-   "score": 5.49,
-   "sources": [
-    "Sky Sport"
-   ],
-   "on_home": false,
-   "also": []
-  },
-  {
-   "title": "ATP Chengdu 2026: Davidovich Fokina e Hurkacz, due rimonte per andare in finale",
-   "link": "https://www.oasport.it/2026/09/atp-chengdu-2026-davidovich-fokina-e-hurkacz-due-rimonte-per-andare-in-finale/",
-   "source": "OA Sport",
-   "section": "tennis",
-   "kicker": "ATP Chengdu",
-   "ts": "2026-09-28T16:38:53+02:00",
-   "image": "https://www.oasport.it/wp-content/uploads/2026/09/24714050_small-e1790606298344.jpg",
-   "summary": "Sarà di martedì, in chiave anomala, ma ormai da qualche anno lo status quo è questo, la finale dell’ATP 250 di Chengdu. E, in rimonta, sono Alejandro Davidovich Fokina e Hubert Hurkacz a guadagnarsi l’ultimo atto, l’ottavo nella carriera…",
-   "video": false,
-   "live": false,
-   "score": 5.46,
-   "sources": [
-    "OA Sport"
-   ],
-   "on_home": false,
-   "also": []
-  },
-  {
-   "title": "Matthews, argento mondiale dopo due anni di infortuni: «Per me come una vittoria»",
-   "link": "https://sport.sky.it/ciclismo/2026/09/28/michael-matthews-infortuni-mondiali-ciclismo-2026",
-   "source": "Sky Sport",
-   "section": "ciclismo",
-   "kicker": "Mondiali",
-   "ts": "2026-09-28T16:38:00+02:00",
-   "image": "https://sport.sky.it/assets/images/d9598435a78bd41593b02b27174fb412ea949c72/skysport/it/ciclismo/2026/09/28/michael-matthews-infortuni-mondiali-ciclismo-2026/Michael_Matthews_ansa.jpg",
-   "summary": "La stagione (e la carriera) di Michael Matthews sembravano al capolinea dopo la doppia frattura al polso subita lo scorso marzo dopo un incidente stradale a Imperia, che seguiva l'embolia polmonare dell'anno prima. L'australiano, 36 anni…",
-   "video": false,
-   "live": false,
-   "score": 5.46,
-   "sources": [
-    "Sky Sport"
-   ],
-   "on_home": true,
-   "also": []
-  },
-  {
-   "title": "Relax, esultanze, pochi media e... 250.000 dollari a testa: la Laver Cup fa impazzire i giocatori",
-   "link": "https://www.gazzetta.it/Tennis/ATP/28-09-2026/la-laver-cup-fa-impazzire-i-tennisti-relax-pochi-media-e-un-montepremi-da-urlo.shtml",
-   "source": "Gazzetta",
-   "section": "tennis",
-   "kicker": "ATP",
-   "ts": "2026-09-28T16:29:39+02:00",
-   "image": "https://dimages2.gazzettaobjects.it/files/image_640_384/uploads/2026/09/28/6aba6d26e40cd.jpeg",
-   "summary": "L'evento convince i campioni a partecipare per tanti motivi, tra questi l'ottimo premio in palio. Ecco quanto si sono intascati Alcaraz, Zverev, Cobolli, Mensik, Ruud e Fery, vincitori di quest'anno",
-   "video": false,
-   "live": false,
-   "score": 5.42,
-   "sources": [
-    "Gazzetta"
-   ],
-   "on_home": false,
-   "also": []
-  },
-  {
-   "title": "Il maltempo ferma l’Italia: annullato l’allenamento prima della Turchia",
-   "link": "https://www.corrieredellosport.it/news/calcio/italia/2026/09/28-151523394/il_maltempo_ferma_l_italia_annullato_l_allenamento_prima_della_turchia/",
-   "source": "Corriere dello Sport",
-   "section": "calcio",
-   "kicker": "Azzurri",
-   "ts": "2026-09-28T14:01:22+02:00",
-   "image": "https://cdn.corrieredellosport.it/img/2000/1000/2026/09/28/114630162-455275aa-af42-4ced-93c6-d58882801485.jpg",
-   "summary": "Un violento temporale a Bursa ha intaccato il programma di avvicinamento degli Azzurri alla sfida contro la squadra di Montella",
-   "video": false,
-   "live": false,
-   "score": 5.4,
-   "sources": [
-    "Corriere dello Sport"
-   ],
-   "on_home": false,
-   "also": []
-  },
-  {
-   "title": "La confessione di Vozinha: «Stavo meglio prima della popolarità»",
-   "link": "https://sport.sky.it/calcio/mondiali/2026/09/28/vozinha-capo-verde-colo-colo-intervista",
-   "source": "Sky Sport",
-   "section": "calcio",
-   "kicker": "Calcio",
-   "ts": "2026-09-28T18:35:00+02:00",
-   "image": "https://sport.sky.it/assets/images/80a375f025f003779138439229c195fd62c105e1/skysport/it/calcio/mondiali/2026/09/28/vozinha-capo-verde-colo-colo-intervista/ansa_vozinha.jpg",
-   "summary": "Il portiere di Capo Verde, diventato un fenomeno globale ai Mondiali, ha rivelato a The Observer: \"Ho perso la mia pace e la mia tranquillità, non ho più privacy\" NATIONS LEAGUE, LE PROBABILI FORMAZIONI DI TURCHIA-ITALIA",
-   "video": false,
-   "live": false,
-   "score": 5.34,
-   "sources": [
-    "Sky Sport"
-   ],
-   "on_home": false,
-   "also": []
-  },
-  {
-   "title": "Serie A, i centrocampisti centrali più preziosi: Manu Koné supera Barella",
-   "link": "https://sport.sky.it/calcio/serie-a/serie-a-centrocampisti-piu-preziosi-classifica",
-   "source": "Sky Sport",
-   "section": "calcio",
-   "kicker": "Serie A",
-   "ts": "2026-09-28T15:20:00+02:00",
-   "image": "https://sport.sky.it/assets/images/5fa718c0ab4ace7ab7f6f4c5356bdbcddf624b0c/skysport/it/calcio/serie-a/serie-a-centrocampisti-piu-preziosi-classifica/kone_barella_ipa.jpg",
-   "summary": "Chi è il centrocampista centrale più prezioso della Serie A? Dopo gli ultimi aggiornamenti dei valori da parte di Transfermarkt, Manu Koné balza in vetta a questa speciale classifica. Completano il podio due interisti, risale Da Cunha",
-   "video": false,
-   "live": false,
-   "score": 5.33,
-   "sources": [
-    "Sky Sport"
-   ],
-   "on_home": false,
-   "also": []
-  },
-  {
-   "title": "Calcio femminile, le migliori italiane della prima giornata di Serie A: Giugliano impeccabile, iconica Guerzoni",
-   "link": "https://www.oasport.it/2026/09/calcio-femminile-le-migliori-italiane-della-prima-giornata-di-serie-a-giugliano-impeccabile-iconica-guerzoni/",
-   "source": "OA Sport",
-   "section": "calcio",
-   "kicker": "Femminile",
-   "ts": "2026-09-28T18:00:41+02:00",
-   "image": "https://www.oasport.it/wp-content/uploads/2026/09/Manuela-Giugliano-e1789767809865.jpg",
-   "summary": "La prima giornata valida per la Serie A 2026-2027 di calcio femminile è finalmente passata agli archivi. Si è trattato di un primo turno che ha visto marchiato a fuoco le big Roma, Juventus e Inter, tutte vincitrici rispettivamente contro…",
-   "video": false,
-   "live": false,
-   "score": 5.2,
-   "sources": [
-    "OA Sport"
-   ],
-   "on_home": false,
-   "also": []
-  },
-  {
-   "title": "La Juve ufficializza Neto, contratto fino a giugno 2027",
-   "link": "https://www.ansa.it/sito/notizie/sport/calcio/2026/09/28/la-juve-ufficializza-neto-contratto-fino-a-giugno-2027_cc8be429-52cd-44ce-8e0c-c58d3a9a8ed8.html",
-   "source": "ANSA",
-   "section": "calcio",
-   "kicker": "Serie A",
-   "ts": "2026-09-28T16:45:42+02:00",
-   "image": "",
-   "summary": "Il portiere torna in bianconero, sostituirà Grabara",
-   "video": false,
-   "live": false,
-   "score": 5.09,
+   "score": 5.64,
    "sources": [
     "ANSA"
    ],
@@ -1441,7 +1237,7 @@
    "summary": "Non c'è Mbappé che salta anche l'Italia per infortunio",
    "video": false,
    "live": false,
-   "score": 5.0,
+   "score": 5.6,
    "sources": [
     "ANSA"
    ],
@@ -1449,17 +1245,233 @@
    "also": []
   },
   {
-   "title": "Inter, un ottobre di fuoco ma... calendario benevolo? Il confronto tra le «7 sorelle»",
-   "link": "https://www.gazzetta.it/Calcio/Serie-A/Inter/storie/28-09-2026/calendario-inter/7-partite-in-21-giorni.shtml",
+   "title": "Juve, 200 milioni in infermeria: da Yildiz ad Ekhator, fino a quando deve farne a meno Spalletti",
+   "link": "https://www.gazzetta.it/Calcio/Serie-A/Juventus/28-09-2026/juve-200-milioni-in-infermeria-da-yildiz-ad-ekhator.shtml",
    "source": "Gazzetta",
    "section": "calcio",
-   "kicker": "Coppe europee",
-   "ts": "2026-09-28T19:32:19+02:00",
-   "image": "https://dimages2.gazzettaobjects.it/files/image_618_349/files/fp/uploads/2026/09/28/6aba9078a1093.r_d.1358-145-4447.jpeg",
-   "summary": "Dentro agli impegni di un mese fitto, con due giornate di Champions League e anche un infrasettimanale: le partite di Inter, Roma, Lazio, Milan, Juventus, Como e Napoli a confronto e qualche domanda verso il rientro dopo questa maxi…",
+   "kicker": "Nazionali",
+   "ts": "2026-09-28T19:41:12+02:00",
+   "image": "https://dimages2.gazzettaobjects.it/files/image_618_349/files/fp/uploads/2026/09/22/6ab26b0f27ccd.r_d.1500-842-0.jpeg",
+   "summary": "La lista bianconera degli infortunati è lunga e importante. Qualcuno degli assenti dovrebbe recuperare già al termine di questa pausa per le nazionali: facciamo il punto",
    "video": false,
    "live": false,
-   "score": 4.98,
+   "score": 5.56,
+   "sources": [
+    "Gazzetta"
+   ],
+   "on_home": true,
+   "also": []
+  },
+  {
+   "title": "Europei canoa slalom, nove medaglie per l’Italia a Ivrea: senatori sugli scudi e giovani in rampa di lancio",
+   "link": "https://www.oasport.it/2026/09/europei-canoa-slalom-nove-medaglie-per-litalia-a-ivrea-senatori-sugli-scudi-e-giovani-in-rampa-di-lancio/",
+   "source": "OA Sport",
+   "section": "altri",
+   "kicker": "Canoa",
+   "ts": "2026-09-28T17:00:06+02:00",
+   "image": "https://www.oasport.it/wp-content/uploads/2026/09/canoa-slalom-DE-GENNARO-Giovanni-ITA-ph.-Pier-Colombo-1.jpg",
+   "summary": "Il bilancio non può che essere ampiamente lusinghiero. La rassegna continentale di Ivrea, tre giorni di gare di straordinaria intensità susseguitesi a ritmi incalzanti, conferma la formazione tricolore come realtà di riferimento del…",
+   "video": false,
+   "live": false,
+   "score": 5.49,
+   "sources": [
+    "OA Sport"
+   ],
+   "on_home": false,
+   "also": []
+  },
+  {
+   "title": "La provocazione di John McEnroe: “I giocatori dovrebbero boicottare uno o due Slam”",
+   "link": "https://www.oasport.it/2026/09/la-provocazione-di-john-mcenroe-i-giocatori-dovrebbero-boicottare-uno-o-due-slam/",
+   "source": "OA Sport",
+   "section": "tennis",
+   "kicker": "ATP",
+   "ts": "2026-09-28T19:21:03+02:00",
+   "image": "https://www.oasport.it/wp-content/uploads/2026/09/John-McEnroe-IPA-Sport.jpg",
+   "summary": "Il tennis professionistico continua a fare i conti con una frattura che riguarda denaro, potere e rappresentanza. A riaccendere la discussione è John McEnroe, che dalla Laver Cup di Londra ha scelto ancora una volta una strada senza mezze…",
+   "video": false,
+   "live": false,
+   "score": 5.47,
+   "sources": [
+    "OA Sport"
+   ],
+   "on_home": true,
+   "also": []
+  },
+  {
+   "title": "Spagna, otto volte regina: dalla Roja alle Under, il calcio è tutto suo",
+   "link": "https://www.gazzetta.it/Calcio/nazionali/28-09-2026/spagna-domina-il-calcio-mondiale-8-titoli-tra-nazionali-maschili-femminili-e-giovanili.shtml",
+   "source": "Gazzetta",
+   "section": "calcio",
+   "kicker": "Femminile",
+   "ts": "2026-09-28T16:47:32+02:00",
+   "image": "https://dimages2.gazzettaobjects.it/files/image_640_384/uploads/2026/09/28/6aba7b443d32f.jpeg",
+   "summary": "Dal Mondiale maschile all’Under 20 femminile, la Spagna detiene otto titoli tra nazionali maggiori e giovanili",
+   "video": false,
+   "live": false,
+   "score": 5.43,
+   "sources": [
+    "Gazzetta"
+   ],
+   "on_home": false,
+   "also": []
+  },
+  {
+   "title": "Parma, Gilardino sarà il nuovo allenatore: le news",
+   "link": "https://sport.sky.it/calcio/serie-a/video/2026/09/28/gilardino-nuovo-allenatore-parma-news-1127666",
+   "source": "Sky Sport",
+   "section": "calcio",
+   "kicker": "Serie A",
+   "ts": "2026-09-28T14:22:21+02:00",
+   "image": "https://sport.sky.it/assets/images/609b57f444fa01576cae0cbc07818f722a4fe3c2/skysport/it/calcio/serie-a/video/2026/09/28/1127666_1790590764879_thumb_494.0000001_1790590943122.jpg",
+   "summary": "",
+   "video": true,
+   "live": false,
+   "score": 5.43,
+   "sources": [
+    "Sky Sport"
+   ],
+   "on_home": false,
+   "also": []
+  },
+  {
+   "title": "ATP Chengdu 2026: Davidovich Fokina e Hurkacz, due rimonte per andare in finale",
+   "link": "https://www.oasport.it/2026/09/atp-chengdu-2026-davidovich-fokina-e-hurkacz-due-rimonte-per-andare-in-finale/",
+   "source": "OA Sport",
+   "section": "tennis",
+   "kicker": "ATP Chengdu",
+   "ts": "2026-09-28T16:38:53+02:00",
+   "image": "https://www.oasport.it/wp-content/uploads/2026/09/24714050_small-e1790606298344.jpg",
+   "summary": "Sarà di martedì, in chiave anomala, ma ormai da qualche anno lo status quo è questo, la finale dell’ATP 250 di Chengdu. E, in rimonta, sono Alejandro Davidovich Fokina e Hubert Hurkacz a guadagnarsi l’ultimo atto, l’ottavo nella carriera…",
+   "video": false,
+   "live": false,
+   "score": 5.4,
+   "sources": [
+    "OA Sport"
+   ],
+   "on_home": false,
+   "also": []
+  },
+  {
+   "title": "Matthews, argento mondiale dopo due anni di infortuni: «Per me come una vittoria»",
+   "link": "https://sport.sky.it/ciclismo/2026/09/28/michael-matthews-infortuni-mondiali-ciclismo-2026",
+   "source": "Sky Sport",
+   "section": "ciclismo",
+   "kicker": "Mondiali",
+   "ts": "2026-09-28T16:38:00+02:00",
+   "image": "https://sport.sky.it/assets/images/d9598435a78bd41593b02b27174fb412ea949c72/skysport/it/ciclismo/2026/09/28/michael-matthews-infortuni-mondiali-ciclismo-2026/Michael_Matthews_ansa.jpg",
+   "summary": "La stagione (e la carriera) di Michael Matthews sembravano al capolinea dopo la doppia frattura al polso subita lo scorso marzo dopo un incidente stradale a Imperia, che seguiva l'embolia polmonare dell'anno prima. L'australiano, 36 anni…",
+   "video": false,
+   "live": false,
+   "score": 5.39,
+   "sources": [
+    "Sky Sport"
+   ],
+   "on_home": true,
+   "also": []
+  },
+  {
+   "title": "Relax, esultanze, pochi media e... 250.000 dollari a testa: la Laver Cup fa impazzire i giocatori",
+   "link": "https://www.gazzetta.it/Tennis/ATP/28-09-2026/la-laver-cup-fa-impazzire-i-tennisti-relax-pochi-media-e-un-montepremi-da-urlo.shtml",
+   "source": "Gazzetta",
+   "section": "tennis",
+   "kicker": "ATP",
+   "ts": "2026-09-28T16:29:39+02:00",
+   "image": "https://dimages2.gazzettaobjects.it/files/image_640_384/uploads/2026/09/28/6aba6d26e40cd.jpeg",
+   "summary": "L'evento convince i campioni a partecipare per tanti motivi, tra questi l'ottimo premio in palio. Ecco quanto si sono intascati Alcaraz, Zverev, Cobolli, Mensik, Ruud e Fery, vincitori di quest'anno",
+   "video": false,
+   "live": false,
+   "score": 5.36,
+   "sources": [
+    "Gazzetta"
+   ],
+   "on_home": false,
+   "also": []
+  },
+  {
+   "title": "La confessione di Vozinha: «Stavo meglio prima della popolarità»",
+   "link": "https://sport.sky.it/calcio/mondiali/2026/09/28/vozinha-capo-verde-colo-colo-intervista",
+   "source": "Sky Sport",
+   "section": "calcio",
+   "kicker": "Calcio",
+   "ts": "2026-09-28T18:35:00+02:00",
+   "image": "https://sport.sky.it/assets/images/80a375f025f003779138439229c195fd62c105e1/skysport/it/calcio/mondiali/2026/09/28/vozinha-capo-verde-colo-colo-intervista/ansa_vozinha.jpg",
+   "summary": "Il portiere di Capo Verde, diventato un fenomeno globale ai Mondiali, ha rivelato a The Observer: \"Ho perso la mia pace e la mia tranquillità, non ho più privacy\" NATIONS LEAGUE, LE PROBABILI FORMAZIONI DI TURCHIA-ITALIA",
+   "video": false,
+   "live": false,
+   "score": 5.28,
+   "sources": [
+    "Sky Sport"
+   ],
+   "on_home": false,
+   "also": []
+  },
+  {
+   "title": "Serie A, i centrocampisti centrali più preziosi: Manu Koné supera Barella",
+   "link": "https://sport.sky.it/calcio/serie-a/serie-a-centrocampisti-piu-preziosi-classifica",
+   "source": "Sky Sport",
+   "section": "calcio",
+   "kicker": "Serie A",
+   "ts": "2026-09-28T15:20:00+02:00",
+   "image": "https://sport.sky.it/assets/images/5fa718c0ab4ace7ab7f6f4c5356bdbcddf624b0c/skysport/it/calcio/serie-a/serie-a-centrocampisti-piu-preziosi-classifica/kone_barella_ipa.jpg",
+   "summary": "Chi è il centrocampista centrale più prezioso della Serie A? Dopo gli ultimi aggiornamenti dei valori da parte di Transfermarkt, Manu Koné balza in vetta a questa speciale classifica. Completano il podio due interisti, risale Da Cunha",
+   "video": false,
+   "live": false,
+   "score": 5.27,
+   "sources": [
+    "Sky Sport"
+   ],
+   "on_home": false,
+   "also": []
+  },
+  {
+   "title": "Calcio femminile, le migliori italiane della prima giornata di Serie A: Giugliano impeccabile, iconica Guerzoni",
+   "link": "https://www.oasport.it/2026/09/calcio-femminile-le-migliori-italiane-della-prima-giornata-di-serie-a-giugliano-impeccabile-iconica-guerzoni/",
+   "source": "OA Sport",
+   "section": "calcio",
+   "kicker": "Femminile",
+   "ts": "2026-09-28T18:00:41+02:00",
+   "image": "https://www.oasport.it/wp-content/uploads/2026/09/Manuela-Giugliano-e1789767809865.jpg",
+   "summary": "La prima giornata valida per la Serie A 2026-2027 di calcio femminile è finalmente passata agli archivi. Si è trattato di un primo turno che ha visto marchiato a fuoco le big Roma, Juventus e Inter, tutte vincitrici rispettivamente contro…",
+   "video": false,
+   "live": false,
+   "score": 5.14,
+   "sources": [
+    "OA Sport"
+   ],
+   "on_home": false,
+   "also": []
+  },
+  {
+   "title": "È la settimana del Festival dello Sport! Scopri tutte le novità",
+   "link": "https://video.gazzetta.it/festival-dello-sport/festival-dello-sport-tutte-le-novita-e-gli-ospiti-della-nona-edizione/4dd8f0a3-d4bf-403c-9fd4-2e1966ac1xlk",
+   "source": "Gazzetta",
+   "section": "altri",
+   "kicker": "Altri sport",
+   "ts": "2026-09-28T19:44:30+02:00",
+   "image": "https://dimages2.gazzettaobjects.it/files/image_896_504/uploads/2026/09/28/6abaa69127db3.png",
+   "summary": "Dall'1 al 4 ottobre Trento si colora di rosa: la Gazzetta dello Sport e Trentino Marketing organizzano la nona edizione del Festival dello Sport, che quest'anno ha un tema speciale: gli Invincibili. E chi sono questi \"invincibili\"?…",
+   "video": false,
+   "live": false,
+   "score": 4.97,
+   "sources": [
+    "Gazzetta"
+   ],
+   "on_home": true,
+   "also": []
+  },
+  {
+   "title": "La Roma tra presente e futuro. Gasperini al Festival dello Sport",
+   "link": "https://www.gazzetta.it/festival-sport-trento/28-09-2026/festival-dello-sport-la-roma-tra-presente-e-futuro-gasperini-al-festival-dello-sport.shtml",
+   "source": "Gazzetta",
+   "section": "calcio",
+   "kicker": "Serie A",
+   "ts": "2026-09-28T19:38:47+02:00",
+   "image": "https://dimages2.gazzettaobjects.it/files/image_618_349/files/fp/uploads/2026/09/17/6aabdccf272f4.r_d.1205-826-0.jpeg",
+   "summary": "Il tecnico giallorosso assieme al Ceo del club Galantic sarà a Trento venerdì 2 ottobre alle 18.45",
+   "video": false,
+   "live": false,
+   "score": 4.95,
    "sources": [
     "Gazzetta"
    ],
@@ -1477,7 +1489,7 @@
    "summary": "Il presidente del Real Madrid dovrà comparire in udienza il 25 novembre per rispondere di una causa per diffamazione",
    "video": false,
    "live": false,
-   "score": 4.88,
+   "score": 4.82,
    "sources": [
     "Tuttosport"
    ],
@@ -1495,7 +1507,7 @@
    "summary": "Il portiere di Capo Verde, finito sotto i riflettori durante l'ultima Coppa del Mondo, non ama la nuova celebrità e rimpiange il suo passato",
    "video": false,
    "live": false,
-   "score": 4.79,
+   "score": 4.72,
    "sources": [
     "Corriere dello Sport"
    ],
@@ -1503,21 +1515,21 @@
    "also": []
   },
   {
-   "title": "La Spagna vince il Mondiale femminile Under 20: l’Italia chiude al 4° posto",
-   "link": "https://sport.sky.it/calcio/femminile/mondiale-femminile-calcio-under-20-tabellone-italia",
+   "title": "Ferrari, obiettivo 2° posto nel Mondiale Costruttori di F1. E nel futuro",
+   "link": "https://sport.sky.it/formula-1/2026/09/29/ferrari-f1-mondiale-2026-bilancio-obiettivi",
    "source": "Sky Sport",
-   "section": "calcio",
-   "kicker": "Femminile",
-   "ts": "2026-09-27T23:00:00+02:00",
-   "image": "https://sport.sky.it/assets/images/b8fcb0122ea8dbc8651a4723bf2c237467b4a619/skysport/it/calcio/femminile/mondiale-femminile-calcio-under-20-tabellone-italia/spagna_u20_donne_getty.jpg",
-   "summary": "Per la seconda volta nella storia la Spagna si laurea campione del mondo Under 20 femminile: la rojita ha battuto in finale la Corea del Nord, campionesse uscenti. Decisivi i calci di rigore. Penalty fatali, invece, per l'Italia nella…",
-   "video": false,
+   "section": "motori",
+   "kicker": "F1",
+   "ts": "2026-09-28T20:00:00+02:00",
+   "image": "https://sport.sky.it/assets/images/b4f67e18c8d1652920a1c076b5a593708af9fe67/skysport/it/motori/formula-1/video/2026/03/06/f1-vasseur-ferrari-intervista-gp-australia-video-1079861/vasseur_itv_getty.jpg",
+   "summary": "L'ultimo mese ha mostrato tutte le fragilità dalla Ferrari: dopo la pausa di agosto sono arrivati gli aggiornamenti motore, ma non hanno dato i risultati sperati. A Maranello si è anche perso uno dei record storici: non è più il motorista…",
+   "video": true,
    "live": false,
-   "score": 4.6,
+   "score": 4.63,
    "sources": [
     "Sky Sport"
    ],
-   "on_home": false,
+   "on_home": true,
    "also": []
   },
   {
@@ -1531,27 +1543,9 @@
    "summary": "Festa grande in casa bianconera: il lungo messaggio della Vecchia Signora: \"Complimenti!\"",
    "video": false,
    "live": false,
-   "score": 4.49,
+   "score": 4.43,
    "sources": [
     "Tuttosport"
-   ],
-   "on_home": false,
-   "also": []
-  },
-  {
-   "title": "Italia, Mancini pensa a diversi cambi contro la Turchia",
-   "link": "https://sport.sky.it/calcio/nations-league/video/2026/09/27/nations-league-turchia-italia-probabile-formazione-1127593",
-   "source": "Sky Sport",
-   "section": "calcio",
-   "kicker": "Azzurri",
-   "ts": "2026-09-27T23:59:02+02:00",
-   "image": "https://sport.sky.it/assets/images/085c9b4e4b120e17a855bc65fe71523274ad3861/skysport/it/calcio/nations-league/video/2026/09/27/1127593_1790538771943_thumb_494.0000001_1790539143782.jpg",
-   "summary": "",
-   "video": true,
-   "live": false,
-   "score": 4.4,
-   "sources": [
-    "Sky Sport"
    ],
    "on_home": false,
    "also": []
@@ -1567,7 +1561,7 @@
    "summary": "Sconfitta al Granillo l'Igea Virtus davanti a oltre settemila spettatori (in tribuna anche Lotito). Derby al Sambiase. PraiaTortora in zona playoff. Primo successo per il Trapani",
    "video": false,
    "live": false,
-   "score": 4.35,
+   "score": 4.29,
    "sources": [
     "Corriere dello Sport"
    ],
@@ -1585,7 +1579,7 @@
    "summary": "Il presidente del Real aveva parlato di \"7 campionati rubati\" per il caso Negreira",
    "video": false,
    "live": false,
-   "score": 4.34,
+   "score": 4.28,
    "sources": [
     "ANSA"
    ],
@@ -1603,11 +1597,29 @@
    "summary": "Il ct azzurro chiaro: \"L'Italia ha vinto un Europeo senza Totti, Del Piero o Baggio, quindi si può fare. Vedrete tanti giovani in campo\"",
    "video": false,
    "live": false,
-   "score": 4.29,
+   "score": 4.23,
    "sources": [
     "Corriere dello Sport"
    ],
    "on_home": false,
+   "also": []
+  },
+  {
+   "title": "MotoGp, Vinales torna con la Ktm Tech 3 al GP Giappone a Motegi dopo l’infortunio",
+   "link": "https://sport.sky.it/motogp/2026/09/28/motogp-vinales-ktm-tech-3-gp-giappone",
+   "source": "Sky Sport",
+   "section": "motori",
+   "kicker": "MotoGP",
+   "ts": "2026-09-28T19:51:31+02:00",
+   "image": "https://sport.sky.it/assets/images/938efaffbe0385e04b7705eb27595bbc6a791785/skysport/it/motori/motogp/2026/09/28/motogp-vinales-ktm-tech-3-gp-giappone/vinales_ipa.jpg",
+   "summary": "Dopo un lungo stop per il problema alla spalla, Maverick Vinales torna in sella alla sua KTM nel GP del Giappone, in programma il prossimo fine settimana a Motegi. \"Sono felice, gli ultimi mesi sono stati lunghi. Ho lavorato tanto per…",
+   "video": false,
+   "live": false,
+   "score": 4.2,
+   "sources": [
+    "Sky Sport"
+   ],
+   "on_home": true,
    "also": []
   },
   {
@@ -1621,7 +1633,7 @@
    "summary": "Punto d'oro al “Frau” di Ossi per la squadra salernitana contro l'Ossese. La Gelbison ha gelato la Paganese sbancando il “Torre”. Blitz di Trastevere e Budoni",
    "video": false,
    "live": false,
-   "score": 4.26,
+   "score": 4.2,
    "sources": [
     "Corriere dello Sport"
    ],
@@ -1629,21 +1641,21 @@
    "also": []
   },
   {
-   "title": "Inter, Bisseck al Festival dello Sport. Il suo talk giovedì 1 ottobre a Trento",
-   "link": "https://www.gazzetta.it/festival-sport-trento/28-09-2026/inter-yann-bisseck-al-festival-dello-sport-giovedi-1-ottobre-il-suo-talk-a-trento.shtml",
+   "title": "Changan Deepal S07, com’è fatto il nuovo Suv elettrico cinese",
+   "link": "https://www.gazzetta.it/motori/mobilita-sostenibile/auto-elettriche/28-09-2026/changan-deepal-s07-suv-elettrico-com-e-fatto-prezzo-autonomia.shtml",
    "source": "Gazzetta",
-   "section": "calcio",
-   "kicker": "Serie A",
-   "ts": "2026-09-28T16:26:11+02:00",
-   "image": "https://dimages2.gazzettaobjects.it/files/image_640_384/files/fp/uploads/2026/09/28/6aba7605ee602.r_d.1191-593-2336.jpeg",
-   "summary": "Yann è un perno della difesa a tre di Chivu e si è conquistato un posto nella Germania. Sarà fra i protagonisti del giorno inaugurale dell'evento Gazzetta",
+   "section": "motori",
+   "kicker": "Motori",
+   "ts": "2026-09-28T19:44:38+02:00",
+   "image": "https://dimages2.gazzettaobjects.it/files/image_640_384/files/fp/uploads/2026/09/14/6aa7f731d0d35.r_d.659-507-5067.png",
+   "summary": "L'ultimo aggiornamento del D-Suv elettrico promette più comfort e tecnologia. La potenza massima è di 258 Cv (190 kW), mentre l'autonomia dichiarata dalla Casa di Chongqing è di 500 chilometri",
    "video": false,
    "live": false,
-   "score": 4.21,
+   "score": 4.17,
    "sources": [
     "Gazzetta"
    ],
-   "on_home": false,
+   "on_home": true,
    "also": []
   },
   {
@@ -1657,11 +1669,29 @@
    "summary": "Già 122 reti in tre giornate di regular season. L84 Torino, Covei Meta Catania Bricocity e Sporting Sala Consilina sempre a segno. Napoli imbattuto e alle spalle del terzetto di testa, Benevento e Came Treviso all’inseguimento GLI…",
    "video": false,
    "live": false,
-   "score": 4.2,
+   "score": 4.14,
    "sources": [
     "Sky Sport"
    ],
    "on_home": false,
+   "also": []
+  },
+  {
+   "title": "Inter, un ottobre di fuoco ma... calendario benevolo? Il confronto tra le «7 sorelle»",
+   "link": "https://www.gazzetta.it/Calcio/Serie-A/Inter/storie/28-09-2026/calendario-inter/7-partite-in-21-giorni.shtml",
+   "source": "Gazzetta",
+   "section": "calcio",
+   "kicker": "Coppe europee",
+   "ts": "2026-09-28T19:32:19+02:00",
+   "image": "https://dimages2.gazzettaobjects.it/files/image_618_349/files/fp/uploads/2026/09/28/6aba9078a1093.r_d.1358-145-4447.jpeg",
+   "summary": "Dentro agli impegni di un mese fitto, con due giornate di Champions League e anche un infrasettimanale: le partite di Inter, Roma, Lazio, Milan, Juventus, Como e Napoli a confronto e qualche domanda verso il rientro dopo questa maxi…",
+   "video": false,
+   "live": false,
+   "score": 4.12,
+   "sources": [
+    "Gazzetta"
+   ],
+   "on_home": true,
    "also": []
   },
   {
@@ -1675,7 +1705,7 @@
    "summary": "ASCOLTA LA PLAYLIST DI TALENT ZONE: https://open.spotify.com/playlist/4dygTNmgN9TwBJTgO0geYz?si=645a2e6fe2004d2d Ospiti di Talent Zone di oggi sono i tuffatori vicecampioni d’Europa Simone Conte e Raffaele Pelligra. Entrambi romani e…",
    "video": false,
    "live": false,
-   "score": 4.15,
+   "score": 4.09,
    "sources": [
     "OA Sport"
    ],
@@ -1693,7 +1723,7 @@
    "summary": "La presidente Alessandra Marzari: \"Vogliamo imparare dalle realtà europee e intercettare le opportunità. Parole d’ordine: monitoraggio, networking e ricerca\"",
    "video": false,
    "live": false,
-   "score": 4.14,
+   "score": 4.08,
    "sources": [
     "Gazzetta"
    ],
@@ -1711,9 +1741,27 @@
    "summary": "Il cda rossonero ha approvato l'esercizio 2025-26: deficit assorbito ampiamente dal patrimonio netto. Pesa l'assenza dalle coppe europee. Bene i ricavi da sponsor e stadio",
    "video": false,
    "live": false,
-   "score": 4.13,
+   "score": 4.07,
    "sources": [
     "Gazzetta"
+   ],
+   "on_home": true,
+   "also": []
+  },
+  {
+   "title": "Tamberi mostra sui social la trasformazione del fisico: «Impressionante»",
+   "link": "https://sport.sky.it/altri-sport/atletica/2026/09/28/gianmarco-tamberi-fisico-social",
+   "source": "Sky Sport",
+   "section": "altri",
+   "kicker": "Altri sport",
+   "ts": "2026-09-28T19:15:31+02:00",
+   "image": "https://sport.sky.it/assets/images/83576eaf08844f0f72637be1c963a118b42fd882/skysport/it/altri-sport/atletica/2026/09/28/gianmarco-tamberi-fisico-social/Tamberi_fisico.jpg",
+   "summary": "Dopo un'estate piena di successi, Gianmarco Tamberi si sta prendendo un mese di pausa. E sui social ha documentato quanto un periodo senza allenamenti possa cambiare il suo fisico: \"Ogni dannato anno mi domando come sia possibile che io…",
+   "video": false,
+   "live": false,
+   "score": 4.05,
+   "sources": [
+    "Sky Sport"
    ],
    "on_home": true,
    "also": []
@@ -1729,11 +1777,11 @@
    "summary": "Inoltre, i nerazzurri hanno segnato per primi soltanto contro Monza e Cagliari, poi hanno sempre subito e rimontato (tranne al Bernabeu col Real)",
    "video": false,
    "live": false,
-   "score": 4.11,
+   "score": 4.05,
    "sources": [
     "Gazzetta"
    ],
-   "on_home": true,
+   "on_home": false,
    "also": []
   },
   {
@@ -1747,11 +1795,11 @@
    "summary": "L'ex brasiliano, che ha vestito la maglia granata negli anni 80, non ha dimenti cato il legame con il club",
    "video": false,
    "live": false,
-   "score": 4.1,
+   "score": 4.04,
    "sources": [
     "Gazzetta"
    ],
-   "on_home": true,
+   "on_home": false,
    "also": []
   },
   {
@@ -1765,7 +1813,7 @@
    "summary": "I valori aggiornati di Transfermarkt premiano Wesley come l'esterno destro più prezioso della Serie A. Cala Spence, che non si è ancora visto in campo, mentre risale il suo compagno di squadra Diouf, che gli contende il posto su quella…",
    "video": false,
    "live": false,
-   "score": 4.1,
+   "score": 4.03,
    "sources": [
     "Sky Sport"
    ],
@@ -1783,11 +1831,11 @@
    "summary": "Gonçalo Ramos come Piatek? Come sceglie Nkunku il colore del palloncino? Perché Leao surfava? I segreti dei festeggiamenti rossoneri...",
    "video": false,
    "live": false,
-   "score": 4.06,
+   "score": 4.0,
    "sources": [
     "Gazzetta"
    ],
-   "on_home": true,
+   "on_home": false,
    "also": []
   },
   {
@@ -1801,7 +1849,7 @@
    "summary": "Il nono posto di Alessandra Fanali e Anna Zanusso all’Open d’Italia 2026 ci permette di aprire un discorso più ampio legato al momento del golf femminile italiano, che va analizzato anche al fine di vedere come potrebbe evolvere nel…",
    "video": false,
    "live": false,
-   "score": 4.05,
+   "score": 3.99,
    "sources": [
     "OA Sport"
    ],
@@ -1819,11 +1867,11 @@
    "summary": "Una vittoria di grande spessore contro i Seagulls appena retrocessi. I piemontesi superano il gap fisico mettendo in campo un'energia importante, riscattando le incertezze del precampionato e iniziando la nuova stagione nel migliore dei…",
    "video": false,
    "live": false,
-   "score": 4.04,
+   "score": 3.98,
    "sources": [
     "Tuttosport"
    ],
-   "on_home": true,
+   "on_home": false,
    "also": []
   },
   {
@@ -1837,7 +1885,7 @@
    "summary": "Per ora l'ex Juve non è considerato il titolare del club inglese",
    "video": false,
    "live": false,
-   "score": 4.01,
+   "score": 3.95,
    "sources": [
     "Gazzetta"
    ],
@@ -1855,7 +1903,7 @@
    "summary": "Le parole del manager del difensore viola dopo che il ct non l'ha inserito contro la Bosnia-Erzegovina",
    "video": false,
    "live": false,
-   "score": 4.0,
+   "score": 3.93,
    "sources": [
     "Gazzetta"
    ],
@@ -1873,7 +1921,7 @@
    "summary": "Dopo la pausa estiva nel mese di ottobre quattro appuntamenti, il 2 ottobre nel capoluogo lombardo poi, successivamente, il 6 ottobre a Bari, nella cornice di Piazza del Ferrarese, quindi il 13 ottobre a Torino, a Parco Dora, fino alla…",
    "video": false,
    "live": false,
-   "score": 3.96,
+   "score": 3.9,
    "sources": [
     "Tuttosport"
    ],
@@ -1891,7 +1939,7 @@
    "summary": "Dopo la pausa estiva appuntamento il 2 ottobre nel capoluogo lombardo in Piazza Duca d’Aosta, per poi proseguire il 6 ottobre a Bari, nella cornice di Piazza del Ferrarese, quindi il 13 ottobre a Torino, a Parco Dora, fino alla tappa di…",
    "video": false,
    "live": false,
-   "score": 3.92,
+   "score": 3.86,
    "sources": [
     "Corriere dello Sport"
    ],
@@ -1909,11 +1957,11 @@
    "summary": "Il tecnico italiano e l'ennesima esperienza di una carriera da giramondo: \"Qui ci alleniamo a 51°. Ogni giorno c'è una problematica, a volte ci bloccano anche le scarpe alla dogana\"",
    "video": false,
    "live": false,
-   "score": 3.9,
+   "score": 3.84,
    "sources": [
     "Gazzetta"
    ],
-   "on_home": true,
+   "on_home": false,
    "also": []
   },
   {
@@ -1927,7 +1975,7 @@
    "summary": "Il classe 1985 non restava in panchina per novanta minuti con la nazionale lusitana da 18 anni",
    "video": false,
    "live": false,
-   "score": 3.84,
+   "score": 3.77,
    "sources": [
     "Corriere dello Sport"
    ],
@@ -1945,7 +1993,7 @@
    "summary": "Contro Dallas leader con 22 punti alla prima nei playoff, le sue Valkyries sognano",
    "video": false,
    "live": false,
-   "score": 3.68,
+   "score": 3.61,
    "sources": [
     "ANSA"
    ],
@@ -1963,7 +2011,7 @@
    "summary": "Tomori, Loftus-Cheek e Modric hanno il contratto in scadenza a fine stagione, altri titolari nel 2028. Tra opzioni del club, dialoghi interrotti bruscamente e trattative in evoluzione, chi ha più chance di firmare",
    "video": false,
    "live": false,
-   "score": 3.64,
+   "score": 3.58,
    "sources": [
     "Gazzetta"
    ],
@@ -1981,7 +2029,7 @@
    "summary": "Il Gran Premio dell’Azerbaijan potrebbe avere conseguenze ben più pesanti del semplice ritiro per Franco Colapinto. L’incidente provocato dal pilota argentino alla ripartenza dopo la Safety Car ha infatti trasformato una gara che sembrava…",
    "video": false,
    "live": false,
-   "score": 3.64,
+   "score": 3.58,
    "sources": [
     "OA Sport"
    ],
@@ -1999,27 +2047,9 @@
    "summary": "Il difensore lascia l'Italia e i biancocelesti per iniziare una nuova avventura all'estero: i dettagli del trasferimento",
    "video": false,
    "live": false,
-   "score": 3.62,
+   "score": 3.56,
    "sources": [
     "Tuttosport"
-   ],
-   "on_home": false,
-   "also": []
-  },
-  {
-   "title": "Italia, Mancini cerca la 1^ vittoria contro l’amico Montella",
-   "link": "https://sport.sky.it/calcio/nations-league/video/2026/09/28/turchia-italia-news-formazione-1127618",
-   "source": "Sky Sport",
-   "section": "calcio",
-   "kicker": "Azzurri",
-   "ts": "2026-09-28T02:29:29+02:00",
-   "image": "https://sport.sky.it/assets/images/7a9219a8c602af44366d7f8045bf292f54af5eef/skysport/it/calcio/nations-league/video/2026/09/28/1127618_1790548078556_thumb_494.0000001_1790548169615.jpg",
-   "summary": "",
-   "video": true,
-   "live": false,
-   "score": 3.6,
-   "sources": [
-    "Sky Sport"
    ],
    "on_home": false,
    "also": []
@@ -2035,7 +2065,7 @@
    "summary": "I carabinieri del Comando provinciale di Cosenza hanno notificato l'avviso di conclusione indagini preliminari nei confronti dell'uomo oggi 65enne per concorso in omicidio. Internò avrebbe agito insieme a Franco, padre di Isabella, ormai…",
    "video": false,
    "live": false,
-   "score": 3.55,
+   "score": 3.49,
    "sources": [
     "Gazzetta"
    ],
@@ -2053,7 +2083,7 @@
    "summary": "Un appuntamento ormai consolidato nel panorama sportivo universitario cittadino, che vedrà nuovamente protagonisti gli equipaggi degli Atenei torinesi sulle rive del Po",
    "video": false,
    "live": false,
-   "score": 3.5,
+   "score": 3.44,
    "sources": [
     "Tuttosport"
    ],
@@ -2071,9 +2101,27 @@
    "summary": "Dopo la partita vinta contro l'Arezzo 2-0, la squadra di Gattuso scenderà in campo per un altro test",
    "video": false,
    "live": false,
-   "score": 3.5,
+   "score": 3.44,
    "sources": [
     "Corriere dello Sport"
+   ],
+   "on_home": false,
+   "also": []
+  },
+  {
+   "title": "Italia, Mancini cerca la 1^ vittoria contro l’amico Montella",
+   "link": "https://sport.sky.it/calcio/nations-league/video/2026/09/28/turchia-italia-news-formazione-1127618",
+   "source": "Sky Sport",
+   "section": "calcio",
+   "kicker": "Azzurri",
+   "ts": "2026-09-28T02:29:29+02:00",
+   "image": "https://sport.sky.it/assets/images/7a9219a8c602af44366d7f8045bf292f54af5eef/skysport/it/calcio/nations-league/video/2026/09/28/1127618_1790548078556_thumb_494.0000001_1790548169615.jpg",
+   "summary": "",
+   "video": true,
+   "live": false,
+   "score": 3.4,
+   "sources": [
+    "Sky Sport"
    ],
    "on_home": false,
    "also": []
@@ -2089,7 +2137,7 @@
    "summary": "La formazione di coach Silvia Asola e Gabriele Balbo​​ conquista il primo posto al torneo \"Chi Ben Inizia\" firmando un percorso netto e senza sbavature",
    "video": false,
    "live": false,
-   "score": 3.46,
+   "score": 3.39,
    "sources": [
     "Tuttosport"
    ],
@@ -2107,29 +2155,11 @@
    "summary": "La 6 Ore del Fuji del Wec si è chiusa con un finale thrilling, nel quale Hirakawa ha colto il successo sulla Toyota #8 grazie ad un grande colpo strategico e ad una difesa sull'Alpine #36 da capogiro. Raccolto magro per Ferrari, solo la…",
    "video": false,
    "live": false,
-   "score": 3.46,
+   "score": 3.39,
    "sources": [
     "Sky Sport"
    ],
    "on_home": true,
-   "also": []
-  },
-  {
-   "title": "Pergolettese, una sola rete fatta, ma 7 punti in classifica! E Doldi non prende gol da 450’",
-   "link": "https://www.gazzetta.it/calcio/serie-c/28-09-2026/pergolettese-doldi-non-prende-gol-da-450-minuti-per-vincere-mancano-gli-attaccanti.shtml",
-   "source": "Gazzetta",
-   "section": "calcio",
-   "kicker": "Calcio",
-   "ts": "2026-09-28T16:24:09+02:00",
-   "image": "https://dimages2.gazzettaobjects.it/files/image_640_384/files/fp/uploads/2026/09/28/6aba3fb93bf32.r_d.540-435-4888.jpeg",
-   "summary": "Minimo sforzo, massima resa per i gialloblù lombardi di Serie C. Il tecnico Giosa: \"Siamo molto bravi in fase di non possesso, però imprecisi con la palla\"",
-   "video": false,
-   "live": false,
-   "score": 3.4,
-   "sources": [
-    "Gazzetta"
-   ],
-   "on_home": false,
    "also": []
   },
   {
@@ -2143,7 +2173,7 @@
    "summary": "La Malesia ospita il GP Bahrain a Sepang dal 2 al 4 ottobre in diretta su Sky e in streaming su NOW : posizionato Azerbaijian e Singapore, questo evento diventa il GP del Golfo Persico. Resta anche l'ipotesi Imola come ultima gara al…",
    "video": false,
    "live": false,
-   "score": 3.39,
+   "score": 3.33,
    "sources": [
     "Sky Sport"
    ],
@@ -2161,7 +2191,7 @@
    "summary": "Serata da dimenticare per le Fever, che cadono 102-85 a Las Vegas, e per Caitlin Clark, che gioca una gara-1 di playoff decisamente sotto i suoi standard abituali. La stella di Indiana chiude comunque in doppia doppia con 15 punti e 10…",
    "video": true,
    "live": false,
-   "score": 3.39,
+   "score": 3.32,
    "sources": [
     "Sky Sport"
    ],
@@ -2179,7 +2209,7 @@
    "summary": "Sempre più veloce. Matteo Zurloni ritocca il record italiano della speed al maschile dando e dandosi un nuovo boost verso la stagione 2027 della specialità che fa parte del panorama dell’arrampicata sportiva. Da 4.94 alle Olimpiadi di…",
    "video": false,
    "live": false,
-   "score": 3.33,
+   "score": 3.26,
    "sources": [
     "OA Sport"
    ],
@@ -2197,7 +2227,7 @@
    "summary": "L'omaggio social del pilota della Ferrari al suo amato bulldog commuove i tifosi: \"",
    "video": false,
    "live": false,
-   "score": 3.33,
+   "score": 3.26,
    "sources": [
     "Corriere dello Sport"
    ],
@@ -2215,7 +2245,7 @@
    "summary": "Dopo ormai tre mesi di negoziazioni, Jalen Duren e i Pistons non hanno ancora trovato un accordo per il rinnovo del suo contratto. Il giocatore, che ha rifiutato l'ultima offerta da 200 milioni di dollari per 5 anni, ha tempo fino al 1°…",
    "video": false,
    "live": false,
-   "score": 3.32,
+   "score": 3.26,
    "sources": [
     "Sky Sport"
    ],
@@ -2233,7 +2263,7 @@
    "summary": "Il difensore saluta dopo 11 anni per trasferirsi in Arabia Saudita",
    "video": false,
    "live": false,
-   "score": 3.32,
+   "score": 3.26,
    "sources": [
     "ANSA"
    ],
@@ -2251,7 +2281,7 @@
    "summary": "La pagina specializzata, \"La Maglia bianconera\", ha pubblicato sui social le prime indiscrezioni riguardo ai kit per la prossima stagione",
    "video": false,
    "live": false,
-   "score": 3.31,
+   "score": 3.25,
    "sources": [
     "Tuttosport"
    ],
@@ -2269,7 +2299,7 @@
    "summary": "Il presidente Aiac di Torino, De Meo: « A lui vanno le nostre congratulazioni e un caloroso augurio di buon lavoro»",
    "video": false,
    "live": false,
-   "score": 3.3,
+   "score": 3.24,
    "sources": [
     "Tuttosport"
    ],
@@ -2287,7 +2317,25 @@
    "summary": "Dopo le dure parole del post-gara a Baku, il pilota McLaren fa marcia indietro con una storia su Instagram: \"Ci siamo chiariti, siamo ancora buoni amici\". La Formula 1 torna subito in pista con il GP del Bahrain in Malesia dal 2 al 4…",
    "video": false,
    "live": false,
-   "score": 3.3,
+   "score": 3.23,
+   "sources": [
+    "Sky Sport"
+   ],
+   "on_home": false,
+   "also": []
+  },
+  {
+   "title": "Presentazione Benetton Treviso, le parole di Michele Lamaro",
+   "link": "https://sport.sky.it/rugby/video/2026/09/28/presentazione-benetton-treviso-le-parole-di-michele-lamaro-1127752",
+   "source": "Sky Sport",
+   "section": "altri",
+   "kicker": "Rugby",
+   "ts": "2026-09-28T19:46:09+02:00",
+   "image": "https://sport.sky.it/assets/images/9c33a4217078430ccb9f953507343a2a3a3e7cf8/skysport/it/rugby/video/2026/09/28/1127752_1790610244112_thumb_494.0000001_1790610371029.jpg",
+   "summary": "",
+   "video": true,
+   "live": false,
+   "score": 3.18,
    "sources": [
     "Sky Sport"
    ],
@@ -2305,27 +2353,9 @@
    "summary": "Accordi già in corso. Gialuz, tre nostre atlete in team Luna rossa",
    "video": false,
    "live": false,
-   "score": 3.23,
+   "score": 3.16,
    "sources": [
     "ANSA"
-   ],
-   "on_home": false,
-   "also": []
-  },
-  {
-   "title": "Varese-Virtus Bologna 69-90: highlights Serie A",
-   "link": "https://sport.sky.it/basket/video/2026/09/27/varese-virtus-bologna-highlights-lba-1127615",
-   "source": "Sky Sport",
-   "section": "basket",
-   "kicker": "Serie A",
-   "ts": "2026-09-28T01:02:39+02:00",
-   "image": "https://sport.sky.it/assets/images/ab86a5aee155b3c8d3c949df2bff1a715169504e/skysport/it/basket/video/2026/09/27/1127615_1790542851826_thumb_494.0000001_1790542960754.jpg",
-   "summary": "",
-   "video": true,
-   "live": false,
-   "score": 3.2,
-   "sources": [
-    "Sky Sport"
    ],
    "on_home": false,
    "also": []
@@ -2341,7 +2371,7 @@
    "summary": "Lunedì dedicato alle semifinali nei due tornei Atp 250 in corso. A Chengdu riflettori puntati su Hurkacz-Shapovalov, ad Hangzhou scendono in campo Medvedev (contro Safiullin) e Rublev (contro Jacquet). Tutto in diretta su Sky Sport e in…",
    "video": false,
    "live": false,
-   "score": 3.2,
+   "score": 3.13,
    "sources": [
     "Sky Sport"
    ],
@@ -2359,7 +2389,7 @@
    "summary": "",
    "video": true,
    "live": false,
-   "score": 3.15,
+   "score": 3.09,
    "sources": [
     "Sky Sport"
    ],
@@ -2377,29 +2407,11 @@
    "summary": "Il tabellino personale dice 22 punti con 7/11 al tiro e 4/5 dalla lunga distanza in poco meno di 16 minuti giocati, quello complessivo dice 104-80. Cecilia Zandalasini, migliore in campo, e Golden State, al debutto ai playoff delle WNBA…",
    "video": true,
    "live": false,
-   "score": 3.15,
+   "score": 3.09,
    "sources": [
     "Sky Sport"
    ],
    "on_home": false,
-   "also": []
-  },
-  {
-   "title": "Ferrari, obiettivo 2° posto nel Costruttori: è troppo poco",
-   "link": "https://sport.sky.it/formula-1/video/2026/09/28/f1-ferrari-mondiale-2026-bilancio-futuro-video-1127710",
-   "source": "Sky Sport",
-   "section": "motori",
-   "kicker": "F1",
-   "ts": "2026-09-28T19:22:23+02:00",
-   "image": "https://sport.sky.it/assets/images/2e0b5315bcbcb5974e504c40b0e5cc237c01045d/skysport/it/motori/formula-1/video/2026/09/28/1127710_1790602897926_thumb_494.0000001_1790608945165.jpg",
-   "summary": "",
-   "video": true,
-   "live": false,
-   "score": 3.14,
-   "sources": [
-    "Sky Sport"
-   ],
-   "on_home": true,
    "also": []
   },
   {
@@ -2413,7 +2425,7 @@
    "summary": "Il difensore brasiliano è tornato ad allenarsi parzialmente con la squadra dopo l'operazione al tendine e mette nel mirino i giallorossi",
    "video": false,
    "live": false,
-   "score": 3.12,
+   "score": 3.06,
    "sources": [
     "Corriere dello Sport"
    ],
@@ -2431,7 +2443,25 @@
    "summary": "Il giovane centrocampista era stato riconfermato dall'Asti: il cordoglio della società e l'abbraccio dei tifosi",
    "video": false,
    "live": false,
-   "score": 3.04,
+   "score": 2.98,
+   "sources": [
+    "Tuttosport"
+   ],
+   "on_home": false,
+   "also": []
+  },
+  {
+   "title": "Stipendi Juve, la lista completa: il paradosso forzato e quanto guadagnano i nuovi",
+   "link": "https://www.tuttosport.com/news/calcio/serie-a/juventus/2026/09/28-151421476/stipendi_juve_la_lista_completa_il_paradosso_forzato_e_quanto_guadagnano_i_nuovi/",
+   "source": "Tuttosport",
+   "section": "calcio",
+   "kicker": "Serie A",
+   "ts": "2026-09-28T11:45:00+02:00",
+   "image": "https://cdn.tuttosport.com/img/2000/1000/2026/09/23/121844960-cfa16b41-9cf6-47e8-8dfa-4035a656e1ae.jpg",
+   "summary": "Le cifre che i bianconeri spendono ogni anno per pagare i giocatori in rosa: tutte le cifre",
+   "video": false,
+   "live": false,
+   "score": 2.97,
    "sources": [
     "Tuttosport"
    ],
@@ -2449,7 +2479,7 @@
    "summary": "La Formula 1 riabbraccia il circuito di Sepang a 9 anni dall'ultima volta, ospitando il GP del Bahrain in Malesia dal 2 al 4 ottobre in diretta su Sky e in streaming su NOW . Nel 2017 c'era chi vinceva la seconda gara in carriera, chi…",
    "video": false,
    "live": false,
-   "score": 3.03,
+   "score": 2.97,
    "sources": [
     "Sky Sport"
    ],
@@ -2457,21 +2487,39 @@
    "also": []
   },
   {
-   "title": "Stipendi Juve, la lista completa: il paradosso forzato e quanto guadagnano i nuovi",
-   "link": "https://www.tuttosport.com/news/calcio/serie-a/juventus/2026/09/28-151421476/stipendi_juve_la_lista_completa_il_paradosso_forzato_e_quanto_guadagnano_i_nuovi/",
-   "source": "Tuttosport",
-   "section": "calcio",
-   "kicker": "Serie A",
-   "ts": "2026-09-28T11:45:00+02:00",
-   "image": "https://cdn.tuttosport.com/img/2000/1000/2026/09/23/121844960-cfa16b41-9cf6-47e8-8dfa-4035a656e1ae.jpg",
-   "summary": "Le cifre che i bianconeri spendono ogni anno per pagare i giocatori in rosa: tutte le cifre",
+   "title": "Ciclismo: dai cinque cerchi alle due ruote, gli olimpionici convergono a Gubbio",
+   "link": "https://www.ansa.it/sito/notizie/sport/ciclismo/2026/09/28/ciclismo-dai-cinque-cerchi-alle-due-ruote-gli-olimpionici-convergono_b2516850-fd15-4865-a3ac-0d18414c23d3.html",
+   "source": "ANSA",
+   "section": "ciclismo",
+   "kicker": "Ciclismo",
+   "ts": "2026-09-28T19:44:18+02:00",
+   "image": "",
+   "summary": "Daniele Masala, Alessia Filippi e Raffaello Leonardo ospiti alla Granfondo del Montefeltro del 10-11 ottobre",
    "video": false,
    "live": false,
-   "score": 3.03,
+   "score": 2.97,
    "sources": [
-    "Tuttosport"
+    "ANSA"
    ],
-   "on_home": false,
+   "on_home": true,
+   "also": []
+  },
+  {
+   "title": "Nba: LeBron, ’per fare cose grandi con i Sixers servono tempo e sacrifici’",
+   "link": "https://www.ansa.it/sito/notizie/sport/basket/2026/09/28/nba-lebron-per-fare-cose-grandi-con-i-sixers-servono-tempo_931e967a-50d5-4731-8661-125e870f48a5.html",
+   "source": "ANSA",
+   "section": "basket",
+   "kicker": "NBA",
+   "ts": "2026-09-28T19:37:43+02:00",
+   "image": "",
+   "summary": "James si presenta da giocatore di Philadelphia al Media Day",
+   "video": false,
+   "live": false,
+   "score": 2.94,
+   "sources": [
+    "ANSA"
+   ],
+   "on_home": true,
    "also": []
   },
   {
@@ -2485,11 +2533,11 @@
    "summary": "Proraso rinnova anche quest’anno il suo legame con L’Eroica e sarà sponsor local della manifestazione in programma dal 2 al 4 ottobre 2026",
    "video": false,
    "live": false,
-   "score": 2.98,
+   "score": 2.92,
    "sources": [
     "Corriere dello Sport"
    ],
-   "on_home": false,
+   "on_home": true,
    "also": []
   },
   {
@@ -2503,11 +2551,11 @@
    "summary": "L'altra sera Jalen Brunson ha avuto l'onore di condurre il Saturday Night Live, leggendario show della televisione americana che rimane palcoscenico ambitissimo. Tanto è vero che l'MVP delle ultime Finals è stato solamente il quinto…",
    "video": false,
    "live": false,
-   "score": 2.97,
+   "score": 2.91,
    "sources": [
     "Sky Sport"
    ],
-   "on_home": false,
+   "on_home": true,
    "also": []
   },
   {
@@ -2521,7 +2569,7 @@
    "summary": "Al Media Day e quindi all'inizio del training camp di Miami mancano ormai poche ore, ma evidentemente Giannis Antetokounmpo scalpita per iniziare la sua nuova avventura in maglia Heat. Il greco, infatti, ha usato i suoi profili social per…",
    "video": false,
    "live": false,
-   "score": 2.94,
+   "score": 2.88,
    "sources": [
     "Sky Sport"
    ],
@@ -2539,7 +2587,7 @@
    "summary": "Il 3 e 4 ottobre si chiude la massima serie nazionale con gara organizzata da Aci Salerno",
    "video": false,
    "live": false,
-   "score": 2.93,
+   "score": 2.87,
    "sources": [
     "ANSA"
    ],
@@ -2557,7 +2605,7 @@
    "summary": "Lanciato nel 2025, il progetto mira a creare un ecosistema che unisca tutto il mondo sportivo in una piattaforma a servizio dei professionisti ma anche dei tifosi",
    "video": false,
    "live": false,
-   "score": 2.92,
+   "score": 2.86,
    "sources": [
     "Corriere dello Sport"
    ],
@@ -2575,7 +2623,7 @@
    "summary": "Il talento della Under 14 continua a mettersi in mostra: il parallelismo con il fuoriclasse del Barcellona, i video social e l'impatto devstante nelle giovanili",
    "video": false,
    "live": false,
-   "score": 2.89,
+   "score": 2.82,
    "sources": [
     "Tuttosport"
    ],
@@ -2593,7 +2641,7 @@
    "summary": "È successo allo stadio Patalano, a Ischia, durante una partita di calcio tra l'Asd Lacco Ameno 2013 e Real Sangiovanni Frattamaggiore",
    "video": false,
    "live": false,
-   "score": 2.88,
+   "score": 2.82,
    "sources": [
     "Corriere dello Sport"
    ],
@@ -2611,7 +2659,7 @@
    "summary": "\"Per noi non è una sconfitta\", le parole del ct dell'U21 sul giovane centrocampista che ha preferito la maglia Azzurra",
    "video": false,
    "live": false,
-   "score": 2.82,
+   "score": 2.75,
    "sources": [
     "Tuttosport"
    ],
@@ -2619,19 +2667,19 @@
    "also": []
   },
   {
-   "title": "Classifica Lega Basket Serie A 2026-27: vincono Milano e Bologna, doppio ko per le romane",
-   "link": "https://sport.sky.it/basket/serie-a/classifica-lega-basket-serie-a-2026-27",
-   "source": "Sky Sport",
-   "section": "basket",
-   "kicker": "Serie A",
-   "ts": "2026-09-27T23:04:00+02:00",
-   "image": "https://sport.sky.it/assets/images/660d23facd3fc86dd9dc00dfec3f911dcae0c6d0/skysport/it/basket/serie-a/classifica-lega-basket-serie-a-2025-2026/lba_lega_basket_logo.jpg",
-   "summary": "Al termine della 1^ giornata di campionato arriva un doppio stop per le due nuove squadre romane, mentre vincono Milano e Venezia, ultime finaliste per lo scudetto, così come la Virtus che sbanca Varese. Le migliori partite della LBA sono…",
+   "title": "Il maltempo ferma l’Italia: annullato l’allenamento prima della Turchia",
+   "link": "https://www.corrieredellosport.it/news/calcio/italia/2026/09/28-151523394/il_maltempo_ferma_l_italia_annullato_l_allenamento_prima_della_turchia/",
+   "source": "Corriere dello Sport",
+   "section": "calcio",
+   "kicker": "Azzurri",
+   "ts": "2026-09-28T14:01:22+02:00",
+   "image": "https://cdn.corrieredellosport.it/img/2000/1000/2026/09/28/114630162-455275aa-af42-4ced-93c6-d58882801485.jpg",
+   "summary": "Un violento temporale a Bursa ha intaccato il programma di avvicinamento degli Azzurri alla sfida contro la squadra di Montella",
    "video": false,
    "live": false,
-   "score": 2.8,
+   "score": 2.74,
    "sources": [
-    "Sky Sport"
+    "Corriere dello Sport"
    ],
    "on_home": false,
    "also": []
@@ -2647,7 +2695,7 @@
    "summary": "La Capitale rende omaggio all'ex capitano giallorosso: le opere diventano virali sui social",
    "video": false,
    "live": false,
-   "score": 2.78,
+   "score": 2.72,
    "sources": [
     "Corriere dello Sport"
    ],
@@ -2665,11 +2713,11 @@
    "summary": "Petizione ideata dallo scrittore Laporta. Il Ministro: Giochi Mediterraneo inizio percorso",
    "video": false,
    "live": false,
-   "score": 2.76,
+   "score": 2.69,
    "sources": [
     "ANSA"
    ],
-   "on_home": true,
+   "on_home": false,
    "also": []
   },
   {
@@ -2683,7 +2731,7 @@
    "summary": "Leo Messi aggiunge un’altra perla alla sua carriera, un gol su punizione realizzato da posizione quasi impossibile contro iL Columbus Crew. L’argentino si conferma così uno dei migliori goleador di sempre in questa specialità. Nella…",
    "video": false,
    "live": false,
-   "score": 2.73,
+   "score": 2.67,
    "sources": [
     "Sky Sport"
    ],
@@ -2701,7 +2749,7 @@
    "summary": "L'algerino, 'un sogno disputare il Mondiale e fare gol'",
    "video": false,
    "live": false,
-   "score": 2.7,
+   "score": 2.63,
    "sources": [
     "ANSA"
    ],
@@ -2719,47 +2767,11 @@
    "summary": "A Cremona si laurea campione: 2° italiano dopo Biaggi, 1° in Rosso. \"Da ragazzo mi dicevano che avrei spaccato il mondo, andare in basso mi ha formato come pilota e persona\". Ora l’aspetta la MotoGP: ripartirà nel team di Rossi",
    "video": false,
    "live": false,
-   "score": 2.67,
+   "score": 2.61,
    "sources": [
     "Tuttosport"
    ],
    "on_home": false,
-   "also": []
-  },
-  {
-   "title": "Ciclismo: dai cinque cerchi alle due ruote, gli olimpionici convergono a Gubbio",
-   "link": "https://www.ansa.it/sito/notizie/sport/ciclismo/2026/09/28/ciclismo-dai-cinque-cerchi-alle-due-ruote-gli-olimpionici-convergono_b2516850-fd15-4865-a3ac-0d18414c23d3.html",
-   "source": "ANSA",
-   "section": "ciclismo",
-   "kicker": "Ciclismo",
-   "ts": "2026-09-28T18:15:01+02:00",
-   "image": "",
-   "summary": "Daniele Masala, Alessia Filippi e Raffaello Leonardo ospiti alla Granfondo del Montefeltro",
-   "video": false,
-   "live": false,
-   "score": 2.66,
-   "sources": [
-    "ANSA"
-   ],
-   "on_home": true,
-   "also": []
-  },
-  {
-   "title": "MotoGP a Motegi: il GP Giappone nel weekend LIVE su Sky",
-   "link": "https://sport.sky.it/motogp/video/2026/09/28/motogp-gp-giappone-motegi-live-su-sky-sport-1127699",
-   "source": "Sky Sport",
-   "section": "motori",
-   "kicker": "MotoGP",
-   "ts": "2026-09-28T17:24:34+02:00",
-   "image": "https://sport.sky.it/assets/images/8f252265cfe58bc77a93f5fa212d0622e270d793/skysport/it/motori/motogp/video/2026/09/28/1127699_1790601810118_thumb_494.0000001_1790601876384.jpg",
-   "summary": "",
-   "video": true,
-   "live": false,
-   "score": 2.65,
-   "sources": [
-    "Sky Sport"
-   ],
-   "on_home": true,
    "also": []
   },
   {
@@ -2773,7 +2785,7 @@
    "summary": "Il tecnico piace alla Carrarese mentre al suo posto si valuta l'opzione Andreoletti",
    "video": false,
    "live": false,
-   "score": 2.55,
+   "score": 2.48,
    "sources": [
     "Tuttosport"
    ],
@@ -2781,31 +2793,13 @@
    "also": []
   },
   {
-   "title": "Pozzecco vince ma prende a schiaffi i suoi giocatori: la loro reazione è esilarante",
-   "link": "https://video.gazzetta.it/video-pozzecco-schiaffi-l-allenatore-saluta-cosi-i-giocatori-del-galatasaray/7ee2669c-285f-4f92-923b-6eb70d0a3xlk",
-   "source": "Gazzetta",
-   "section": "basket",
-   "kicker": "Basket",
-   "ts": "2026-09-28T16:28:20+02:00",
-   "image": "https://dimages2.gazzettaobjects.it/files/image_896_504/uploads/2026/09/28/6aba750176276.jpeg",
-   "summary": "Cambia il paese, cambia la squadra, ma Gianmarco Pozzecco resta lo stesso. Istrionico e spettacolare ha di nuovo trovato un modo particolare per esprimere affetto verso i cestisti del suo Galatasaray, prendendoli letteralmente a schiaffi…",
-   "video": true,
-   "live": false,
-   "score": 2.42,
-   "sources": [
-    "Gazzetta"
-   ],
-   "on_home": true,
-   "also": []
-  },
-  {
-   "title": "Israele-Irlanda 0-3: gol e highlights",
-   "link": "https://sport.sky.it/calcio/nations-league/video/2026/09/28/israele-irlanda-gol-highlights-1127628",
+   "title": "Varese-Virtus Bologna 69-90: highlights Serie A",
+   "link": "https://sport.sky.it/basket/video/2026/09/27/varese-virtus-bologna-highlights-lba-1127615",
    "source": "Sky Sport",
-   "section": "calcio",
-   "kicker": "Calcio",
-   "ts": "2026-09-28T02:38:11+02:00",
-   "image": "https://sport.sky.it/assets/images/5a8a6c8283ff1e5f57765b417af0246c78b83d28/skysport/it/calcio/nations-league/video/2026/09/28/1127628_1790548592767_thumb_494.0000001_1790548693499.jpg",
+   "section": "basket",
+   "kicker": "Serie A",
+   "ts": "2026-09-28T01:02:39+02:00",
+   "image": "https://sport.sky.it/assets/images/ab86a5aee155b3c8d3c949df2bff1a715169504e/skysport/it/basket/video/2026/09/27/1127615_1790542851826_thumb_494.0000001_1790542960754.jpg",
    "summary": "",
    "video": true,
    "live": false,
@@ -2845,7 +2839,7 @@
    "summary": "Il giocatore della nazionale di Anguilla è diventato una celebrità dopo aver causato l'espulsione di due avversari in pochi minuti: non hanno resistito alla tentazione di tirargli i capelli, e c'è da capirli. Scipio ha dei dreadlock che…",
    "video": false,
    "live": false,
-   "score": 2.39,
+   "score": 2.33,
    "sources": [
     "Sky Sport"
    ],
@@ -2863,7 +2857,7 @@
    "summary": "L'Eurolega scalda i motori in vista della stagione, da seguire sui canali di Sky Sport e in streaming su NOW a partire dal 24 settembre. L'Olympiacos riporta a Atene due leggende del club. Il Real Madrid prende Nick Smith Jr dalla NBA con…",
    "video": false,
    "live": false,
-   "score": 2.35,
+   "score": 2.29,
    "sources": [
     "Sky Sport"
    ],
@@ -2881,7 +2875,7 @@
    "summary": "Si tratta del diciottesimo campionato di \"A\" che le EGirls affronteranno da qui a poche settimane, con 10 partecipazioni in A1 e 8 in A2 dal 2008 ad oggi",
    "video": false,
    "live": false,
-   "score": 2.3,
+   "score": 2.24,
    "sources": [
     "Tuttosport"
    ],
@@ -2899,7 +2893,7 @@
    "summary": "A ottobre il gusto del basket diventa cinque volte più grande",
    "video": false,
    "live": false,
-   "score": 2.28,
+   "score": 2.21,
    "sources": [
     "Tuttosport"
    ],
@@ -2917,7 +2911,7 @@
    "summary": "Il volto della leggenda rossonera e della nazionale italiana è stato coperto da spray rosso. A condividere la foto è stato il consigliere comunale di Milano Alessandro Giungi: \"Un gesto così vile e miserrimo che mi fa provare una profonda…",
    "video": false,
    "live": false,
-   "score": 2.26,
+   "score": 2.19,
    "sources": [
     "Sky Sport"
    ],
@@ -2935,7 +2929,7 @@
    "summary": "I risultati e le classifiche dei campionati di Serie A Banca D'Alba, Serie B, Serie C1, Serie C2, Femminile, Under 21, Allievi, Esordienti, Pulcini e Promozionali",
    "video": false,
    "live": false,
-   "score": 2.23,
+   "score": 2.17,
    "sources": [
     "Tuttosport"
    ],
@@ -2953,7 +2947,7 @@
    "summary": "L’Under 18 torinese firma il colpo a Calvisano: il 25-22 vale, all’ultimo turno di barrage, l’accesso al Campionato Nazionale Under 18 Titolo. In Coppa Italia Rovigo fa valere l’esperienza e supera il CUS, ma i biancoblù gettano basi…",
    "video": false,
    "live": false,
-   "score": 2.2,
+   "score": 2.14,
    "sources": [
     "Tuttosport"
    ],
@@ -2971,7 +2965,7 @@
    "summary": "L’ex centrocampista bianconero ripercorre gli anni di Torino, il rapporto con Allegri e la chiamata in Nazionale: dal gruppo costruito dal ct ai giorni di Coverciano, fino alla Germania...",
    "video": false,
    "live": false,
-   "score": 2.11,
+   "score": 2.05,
    "sources": [
     "Tuttosport"
    ],
@@ -2989,7 +2983,7 @@
    "summary": "",
    "video": true,
    "live": false,
-   "score": 2.1,
+   "score": 2.03,
    "sources": [
     "Sky Sport"
    ],
@@ -3007,7 +3001,7 @@
    "summary": "Il club comunica l'impossibilità di poter giocare all'Allianz nella gara valida per la quinta giornata del cammino europeo",
    "video": false,
    "live": false,
-   "score": 2.1,
+   "score": 2.03,
    "sources": [
     "Tuttosport"
    ],
@@ -3025,7 +3019,7 @@
    "summary": "Il portiere di Capo Verde star del Mondiale: 'Preferivo la mia vita di prima'",
    "video": false,
    "live": false,
-   "score": 2.08,
+   "score": 2.02,
    "sources": [
     "ANSA"
    ],
@@ -3043,7 +3037,7 @@
    "summary": "",
    "video": true,
    "live": false,
-   "score": 2.04,
+   "score": 1.97,
    "sources": [
     "Sky Sport"
    ],
@@ -3061,7 +3055,7 @@
    "summary": "",
    "video": true,
    "live": false,
-   "score": 2.0,
+   "score": 1.94,
    "sources": [
     "Sky Sport"
    ],
@@ -3079,7 +3073,7 @@
    "summary": "Presidente Lnd: 'Possiamo intervenire solo su aspetti di politica sportiva. Per l'Italia inizio difficile, il percorso è lungo'",
    "video": false,
    "live": false,
-   "score": 1.93,
+   "score": 1.87,
    "sources": [
     "ANSA"
    ],
@@ -3097,7 +3091,7 @@
    "summary": "'Lo meritano i tifosi della Lazio'",
    "video": false,
    "live": false,
-   "score": 1.88,
+   "score": 1.82,
    "sources": [
     "ANSA"
    ],
@@ -3115,7 +3109,7 @@
    "summary": "Con ambo i sessi é un dominio non solo europeo che va dalla Roja ai club",
    "video": false,
    "live": false,
-   "score": 1.82,
+   "score": 1.76,
    "sources": [
     "ANSA"
    ],
@@ -3133,7 +3127,7 @@
    "summary": "Vio: 'Ora giocatori in relax, bisognerà essere bravi a riattaccare la spina'",
    "video": false,
    "live": false,
-   "score": 1.82,
+   "score": 1.75,
    "sources": [
     "ANSA"
    ],
@@ -3148,10 +3142,10 @@
    "kicker": "MotoGP",
    "ts": "2026-09-28T10:00:00+02:00",
    "image": "https://sport.sky.it/assets/images/eb3041738a21bf84db5badbbac1e1d64499bd80c/skysport/it/motori/motogp/motogp-2026-calendario-gare-asia-australia-date-orari/giappone_programma_completo.jpg",
-   "summary": "La MotoGP è pronta al tour fuori dai confini europei, con una serie di gare che potrebbero decidere una buona fetta del Mondiale 2026. Si parte dal GP Giappone, LIVE su Sky Sport e in streaming su NOW nel weekend del 2-4 ottobre. Qui di…",
+   "summary": "La MotoGP è pronta al tour fuori dai confini europei, con una serie di gare che potrebbero decidere una buona fetta del Mondiale 2026. Si parte dal GP Giappone, LIVE su Sky Sport e in streaming su NOW nel weekend del 2-4 ottobre, con il…",
    "video": false,
    "live": false,
-   "score": 1.8,
+   "score": 1.73,
    "sources": [
     "Sky Sport"
    ],
@@ -3223,7 +3217,7 @@
    "summary": "Eliminato dal polacco Majchrzak",
    "video": false,
    "live": false,
-   "score": 1.57,
+   "score": 1.5,
    "sources": [
     "ANSA"
    ],
@@ -3241,27 +3235,9 @@
    "summary": "Si è conclusa la tre giorni di regate preliminari di America's Cup a napoli. Il CEO di America's Cup Partenrship, Marzio Perrelli e il Sindaco di Napoli Gaetano Manfredi ne hanno tracciato il bilancio",
    "video": true,
    "live": false,
-   "score": 1.52,
+   "score": 1.46,
    "sources": [
     "Sky Sport"
-   ],
-   "on_home": false,
-   "also": []
-  },
-  {
-   "title": "Figc: botta e risposta Ceferin-Buonfiglio, e arriva sponsor ItalPetroli",
-   "link": "https://www.ansa.it/sito/notizie/sport/2026/09/27/ansa-boxfigc-botta-e-risposta-ceferin-buonfiglio-e-arriva-sponsor-italpetroli_9023b35b-a623-43d3-baa2-af246f0f1dc6.html",
-   "source": "ANSA",
-   "section": "calcio",
-   "kicker": "Calcio",
-   "ts": "2026-09-27T22:37:16+02:00",
-   "image": "",
-   "summary": "Il presidente dell'Uefa 'difende' federazione, il n.1 del Coni: 'Rispettiamo l'ordinamento sportivo'",
-   "video": false,
-   "live": false,
-   "score": 1.4,
-   "sources": [
-    "ANSA"
    ],
    "on_home": false,
    "also": []
@@ -3321,6 +3297,24 @@
    "also": []
   },
   {
+   "title": "Israele-Irlanda 0-3: gol e highlights",
+   "link": "https://sport.sky.it/calcio/nations-league/video/2026/09/28/israele-irlanda-gol-highlights-1127628",
+   "source": "Sky Sport",
+   "section": "calcio",
+   "kicker": "Calcio",
+   "ts": "2026-09-28T02:38:11+02:00",
+   "image": "https://sport.sky.it/assets/images/5a8a6c8283ff1e5f57765b417af0246c78b83d28/skysport/it/calcio/nations-league/video/2026/09/28/1127628_1790548592767_thumb_494.0000001_1790548693499.jpg",
+   "summary": "",
+   "video": true,
+   "live": false,
+   "score": 1.0,
+   "sources": [
+    "Sky Sport"
+   ],
+   "on_home": false,
+   "also": []
+  },
+  {
    "title": "Irlanda, la protesta durante il match contro Israele",
    "link": "https://sport.sky.it/calcio/nations-league/video/2026/09/28/israele-irlanda-protesta-inno-lutto-nations-league-video-1127626",
    "source": "Sky Sport",
@@ -3339,24 +3333,6 @@
    "also": []
   },
   {
-   "title": "Domenicali indica la rotta alla Ferrari: ’Nella tempesta barra dritta’",
-   "link": "https://www.ansa.it/sito/notizie/sport/f1/2026/09/28/domenicali-indica-la-rotta-alla-ferrari-nella-tempesta-barra-dritta_08ab84eb-215f-4511-aee9-6c46bf3e26e1.html",
-   "source": "ANSA",
-   "section": "motori",
-   "kicker": "F1",
-   "ts": "2026-09-28T11:26:08+02:00",
-   "image": "",
-   "summary": "'Antonelli è talento, ma anche capacità di gestire la pressione'",
-   "video": false,
-   "live": false,
-   "score": 0.96,
-   "sources": [
-    "ANSA"
-   ],
-   "on_home": false,
-   "also": []
-  },
-  {
    "title": "Coni: in arrivo i pareri giuridici sul caso Malagò",
    "link": "https://www.ansa.it/sito/notizie/sport/calcio/2026/09/28/coni-in-arrivo-i-pareri-giuridici-sul-caso-malago_8097590b-c358-4704-9866-a4427f3ec0b4.html",
    "source": "ANSA",
@@ -3367,7 +3343,7 @@
    "summary": "Sono stati chiesti a Scoca, Coccia, Medugno e Angeletti",
    "video": false,
    "live": false,
-   "score": 0.88,
+   "score": 0.82,
    "sources": [
     "ANSA"
    ],
@@ -3483,127 +3459,19 @@
    "also": []
   },
   {
-   "title": "Gibilterra-Andorra 0-0: highlights",
-   "link": "https://sport.sky.it/calcio/nations-league/video/2026/09/27/gibilterra-andorra-gol-highlights-1127603",
-   "source": "Sky Sport",
+   "title": "Figc: botta e risposta Ceferin-Buonfiglio, e arriva sponsor ItalPetroli",
+   "link": "https://www.ansa.it/sito/notizie/sport/2026/09/27/ansa-boxfigc-botta-e-risposta-ceferin-buonfiglio-e-arriva-sponsor-italpetroli_9023b35b-a623-43d3-baa2-af246f0f1dc6.html",
+   "source": "ANSA",
    "section": "calcio",
    "kicker": "Calcio",
-   "ts": "2026-09-28T00:30:27+02:00",
-   "image": "https://sport.sky.it/assets/images/ee0a5d592cfdf2186939c33b0bcb6de7d7a31b77/skysport/it/calcio/nations-league/video/2026/09/27/1127603_1790540735318_thumb_494.0000001_1790541030063.jpg",
-   "summary": "",
-   "video": true,
+   "ts": "2026-09-27T22:37:16+02:00",
+   "image": "",
+   "summary": "Il presidente dell'Uefa 'difende' federazione, il n.1 del Coni: 'Rispettiamo l'ordinamento sportivo'",
+   "video": false,
    "live": false,
-   "score": 0.2,
+   "score": 0.0,
    "sources": [
-    "Sky Sport"
-   ],
-   "on_home": false,
-   "also": []
-  },
-  {
-   "title": "Austria-Kosovo 3-1: gol e highlights",
-   "link": "https://sport.sky.it/calcio/nations-league/video/2026/09/27/austria-kosovo-gol-highlights-1127602",
-   "source": "Sky Sport",
-   "section": "calcio",
-   "kicker": "Calcio",
-   "ts": "2026-09-28T00:18:55+02:00",
-   "image": "https://sport.sky.it/assets/images/bc8000b00930ffd2a74fdda1c34f4fbc93b87bee/skysport/it/calcio/nations-league/video/2026/09/27/1127602_1790540209023_thumb_494.0000001_1790540337625.jpg",
-   "summary": "",
-   "video": true,
-   "live": false,
-   "score": 0.2,
-   "sources": [
-    "Sky Sport"
-   ],
-   "on_home": false,
-   "also": []
-  },
-  {
-   "title": "Danimarca-Galles 2-0: gol e highlights",
-   "link": "https://sport.sky.it/calcio/nations-league/video/2026/09/27/danimarca-galles-gol-highlights-1127600",
-   "source": "Sky Sport",
-   "section": "calcio",
-   "kicker": "Calcio",
-   "ts": "2026-09-28T00:15:35+02:00",
-   "image": "https://sport.sky.it/assets/images/6c1eacbb3603916660d17e1ca007762574a24a36/skysport/it/calcio/nations-league/video/2026/09/27/1127600_1790539859637_thumb_494.0000001_1790540136822.jpg",
-   "summary": "",
-   "video": true,
-   "live": false,
-   "score": 0.2,
-   "sources": [
-    "Sky Sport"
-   ],
-   "on_home": false,
-   "also": []
-  },
-  {
-   "title": "Udine-Scafati 87-63: highlights Serie A",
-   "link": "https://sport.sky.it/basket/video/2026/09/27/udine-scafati-trento-highlights-lba-1127597",
-   "source": "Sky Sport",
-   "section": "basket",
-   "kicker": "Serie A",
-   "ts": "2026-09-27T23:43:24+02:00",
-   "image": "https://sport.sky.it/assets/images/06cb86b7d98986b1ead0295f9c524c67b696973e/skysport/it/basket/video/2026/09/27/1127597_1790538001866_thumb_494.0000001_1790538206831.jpg",
-   "summary": "",
-   "video": true,
-   "live": false,
-   "score": 0.2,
-   "sources": [
-    "Sky Sport"
-   ],
-   "on_home": false,
-   "also": []
-  },
-  {
-   "title": "Motocorsa, Mauri: «Surra confermato per il 2027»",
-   "link": "https://sport.sky.it/motogp/2026/09/27/surra-sbk-motocorsa-racing-2027-news-video",
-   "source": "Sky Sport",
-   "section": "motori",
-   "kicker": "MotoGP",
-   "ts": "2026-09-27T23:10:00+02:00",
-   "image": "https://sport.sky.it/assets/images/d2d8fc8eb164a40f6b2658cb50887a448fa922ff/skysport/it/motori/motogp/2026/09/27/surra-sbk-motocorsa-racing-2027-news-video/ansa_surra_motocorsa_sbk.jpg",
-   "summary": "Lorenzo Mauri, fondatore del team Motocorsa Racing, annuncia in diretta a Sky il rinnovo di Alberto Surra per il 2027: \"Continuiamo il progetto, siamo felici\". Guarda il VIDEO BULEGA CAMPIONE: ULTIMO GIRO - CARRIERA - HIGHLIGHTS …",
-   "video": true,
-   "live": false,
-   "score": 0.2,
-   "sources": [
-    "Sky Sport"
-   ],
-   "on_home": false,
-   "also": []
-  },
-  {
-   "title": "Tortona-Verona 101-93: highlights Serie A",
-   "link": "https://sport.sky.it/basket/video/2026/09/27/tortona-verona-highlights-lba-1127594",
-   "source": "Sky Sport",
-   "section": "basket",
-   "kicker": "Serie A",
-   "ts": "2026-09-27T23:05:32+02:00",
-   "image": "https://sport.sky.it/assets/images/8ff7cd5100631434dfafd408dd2d457e1aeeccd6/skysport/it/basket/video/2026/09/27/1127594_1790535701143_thumb_494.0000001_1790535932643.jpg",
-   "summary": "",
-   "video": true,
-   "live": false,
-   "score": 0.2,
-   "sources": [
-    "Sky Sport"
-   ],
-   "on_home": false,
-   "also": []
-  },
-  {
-   "title": "Bulega campione Superbike: la sua carriera fin qui",
-   "link": "https://sport.sky.it/motogp/video/2026/09/27/bulega-campione-superbike-storia-carriera-video-1127588",
-   "source": "Sky Sport",
-   "section": "motori",
-   "kicker": "MotoGP",
-   "ts": "2026-09-27T22:58:24+02:00",
-   "image": "https://sport.sky.it/assets/images/3da0b9e86c58077c569d8b059b26e2f6bc867488/skysport/it/motori/motogp/video/2026/09/27/1127588_1790533154454_thumb_494.0000001_1790535506622.jpg",
-   "summary": "",
-   "video": true,
-   "live": false,
-   "score": 0.2,
-   "sources": [
-    "Sky Sport"
+    "ANSA"
    ],
    "on_home": false,
    "also": []
