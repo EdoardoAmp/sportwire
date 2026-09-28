@@ -95,6 +95,12 @@ def tidy_title(raw: str) -> tuple[str, bool, bool]:
         video |= word in ("VIDEO",)
         live |= word in ("DIRETTA", "LIVE")
         t = t[: m.start()].rstrip()
+    m = re.match(r"^(LIVE|DIRETTA|VIDEO)\b[\s:–-]*", t)          # anche in testa: "LIVE Alle 20.45 …"
+    if m and len(t) > m.end() + 12:
+        video |= m.group(1) == "VIDEO"
+        live |= m.group(1) != "VIDEO"
+        t = t[m.end():]
+        t = t[:1].upper() + t[1:]
     t = t.replace("'", "’")
     parts = t.split('"')
     if len(parts) % 2 == 1 and len(parts) > 1:           # virgolette bilanciate → « »
