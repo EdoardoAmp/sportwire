@@ -1,0 +1,58 @@
+# Sportwire · refresh orario su GitHub Actions (gratis per i repo pubblici, niente server da mantenere).
+# Ogni ora: legge i feed RSS, rigenera le pagine, salva i dati nel repo (commit "live:" unico, riscritto
+# a ogni giro) e pubblica su GitHub Pages. Parte anche a ogni push su main e a mano ("Run workflow").
+# Nota: GitHub disattiva i cron dei repo senza commit da 60 giorni; il commit "live:" orario lo evita.
+name: refresh
+
+on:
+  schedule:
+    - cron: "17 * * * *"      # al minuto 17: allo scoccare dell'ora le code di GitHub sono lente
+  workflow_dispatch:
+  push:
+    branches: [main]          # i push fatti da questo workflow (GITHUB_TOKEN) non lo rilanciano
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Build dai feed
+        env:
+          TZ: Europe/Rome
+        run: python3 build.py
+
+      - name: Salva i dati nel repo
+        run: |
+          git config user.name "sportwire-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then echo "nessuna novità"; exit 0; fi
+          # i refresh si accumulano in un solo commit "live:"; i rilasci di codice restano nella storia
+          if git log -1 --format=%s | grep -q '^live:'; then AMEND=--amend; else AMEND=; fi
+          git commit -q $AMEND -m "live: rassegna aggiornata $(TZ=Europe/Rome date '+%Y-%m-%d %H:%M')"
+          git push -q --force-with-lease origin HEAD:main
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - id: deploy
+        uses: actions/deploy-pages@v4
