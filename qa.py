@@ -87,6 +87,7 @@ PROBE = r"""
     scrollW: document.documentElement.scrollWidth, innerW: window.innerWidth,
     imgs: imgs.length, broken, contrast: bad, navWrap, smallTargets: targets,
     wordmark: getComputedStyle(document.querySelector('.masthead__wordmark')).fontFamily,
+    viewportMeta: (document.querySelector('meta[name=viewport]') || {}).content || null,
   };
 }
 """
@@ -112,7 +113,15 @@ def main() -> int:
         if browser is None:
             raise SystemExit("nessun browser")
         for width in WIDTHS:
-            ctx = browser.new_context(viewport={"width": width, "height": 900}, device_scale_factor=1)
+            # sotto i 640px uso l'emulazione telefono vera: uno screenshot headless con --window-size
+            # NON è una verifica mobile (il layout viewport può essere più largo del ritaglio).
+            mobile = width <= 414
+            ctx = browser.new_context(
+                viewport={"width": width, "height": 900},
+                device_scale_factor=2 if mobile else 1,
+                is_mobile=mobile, has_touch=mobile,
+                user_agent=("Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 "
+                            "(KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1") if mobile else None)
             page = ctx.new_page()
             errors: list[str] = []
             page.on("console", lambda m: errors.append(m.text[:90]) if m.type == "error" else None)
@@ -122,6 +131,8 @@ def main() -> int:
                 page.evaluate(PREP)
                 r = page.evaluate(PROBE)
                 flags = []
+                if not r.get("viewportMeta") or "width=device-width" not in (r.get("viewportMeta") or ""):
+                    flags.append("META VIEWPORT assente")
                 if r["scrollW"] - r["innerW"] > 1:
                     flags.append(f"SCROLL ORIZZONTALE +{r['scrollW'] - r['innerW']}px")
                 if r["broken"]:
