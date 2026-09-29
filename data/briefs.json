@@ -1,4 +1,24 @@
 {
+ "014065d2": {
+  "at": "2026-09-29T23:36:23+02:00",
+  "b": "Eurolega, il derby è dell'Olimpia Milano: 87-85 sulla Virtus Bologna con il canestro sulla sirena di Devon Hall, 12 punti di cui 8 nell'ultimo quarto. Bologna pareggia a 4'' dalla fine con Diarra (22 di valutazione), Milano domina a rimbalzo (41, 10 di Burnell).",
+  "n": 1
+ },
+ "037e493e": {
+  "at": "2026-09-29T23:00:10+02:00",
+  "b": "La Roma nega a Dybala e Molina il viaggio a Buenos Aires per il saluto di Messi alla nazionale. Il club richiama ragioni sportive e logistiche: la trasferta sottrae allenamenti a ridosso della gara di Como.",
+  "n": 4
+ },
+ "04686008": {
+  "at": "2026-09-29T23:00:10+02:00",
+  "b": "Matthews, argento ai Mondiali di Montréal dietro McNulty, denuncia collaborazioni tra corridori di nazionali diverse legati allo stesso club. L'australiano riconosce comunque la superiorità del vincitore.",
+  "n": 1
+ },
+ "061f420b": {
+  "at": "2026-09-30T00:00:21+02:00",
+  "b": "Nessuna lesione muscolare per Francisco Conceiçao: secondo Sky Sport e ANSA l'attaccante della Juventus ha solo una contusione alla coscia. L'allarme era scattato con la sua sostituzione nella sfida di Nations League.",
+  "n": 2
+ },
  "0a94b583": {
   "at": "2026-09-29T21:53:39+02:00",
   "b": "Brandon Ingram, appena arrivato ai Clippers dai Raptors, ha un tendine d'Achille parzialmente lesionato, non rotto del tutto, e salterà almeno l'inizio della stagione. Sarà rivalutato settimana per settimana.",
@@ -20,6 +40,18 @@
   "b": "Lo staff di Pogacar, citato da Marca, esclude che corra l'Europeo di domenica 4 ottobre a Lubiana: il suo nome in startlist era una formalità. Il capitano della Slovenia dovrebbe essere Roglic.",
   "n": 1
  },
+ "0cbeab27": {
+  "at": "2026-09-29T23:36:23+02:00",
+  "b": "",
+  "n": 1,
+  "skip": true
+ },
+ "0e0613dd": {
+  "at": "2026-09-29T23:28:47+02:00",
+  "b": "",
+  "n": 1,
+  "skip": true
+ },
  "0eb81be9": {
   "at": "2026-09-29T21:40:15+02:00",
   "b": "Questa settimana la Uefa versa ai club circa 31,5 milioni per i giocatori lasciati partire per la Nations League 2024-25, primo pagamento di un fondo da 104 milioni. Il compenso è di 3.845 euro per ogni presenza a referto.",
@@ -29,6 +61,18 @@
   "at": "2026-09-29T22:33:53+02:00",
   "b": "La Roma non farà volare Dybala e Molina a Buenos Aires per l'addio di Messi alla nazionale argentina il 6 ottobre: motivi sportivi e logistici. Per il Corriere dello Sport è deciso, per Sky Sport la Roma è orientata al no.",
   "n": 2
+ },
+ "115f72aa": {
+  "at": "2026-09-29T23:28:47+02:00",
+  "b": "",
+  "n": 1,
+  "skip": true
+ },
+ "11c5c598": {
+  "at": "2026-09-29T23:00:10+02:00",
+  "b": "",
+  "n": 1,
+  "skip": true
  },
  "15c8ae11": {
   "at": "2026-09-29T21:53:39+02:00",
@@ -40,6 +84,12 @@
   "at": "2026-09-29T21:40:15+02:00",
   "b": "L'Aston Martin ha rinnovato Alonso per il 2027, quando avrà 46 anni. Sky ripercorre la carriera dello spagnolo: due titoli mondiali, cinque anni in Ferrari e l'amicizia con Briatore.",
   "n": 1
+ },
+ "1e2a6482": {
+  "at": "2026-09-29T23:28:47+02:00",
+  "b": "",
+  "n": 1,
+  "skip": true
  },
  "21247109": {
   "at": "2026-09-29T21:53:39+02:00",
@@ -57,9 +107,19 @@
   "b": "La Giunta di Napoli stanzia 50 milioni di fondi comunali per riqualificare lo stadio Maradona, che si aggiungono ai 150 della Regione Campania: servono alla candidatura della città a Euro 2032.",
   "n": 2
  },
+ "290abf7e": {
+  "at": "2026-09-29T23:00:31+02:00",
+  "b": "Il PGA Tour si sposta nello Utah: in palio 500 punti FedEx e un montepremi di 6 milioni di dollari. Brennan difende il titolo; la Fall Season consente ai golfisti esclusi dai primi 50 di cercare un posto nella top 100 di fine anno.",
+  "n": 1
+ },
  "2ce42a9b": {
   "at": "2026-09-29T21:40:15+02:00",
   "b": "Sinner, fermo dal 12 luglio e ritirato dal torneo di Pechino, guida ancora il ranking Atp con 11.000 punti; Zverev, testa di serie numero 1 in Cina, è a 1.370 punti e può avvicinarsi.",
+  "n": 2
+ },
+ "2d8b780f": {
+  "at": "2026-09-29T23:28:47+02:00",
+  "b": "La Omag firma la centrale francese Amandha Sylves, 26 anni, che prende il posto di Veronica Costantini, ancora alle prese con il recupero della condizione fisica. Sarà a disposizione di Bellano dopo il nulla osta del Coni.",
   "n": 2
  },
  "2f8f4e08": {
@@ -71,6 +131,11 @@
   "at": "2026-09-29T21:40:15+02:00",
   "b": "Alla prima conferenza stampa con i Philadelphia 76ers, LeBron James racconta che almeno cinque squadre lo volevano quest'estate e che ha scelto Filadelfia grazie all'amico Tyrese Maxey; aggiunge che avrebbe potuto chiudere la carriera a New York.",
   "n": 1
+ },
+ "31bc3c64": {
+  "at": "2026-09-29T23:00:10+02:00",
+  "b": "Bezzecchi punta a dare continuità al lavoro dell'Aprilia nel GP del Giappone a Motegi, dove l'anno scorso arriva quarto. OA Sport indica in 42 punti il distacco dal compagno Martin, leader del Mondiale.",
+  "n": 2
  },
  "33b49347": {
   "at": "2026-09-29T22:34:16+02:00",
@@ -118,6 +183,12 @@
   "b": "Il britannico Greg Rusedski, nel suo podcast, prevede che dal 2027 Zverev, due Slam vinti quest'anno tra cui gli Us Open, si giocherà i major con Sinner e Alcaraz, e giudica «una sciocchezza» l'obiezione che abbia vinto senza dover battere i due.",
   "n": 1
  },
+ "4ad9f85f": {
+  "at": "2026-09-29T23:36:23+02:00",
+  "b": "",
+  "n": 1,
+  "skip": true
+ },
  "4b2a6ce9": {
   "at": "2026-09-29T21:53:39+02:00",
   "b": "",
@@ -145,6 +216,11 @@
   "b": "Per la Gazzetta il calcio italiano non sa riconoscere le soluzioni che ha davanti: Kayode, scartato giovanissimo dalla Juve, è stato la novità in Turchia, mentre Amorim viene criticato dopo quattro mesi da imbattuto.",
   "n": 1
  },
+ "690c7580": {
+  "at": "2026-09-29T23:00:10+02:00",
+  "b": "Ferrer spiega a Relevo che Alcaraz conferma la disponibilità per le Finals di Davis. Il capitano spagnolo attribuisce l'assenza contro il Cile alle condizioni fisiche e ricorda l'infortunio che lo ferma anche l'anno scorso.",
+  "n": 1
+ },
  "6ae101e5": {
   "at": "2026-09-29T21:53:39+02:00",
   "b": "Pio Esposito ha segnato 6 gol in 11 partite in Nazionale, una media di 0,55 a gara: dagli anni Novanta a oggi nessun azzurro ha fatto meglio, nemmeno Roberto Baggio.",
@@ -166,6 +242,23 @@
   "n": 1,
   "skip": true
  },
+ "76dabe9a": {
+  "at": "2026-09-29T23:00:10+02:00",
+  "b": "",
+  "n": 1,
+  "skip": true
+ },
+ "76e051fc": {
+  "at": "2026-09-29T23:36:23+02:00",
+  "b": "",
+  "n": 1,
+  "skip": true
+ },
+ "78a40a72": {
+  "at": "2026-09-29T23:28:47+02:00",
+  "b": "Il team manager della UAE-XRG Mauro Gianetti chiude le voci su un rientro di Tadej Pogacar all'Europeo di Lubiana del 4 ottobre, un mese dopo l'incidente alla Vuelta: «È troppo rischioso», dice, perché la priorità è la salute. Lo sloveno è tornato in sella da pochi giorni.",
+  "n": 1
+ },
  "79490ee4": {
   "at": "2026-09-29T22:33:53+02:00",
   "b": "La Ferrari ribadisce la fiducia in Fred Vasseur dopo le speculazioni sul suo futuro, nate dalle parole di Horner al Times e dai risultati deludenti. Il club chiede di concentrarsi sul lavoro e sul miglioramento delle prestazioni.",
@@ -181,9 +274,30 @@
   "b": "Tokyo (Japan Open) e Pechino (China Open), due Atp 500, si giocano dal 30 settembre al 6 ottobre e sono su Sky Sport e Now. Alcaraz guida il tabellone di Tokyo, Zverev quello di Pechino, dove giocano anche Djokovic e Cobolli.",
   "n": 1
  },
+ "82559cd6": {
+  "at": "2026-09-29T23:00:10+02:00",
+  "b": "",
+  "n": 1,
+  "skip": true
+ },
  "82d17c50": {
   "at": "2026-09-29T21:53:39+02:00",
   "b": "Secondo la Gazzetta, Pogacar vorrebbe correre l'Europeo in Slovenia a 28 giorni dalla caduta alla Vuelta, con l'ok del chirurgo che lo ha operato; la Uae Emirates giudica il rientro rischioso e non è d'accordo.",
+  "n": 1
+ },
+ "8362b7e5": {
+  "at": "2026-09-29T23:00:10+02:00",
+  "b": "Amanda Anisimova interrompe la stagione per un nuovo infortunio al polso e dà appuntamento al 2027. Dopo il ritiro da Singapore rinuncia anche al China Open, dove è campionessa in carica.",
+  "n": 1
+ },
+ "837604e2": {
+  "at": "2026-09-29T23:28:47+02:00",
+  "b": "Il presidente della Figc Giovanni Malagò, all'indomani del 4-1 sulla Turchia, parla di «primo passo» verso la «luce in fondo al tunnel» e loda i giovani esordienti. Sul dossier per Euro 2032 avverte che gli stadi non sono pronti «eccetto uno», mentre quello della Roma ci sarà.",
+  "n": 2
+ },
+ "83e586f7": {
+  "at": "2026-09-29T23:00:10+02:00",
+  "b": "Le regate preliminari dell'America's Cup a Napoli accompagnano un aumento dei tesserati della vela in Campania: 1.294 iscritti in più in una settimana. Il 90% dei nuovi ingressi riguarda bambini e ragazzi fra 6 e 14 anni.",
   "n": 1
  },
  "87ba2561": {
@@ -205,6 +319,21 @@
   "at": "2026-09-29T22:33:53+02:00",
   "b": "Raspadori lascia il ritiro di Coverciano: dopo gli esami strumentali l'attaccante dell'Atalanta è indisponibile per le prossime due gare dell'Italia e torna al club. Venerdì 2 ottobre gli azzurri affrontano la Francia a Saint-Denis.",
   "n": 1
+ },
+ "8d6ad45d": {
+  "at": "2026-09-29T23:00:10+02:00",
+  "b": "La Gazzetta ricostruisce dalle carte della sentenza il sistema di sponsorizzazioni del Manchester City. Il club e la proprietà avrebbero inserito oltre un miliardo di euro nei conti per rispettare i vincoli di Premier e Uefa.",
+  "n": 1
+ },
+ "8e04c731": {
+  "at": "2026-09-29T23:28:47+02:00",
+  "b": "Javier Tebas, presidente della Liga, avverte dal summit Fifpro di Londra: il calendario è ormai insostenibile e i calciatori corrono verso un «punto di rottura inevitabile». Cita il Mondiale per club allargato e quello a 48 squadre e chiede a Fifa e Uefa un intervento deciso.",
+  "n": 1
+ },
+ "8f71b1ea": {
+  "at": "2026-09-29T23:00:10+02:00",
+  "b": "Raspadori lascia Coverciano dopo gli esami per il colpo alla coscia subito contro la Turchia e torna a Bergamo per curarsi. Mancini non chiama sostituti: restano 32 azzurri per le gare con Francia e Turchia.",
+  "n": 2
  },
  "901b3e01": {
   "at": "2026-09-29T22:33:53+02:00",
@@ -242,15 +371,36 @@
   "b": "Con un punto in due gare di Nations League (1-1 con l'Olanda, 0-1 in casa con la Grecia) Klopp firma il peggior avvio di un ct tedesco: Herberger nel 1937 e Schön nel 1965 ne avevano due. Mai la Germania aveva perso con la Grecia.",
   "n": 1
  },
+ "9ee25d91": {
+  "at": "2026-09-29T23:00:10+02:00",
+  "b": "",
+  "n": 1,
+  "skip": true
+ },
  "a1a81d3a": {
   "at": "2026-09-29T21:53:39+02:00",
   "b": "",
   "n": 1,
   "skip": true
  },
+ "a770abd4": {
+  "at": "2026-09-30T00:00:19+02:00",
+  "b": "Il Concorso letterario del Coni, alla 60ª edizione, premia Marco Bellinazzo per la narrativa e l'ex nuotatrice Cristina Chiuso per la saggistica. Per la sezione tecnica vincono Maria Christina Cox e Renato Manno, con un libro sul cancro e lo sport.",
+  "n": 1
+ },
+ "a7dfe668": {
+  "at": "2026-09-29T23:00:10+02:00",
+  "b": "Roberto La Florio racconta alla Gazzetta l'approdo all'Inter dei fratelli Esposito nel 2014. Il Brescia rischia il fallimento e l'agente cerca una destinazione: dopo le riserve di altri club, Samaden decide in 24 ore.",
+  "n": 1
+ },
  "a8cbc9c8": {
   "at": "2026-09-29T22:33:53+02:00",
   "b": "Gli Europei su strada di Lubiana (2-7 ottobre) andranno in diretta sulla Rai. La prova élite maschile di domenica pomeriggio dovrebbe seguire tra Rai Sport HD e Rai 2 HD, senza le sovrapposizioni di orario viste ai Mondiali di Montreal.",
+  "n": 1
+ },
+ "a9999021": {
+  "at": "2026-09-29T23:00:10+02:00",
+  "b": "La Nba apre i training camp in vista del campionato al via il 20 ottobre. La preparazione offre agli staff uno spazio di lavoro che i ritmi della stagione regolare riducono, soprattutto per integrare nuovi giocatori e allenatori.",
   "n": 1
  },
  "aa225026": {
@@ -271,6 +421,11 @@
  "abfc7d9e": {
   "at": "2026-09-29T21:53:39+02:00",
   "b": "Per Beppe Bergomi il 4-1 alla Turchia dà autostima all'Italia perché è arrivato con idee, ma la difesa deve fare attenzione a quanto accaduto nel secondo tempo. Teotino sostiene che i cambi di Mancini hanno migliorato la squadra.",
+  "n": 1
+ },
+ "b016cf80": {
+  "at": "2026-09-30T00:00:20+02:00",
+  "b": "Il BC Roma gioca la prima in casa domenica 4 ottobre alle 16 al PalaTiziano contro Tortona, seconda giornata di LBA: biglietti in vendita da oggi alle 15 sul nuovo sito del club, da 1 a 10 euro più prevendita. Il 20% del ricavato va a Komen Italia per la salute delle donne.",
   "n": 1
  },
  "b09a6c7f": {
@@ -310,10 +465,27 @@
   "b": "A due terzi del Mondiale MotoGP guida Martin con 306 punti, davanti a Marquez (294), Bezzecchi (264) e Acosta (234). Per l'analisi dei dati di OA Sport il favorito è Marquez, mentre Bezzecchi paga le difficoltà nelle Sprint.",
   "n": 1
  },
+ "c637d382": {
+  "at": "2026-09-29T23:36:34+02:00",
+  "b": "Il designatore della Can Daniele Orsato, a Lissone, annuncia che Guida tornerà presto a dirigere il Napoli, essendo di Torre Annunziata, mentre per Maresca sarà più complicato: preferisce non assegnare fischietti della sezione della squadra.",
+  "n": 1
+ },
+ "c6b0df14": {
+  "at": "2026-09-29T23:36:23+02:00",
+  "b": "",
+  "n": 1,
+  "skip": true
+ },
  "c8a59946": {
   "at": "2026-09-29T21:40:15+02:00",
   "b": "La Roma prevede di posare la prima pietra dello stadio di Pietralata entro marzo 2027, dopo l'ultimo via libera della Conferenza dei Servizi. Nel 2031 i ricavi stimati sono 153 milioni, con incassi +245% sul 2025; secondo Sky l'opera costerà circa 1,4 miliardi.",
   "n": 2
+ },
+ "c8e1b7a3": {
+  "at": "2026-09-29T23:00:10+02:00",
+  "b": "",
+  "n": 1,
+  "skip": true
  },
  "cc2690a4": {
   "at": "2026-09-29T21:40:15+02:00",
@@ -334,6 +506,12 @@
   "at": "2026-09-29T21:40:15+02:00",
   "b": "Gli Slam hanno reso noti i 12 membri del Grand Slam Player Council, organo che discuterà anche di ricavi e montepremi: dentro Djokovic e Musetti, unico italiano; fuori Sinner e Alcaraz.",
   "n": 2
+ },
+ "cf8eb207": {
+  "at": "2026-09-29T23:00:10+02:00",
+  "b": "",
+  "n": 1,
+  "skip": true
  },
  "d3874eb3": {
   "at": "2026-09-29T21:53:39+02:00",
@@ -363,8 +541,23 @@
   "b": "Entro il 26 ottobre Volandri indicherà i pre-convocati per le Finali di Coppa Davis, a Bologna dal 24 al 29 novembre. Cobolli è certo del posto; Musetti, Darderi e Berrettini si contendono uno slot, due se Sinner non ci sarà.",
   "n": 1
  },
+ "da7d02bf": {
+  "at": "2026-09-29T23:00:10+02:00",
+  "b": "La Reyer Venezia apre l'EuroCup battendo Francoforte 104-72 e manda a segno tutti i giocatori. Watson, Wiltjer e Candi chiudono con 14 punti ciascuno; il vantaggio è già in doppia cifra al termine del primo quarto.",
+  "n": 1
+ },
  "db00aa09": {
-  "at": "2026-09-29T21:40:15+02:00",
+  "at": "2026-09-29T23:28:47+02:00",
+  "b": "Anche nel 2027 Fernando Alonso sarà al via della Formula 1: lo spagnolo, 45 anni e due titoli iridati, ha prolungato di un anno con l'Aston Martin, che rinnova anche Lance Stroll. «Mi sento ancora veloce», ha detto in un video social: il ritiro non è ancora tempo.",
+  "n": 2
+ },
+ "dd209ba3": {
+  "at": "2026-09-29T23:00:10+02:00",
+  "b": "Il Parma ufficializza Gilardino come allenatore al posto di Cuesta, con l'obiettivo della salvezza. Torna nel club che nel 2005 contribuì a salvare segnando nello spareggio contro il Bologna.",
+  "n": 1
+ },
+ "dd3e0c7b": {
+  "at": "2026-09-29T23:28:47+02:00",
   "b": "",
   "n": 1,
   "skip": true
@@ -391,6 +584,17 @@
   "b": "Filippo Ferrero, attaccante dell'AN Brescia e campione ai Giochi del Mediterraneo di Taranto, li definisce un'iniezione di fiducia. Il suo club ha superato i preliminari di Champions e lui si dice contento di trovare la Pro Recco.",
   "n": 1
  },
+ "e53f1f76": {
+  "at": "2026-09-29T23:00:10+02:00",
+  "b": "Orsato esclude una linea arbitrale personale: chiede di distinguere i falli dai semplici contatti e riserva il Var agli errori evidenti. A Lissone il designatore fa il punto dopo una sola revisione al monitor in 5 giornate.",
+  "n": 1
+ },
+ "e879d805": {
+  "at": "2026-09-29T23:36:23+02:00",
+  "b": "",
+  "n": 1,
+  "skip": true
+ },
  "e8d32904": {
   "at": "2026-09-29T21:53:39+02:00",
   "b": "Filippo Ganna salta gli Europei di ciclismo per dare priorità alle qualificazioni olimpiche. Arriva dall'argento nella cronometro dei Mondiali di Montreal, a 57 secondi da Evenepoel.",
@@ -406,6 +610,11 @@
   "b": "Pio Esposito segna anche in Turchia, dopo un assist a Kayode nel primo tempo, e in casa Inter si torna a chiedersi chi debba giocare tra lui e Thuram: in campionato entrambi hanno due gol.",
   "n": 1
  },
+ "eb21fb62": {
+  "at": "2026-09-30T00:00:21+02:00",
+  "b": "Il designatore Daniele Orsato ammette a Lissone sette errori arbitrali in stagione: in campionato tre rigori non fischiati e due espulsioni mancate, in Coppa Italia due errori sui rigori. Intanto il tempo effettivo sale a 59'24'', con soli 5 rigori in cinque turni.",
+  "n": 2
+ },
  "eddb0279": {
   "at": "2026-09-29T22:33:53+02:00",
   "b": "Debutto vincente in Eurocup per la Dolomiti Energia Trento, che a Klaipeda batte il Neptunas 76-73 dopo quattro quarti in equilibrio: 22 punti per Olivari, 19 per Darius Brown II.",
@@ -417,6 +626,11 @@
   "n": 1,
   "skip": true
  },
+ "f6d4ba17": {
+  "at": "2026-09-29T23:28:47+02:00",
+  "b": "Stop per Zaniolo, lesione al bicipite femorale: per Sky Sport l'attaccante dell'Udinese resterà fuori 3-4 settimane, circa un mese per il Corriere dello Sport, con rientro possibile contro la Roma. Distorsione alla caviglia per Gueye, da valutare settimanalmente.",
+  "n": 2
+ },
  "f7da6f29": {
   "at": "2026-09-29T22:42:23+02:00",
   "b": "Daniil Medvedev batte in finale il connazionale Rublev 7-5 6-4 e vince l'Atp 250 di Hangzhou: è il 24° titolo in carriera e il terzo della stagione dopo Brisbane e Dubai, l'ottava vittoria in dieci sfide con Rublev.",
@@ -426,5 +640,10 @@
   "at": "2026-09-29T22:34:16+02:00",
   "b": "La Juventus chiude il bilancio 2025-26 con una perdita di 66 milioni, la nona di fila. Ai soci, il 3 novembre, il cda chiederà di approvare 250 milioni di aumento di capitale; Exor anticipa subito 60 milioni.",
   "n": 2
+ },
+ "fdafba3e": {
+  "at": "2026-09-29T23:36:23+02:00",
+  "b": "Nations League: la Spagna campione del mondo supera 4-1 la Croazia a Siviglia, trascinata da Lamine Yamal, autore di due gol e un assist; segnano anche Pubill e Nico Williams. Nel gruppo 3 l'Inghilterra espugna Praga 2-0 con Gordon e Kane, favorita dall'espulsione di Sulc al 25'.",
+  "n": 5
  }
 }
