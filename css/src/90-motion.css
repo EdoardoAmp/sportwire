@@ -1,0 +1,11 @@
+/* ingresso: solo dissolvenza (genere atmospheric: niente slide, niente rimbalzi) */
+.js .reveal { opacity: 0; transition: opacity .7s var(--ease); }
+.js .reveal.is-in { opacity: 1; }
+.js .sky__canvas .star { animation: appear .8s var(--ease) both; animation-delay: calc(var(--g, 0) * 70ms); }
+@keyframes appear { from { opacity: 0; } }
+.js .sky__canvas .star--live { animation: appear .8s var(--ease) both, pulse 2.4s ease-out 1s infinite; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
+  .js .reveal { opacity: 1; }
+}

@@ -1,0 +1,40 @@
+/* Sportwire · token. Genere atmospheric: tela scura blu-notte, due aloni caldi, UN accento ambra + il rosso solo per la diretta.
+   Hallmark · genre: atmospheric · macrostructure: 19 Map / Diagram (il cielo) · theme: Bloom · nav: N5 Floating pill · footer: Ft5 Statement */
+:root {
+  color-scheme: dark;
+
+  --void:    oklch(0.155 0.024 268);
+  --paper-1: oklch(0.195 0.026 268);
+  --paper-2: oklch(0.235 0.028 268);
+  --paper-3: oklch(0.285 0.030 268);
+  --ink:     oklch(0.945 0.008 80);
+  --ink-2:   oklch(0.82 0.010 80);
+  --ink-3:   oklch(0.72 0.014 270);
+  --accent:    oklch(0.80 0.155 68);
+  --accent-hi: oklch(0.87 0.140 72);
+  --on-accent: oklch(0.19 0.030 60);
+  --hot:       oklch(0.70 0.190 24);
+  --on-hot:    oklch(0.16 0.030 24);
+  --star:      oklch(0.96 0.020 85);
+  --scrim:     oklch(0.10 0.020 268 / 0.82);
+  --veil:      oklch(1 0 0 / 0.05);
+
+  --f-display: 'Archivo Variable', 'Arial Narrow', Impact, system-ui, sans-serif;
+  --f-text:    'Geist Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --f-mono:    'Geist Mono Variable', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  --r-1: 8px;
+  --r-2: 14px;
+  --r-3: 22px;
+  --r-pill: 999px;
+
+  --shadow-1:    0 1px 2px oklch(0.05 0.02 268 / .55), 0 12px 30px -14px oklch(0.05 0.02 268 / .8);
+  --shadow-glow: 0 14px 44px -14px oklch(0.75 0.16 65 / .5);
+  --ease: cubic-bezier(.2, .7, .2, 1);
+  --t-fast: 140ms;
+  --t-mid: 260ms;
+
+  --wrap: 1240px;
+  --gut: clamp(16px, 4vw, 40px);
+  --bar-h: 68px;
+}

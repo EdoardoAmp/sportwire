@@ -2,6 +2,22 @@
   "runs": [
     {
       "project": "Sportwire (~/sites/sport-news)",
+      "date": "2026-09-29",
+      "genre": "atmospheric",
+      "macrostructure": "19 Map / Diagram (il cielo: notizie come stelle, tempo × sport)",
+      "theme": "Bloom",
+      "nav": "N5 Floating pill",
+      "footer": "Ft5 Statement",
+      "fonts": [
+        "Archivo Variable (wdth)",
+        "Geist Variable",
+        "Geist Mono Variable"
+      ],
+      "enrichment": "cielo stellato in SVG + pianeta con orbita (nessuna immagine generata)",
+      "notes": "ridisegno completo: diversificato da editorial / Ecosystem Index / N6 / Ft4. Notizie lette nel dossier (#/s/<id>), cronologia locale, «in breve» scritti dall'agente."
+    },
+    {
+      "project": "Sportwire (~/sites/sport-news)",
       "date": "2026-09-28",
       "genre": "editorial",
       "macrostructure": "20 Ecosystem Index",

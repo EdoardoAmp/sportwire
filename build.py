@@ -6,14 +6,17 @@ vecchi, raggruppa gli articoli che raccontano la stessa storia, li classifica pe
 usando le sezioni dichiarate dalle testate (URL e <category>) e sceglie l'apertura in base
 a quante redazioni ne parlano. Produce un sito statico:
 
-    index.html + <sezione>.html + data/news.json
+    index.html + <sezione>.html + cronologia.html + data/news.json
+    css/site.css e js/app.js (impacchettati da css/src e js/src), sw.js, manifest
 
-Solo stdlib. Uso:  python3 build.py [--no-fetch]
+Le notizie riscritte in breve stanno in data/briefs.json (le scrive briefs.py / il cron di
+Hermes); qui vengono solo unite alle storie. Solo stdlib. Uso:  python3 build.py [--no-fetch]
 """
 from __future__ import annotations
 
 import argparse
 import concurrent.futures as cf
+import hashlib
 import html
 import json
 import os
@@ -30,9 +33,12 @@ from email.utils import parsedate_to_datetime
 from urllib.parse import urlparse
 from zoneinfo import ZoneInfo
 
+import render as R
+
 ROOT = os.path.dirname(os.path.abspath(__file__))
 TZ = ZoneInfo("Europe/Rome")
 SITE_URL = "https://edoardoamp.github.io/sportwire/"
+THEME_COLOR = "#080c16"   # = --void di css/src/00-tokens.css
 WINDOW_H = 36          # finestra delle notizie
 MIN_ITEMS = 60         # se la finestra è troppo magra (notte), la allargo fino a 72h
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
@@ -415,6 +421,11 @@ ha hanno era vs tutto tutti tutte suo sua suoi sue loro questo questa quel quell
 parla dice detto dopo prima nuovo nuova ancora sempre gia molto poi qui cosi due tre ecco""".split())
 
 
+def item_id(link: str) -> str:
+    """Identificativo stabile di un articolo (e, per estensione, della storia): hash del link."""
+    return hashlib.sha1(link.encode("utf-8")).hexdigest()[:8]
+
+
 def stem(w: str) -> str:
     return w[:-1] if len(w) > 4 and w[-1] in "aeio" else w
 
@@ -459,6 +470,7 @@ COMMON_NAME_STEMS: set[str] = set()
 def cluster(items: list[dict]) -> list[dict]:
     items.sort(key=lambda i: i["ts"], reverse=True)
     for it in items:
+        it["id"] = item_id(it["link"])
         it["tok"] = tokens(it["title"])
         it["fx"] = fixture(it["title"])
         it["names"] = names(it["title"])
@@ -480,7 +492,10 @@ def cluster(items: list[dict]) -> list[dict]:
         its = st["items"]
         # rappresentante: foto migliore, poi sommario, poi il più recente
         rep = max(its, key=lambda i: (SRC_IMGQ[i["src"]] if i["image"] else -1, bool(i["summary"]), i["ts"]))
+        first = min(its, key=lambda i: (i["ts"], i["id"]))
         st.update({
+            "id": first["id"],                 # la storia si chiama come il suo primo articolo: non cambia se ne arrivano altri
+            "first_ts": first["ts"],
             "rep": rep,
             "title": rep["title"], "link": rep["link"], "src": rep["src"],
             "summary": next((i["summary"] for i in [rep] + its if i["summary"]), ""),
@@ -518,6 +533,7 @@ def rank(stories: list[dict], now: datetime) -> None:
             - (1.0 if st["video"] else 0)
         )
         st["heat"] = len(heat_sources)
+        st["related"] = [o["id"] for o in sorted(related, key=lambda o: (-len(salient & o["tok"]), o["ts"]))[:4]]
 
 
 # ================================================================ immagini
@@ -546,211 +562,168 @@ def validate_images(stories: list[dict], limit: int = 260) -> int:
     return len(bad)
 
 
-# ================================================================ rendering
-def esc(t: str) -> str:
-    return html.escape(t or "", quote=True)
+# ================================================================ asset
+def read_text(path: str) -> str:
+    with open(path, encoding="utf-8") as fh:
+        return fh.read()
 
 
-def dt(st: dict) -> datetime:
-    return datetime.fromisoformat(st["ts"]).astimezone(TZ)
-
-
-def when(st: dict, now: datetime) -> str:
-    d = dt(st)
-    if d.date() == now.date():
-        return d.strftime("%H:%M")
-    if d.date() == (now - timedelta(days=1)).date():
-        return "ieri " + d.strftime("%H:%M")
-    return f"{d.day} {MESI[d.month - 1][:3]} " + d.strftime("%H:%M")
-
-
-def kicker_html(st: dict, with_section: bool) -> str:
-    sec = SEC_TITLE[st["cat"]]
-    k = st["kicker"]
-    label = esc(sec) if (not with_section and k == sec) else (
-        f'{esc(sec)}<span class="kicker__sub">{esc(k)}</span>' if with_section and k != sec else esc(k))
-    badges = ""
-    if st["live"]:
-        badges += '<span class="badge badge--live">Diretta</span>'
-    return f'<p class="kicker">{label}{badges}</p>'
-
-
-def meta_html(st: dict, now: datetime) -> str:
-    extra = ""
-    if len(st["sources"]) > 1:
-        others = ", ".join(SRC_NAME[s] for s in st["sources"] if s != st["src"])
-        extra += f'<span class="meta__more" title="Ne scrivono anche: {esc(others)}">+{len(st["sources"]) - 1} testat{"a" if len(st["sources"]) == 2 else "e"}</span>'
-    if st["video"]:
-        extra += '<span class="meta__video">Video</span>'
-    return (f'<p class="meta"><span class="meta__src">{esc(SRC_NAME[st["src"]])}</span>'
-            f'<time datetime="{esc(st["ts"])}" data-rel>{esc(when(st, now))}</time>{extra}</p>')
-
-
-def img_html(url: str, cls: str, eager: bool = False, sizes: str = "") -> str:
-    if not url:
-        return ""
-    load = 'fetchpriority="high"' if eager else 'loading="lazy"'
-    return (f'<img class="{cls}" src="{esc(url)}" alt="" {load} '
-            f'decoding="async" referrerpolicy="no-referrer" onload="this.classList.add(\'is-loaded\')" '
-            f'onerror="this.parentNode.classList.add(\'no-img\');this.remove()">')
-
-
-def hero_html(st: dict, now: datetime) -> str:
-    also = "".join(
-        f'<li data-hit><a href="{esc(i["link"])}" rel="noopener"><span class="coverage__src">{esc(SRC_NAME[i["src"]])}</span>'
-        f'<span class="coverage__title">{esc(i["title"])}</span></a></li>'
-        for i in st["also"][:3])
-    coverage = (f'<div class="coverage"><p class="coverage__label">Ne scrivono anche</p><ul>{also}</ul></div>'
-                if also else "")
-    media = (f'<a class="hero__media media" href="{esc(st["link"])}" rel="noopener" tabindex="-1" aria-hidden="true">'
-             f'{img_html(st["image"], "", eager=True)}</a>' if st["image"] else "")
-    dek = f'<p class="hero__dek">{esc(st["summary"])}</p>' if st["summary"] else ""
-    return f"""  <article class="hero{'' if st['image'] else ' hero--text'}" data-k="{esc(norm_key(st['kicker']))}">
-    {media}
-    <div class="hero__text">
-      {kicker_html(st, True)}
-      <h2 class="hero__title"><a href="{esc(st['link'])}" rel="noopener">{esc(st['title'])}</a></h2>
-      {dek}
-      {meta_html(st, now)}
-      {coverage}
-    </div>
-  </article>
-"""
-
-
-def card_html(st: dict, now: datetime, with_section: bool = True, eager: bool = False) -> str:
-    media = (f'<div class="card__media media">{img_html(st["image"], "", eager=eager)}</div>'
-             if st["image"] else "")
-    return f"""<article class="card{'' if st['image'] else ' card--text'}" data-hit data-k="{esc(norm_key(st['kicker']))}">
-      {media}
-      <div class="card__body">
-        {kicker_html(st, with_section)}
-        <h3 class="card__title"><a href="{esc(st['link'])}" rel="noopener">{esc(st['title'])}</a></h3>
-        {meta_html(st, now)}
-      </div>
-    </article>"""
-
-
-def row_html(st: dict, now: datetime, with_section: bool = True, thumb: bool = True) -> str:
-    img = (f'<div class="row__media media">{img_html(st["image"], "")}</div>'
-           if thumb and st["image"] else "")
-    return f"""<li class="row" data-hit data-k="{esc(norm_key(st['kicker']))}">
-        <div class="row__body">
-          {kicker_html(st, with_section)}
-          <h3 class="row__title"><a href="{esc(st['link'])}" rel="noopener">{esc(st['title'])}</a></h3>
-          {meta_html(st, now)}
-        </div>{img}
-      </li>"""
-
-
-def tl_html(st: dict, now: datetime) -> str:
-    return f"""<li class="tl" data-hit>
-        <time class="tl__time" datetime="{esc(st['ts'])}">{esc(dt(st).strftime('%H:%M'))}</time>
-        <div class="tl__body">
-          {kicker_html(st, True)}
-          <a class="tl__title" href="{esc(st['link'])}" rel="noopener">{esc(st['title'])}</a>
-          <span class="tl__src">{esc(SRC_NAME[st['src']])}{' · video' if st['video'] else ''}</span>
-        </div>
-      </li>"""
-
-
-def human_date(now: datetime) -> str:
-    return f"{GIORNI[now.weekday()].capitalize()} {now.day} {MESI[now.month - 1]} {now.year}"
-
-
-def page(*, rel: str, title: str, description: str, h1: str, h1_hidden: bool, body: str,
-         active: str, now: datetime, og_image: str, n_stories: int) -> str:
-    cur = ' aria-current="page"'
-    nav = "".join(
-        f'<a href="{k}.html"{cur if k == active else ""}>{esc(t)}</a>'
-        for k, t in [("index", "Prima pagina")] + SECTIONS)
-    url = SITE_URL + ("" if rel == "index.html" else rel)
-    og_img = f'<meta property="og:image" content="{esc(og_image)}">' if og_image else ""
-    return f"""<!doctype html>
-<html lang="it">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{esc(title)}</title>
-<meta name="description" content="{esc(description)}">
-<link rel="canonical" href="{esc(url)}">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Sportwire">
-<meta property="og:locale" content="it_IT">
-<meta property="og:title" content="{esc(title)}">
-<meta property="og:description" content="{esc(description)}">
-<meta property="og:url" content="{esc(url)}">
-{og_img}
-<meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#faf8f3" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#14171c" media="(prefers-color-scheme: dark)">
-<script>document.documentElement.classList.add('js')</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="tokens.css">
-<link rel="stylesheet" href="css/site.css">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="favicon.svg">
-</head>
-<body>
-<a class="skip" href="#main">Vai al contenuto</a>
-<header class="masthead">
-  <div class="masthead__bar wrap">
-    <span>{esc(human_date(now))}</span>
-    <span class="masthead__status"><span class="pulse" aria-hidden="true"></span>Aggiornato alle <time datetime="{esc(now.isoformat())}">{esc(now.strftime('%H:%M'))}</time></span>
-  </div>
-  <div class="masthead__brand wrap">
-    <a class="wordmark" href="index.html">Sportwire<span class="wordmark__dot" aria-hidden="true">.</span></a>
-    <p class="masthead__tagline">La giornata sportiva raccontata da sei redazioni</p>
-  </div>
-</header>
-<nav class="sections" aria-label="Sezioni">
-  <div class="sections__track wrap">{nav}</div>
-</nav>
-<main id="main" class="wrap">
-<h1 class="{'visually-hidden' if h1_hidden else 'page-title'}">{esc(h1)}</h1>
-{body}</main>
-<footer class="colophon">
-  <div class="colophon__grid wrap">
-    <div>
-      <p class="colophon__brand">Sportwire<span class="wordmark__dot">.</span></p>
-      <p class="colophon__about">Una rassegna, non una redazione: raccoglie titoli, sommari e foto dai feed
-      pubblici delle testate e rimanda sempre all’articolo originale. Le notizie coperte da più redazioni
-      salgono in prima pagina.</p>
-    </div>
-    <div>
-      <p class="colophon__label">Le fonti</p>
-      <ul class="colophon__sources">
-        {''.join(f'<li><a href="{esc(home)}" rel="noopener">{esc(name)}</a></li>' for _k, name, _u, home, _q in SOURCES)}
-      </ul>
-    </div>
-    <div>
-      <p class="colophon__label">Questa edizione</p>
-      <p class="colophon__meta">{n_stories} notizie delle ultime {WINDOW_H} ore<br>
-      aggiornata ogni ora · {esc(now.strftime('%d/%m/%Y %H:%M'))}<br>
-      nessun tracciamento, nessun cookie</p>
-    </div>
-  </div>
-</footer>
-<script src="js/site.js" defer></script>
-</body>
-</html>
-"""
-
-
-def write(rel: str, content: str) -> None:
-    path = os.path.join(ROOT, rel)
+def write_if_changed(path: str, content: str) -> bool:
+    try:
+        if read_text(path) == content:
+            return False
+    except OSError:
+        pass
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8") as fh:
         fh.write(content)
-    print(f"  scritto {rel} ({len(content) // 1024} KB)")
+    return True
+
+
+def bundle(kind: str) -> str:
+    """Impacchetta css/src/*.css o js/src/*.js in un solo file: una richiesta, cache legata al contenuto."""
+    src_dir = os.path.join(ROOT, kind, "src")
+    names = sorted(f for f in os.listdir(src_dir) if f.endswith("." + kind))
+    body = "\n".join(read_text(os.path.join(src_dir, f)).rstrip() + "\n" for f in names)
+    if kind == "css":
+        fonts = read_text(os.path.join(ROOT, "fonts", "fonts.css")).replace("url(./", "url(../fonts/")
+        body = fonts.rstrip() + "\n\n" + body
+        out = "css/site.css"
+        banner = "/* GENERATO da build.py: si modifica css/src/*.css */\n"
+    else:
+        body = '(() => {\n"use strict";\n' + body + "})();\n"
+        out = "js/app.js"
+        banner = "/* GENERATO da build.py: si modifica js/src/*.js */\n"
+    content = banner + body
+    write_if_changed(os.path.join(ROOT, out), content)
+    return hashlib.sha1(content.encode("utf-8")).hexdigest()[:8]
+
+
+SW_TEMPLATE = """/* Sportwire · service worker (build __BUILD__). Pagine e dati: rete prima, cache se offline.
+   Asset con ?v= nel nome: cache prima. Le foto delle testate non si mettono in cache. */
+const BUILD = "__BUILD__";
+const STATIC = "sw-static-" + BUILD;
+const PAGES = "sw-pages-v1";
+const PRECACHE = __PRECACHE__;
+
+self.addEventListener("install", (e) => {
+  e.waitUntil(caches.open(STATIC).then((c) => Promise.allSettled(PRECACHE.map((u) => c.add(u)))).then(() => self.skipWaiting()));
+});
+self.addEventListener("activate", (e) => {
+  e.waitUntil((async () => {
+    for (const k of await caches.keys()) if (k.startsWith("sw-static-") && k !== STATIC) await caches.delete(k);
+    await self.clients.claim();
+  })());
+});
+
+const withTimeout = (p, ms) => new Promise((res, rej) => { const t = setTimeout(() => rej(new Error("timeout")), ms); p.then((v) => { clearTimeout(t); res(v); }, (x) => { clearTimeout(t); rej(x); }); });
+
+async function networkFirst(req) {
+  const cache = await caches.open(PAGES);
+  try {
+    const res = await withTimeout(fetch(req), 6000);
+    if (res && res.ok) cache.put(req, res.clone());
+    return res;
+  } catch (err) {
+    const hit = await cache.match(req, { ignoreSearch: true });
+    if (hit) return hit;
+    if (req.mode === "navigate") {
+      const home = await cache.match("index.html", { ignoreSearch: true }) || await cache.match("./", { ignoreSearch: true });
+      if (home) return home;
+    }
+    throw err;
+  }
+}
+
+async function cacheFirst(req) {
+  const hit = await caches.match(req);
+  if (hit) return hit;
+  const res = await fetch(req);
+  if (res && res.ok) (await caches.open(STATIC)).put(req, res.clone());
+  return res;
+}
+
+self.addEventListener("fetch", (e) => {
+  const req = e.request;
+  if (req.method !== "GET") return;
+  const url = new URL(req.url);
+  if (url.origin !== location.origin) return;
+  const dynamic = req.mode === "navigate" || url.pathname.endsWith(".html") || url.pathname.endsWith("/data/news.json");
+  e.respondWith(dynamic ? networkFirst(req) : cacheFirst(req));
+});
+"""
+
+
+def write_pwa(ver: dict) -> None:
+    fonts = sorted(f for f in os.listdir(os.path.join(ROOT, "fonts")) if f.endswith("-latin-wdth-normal.woff2")
+                   or f.endswith("-latin-wght-normal.woff2"))
+    pre = [f"css/site.css?v={ver['css']}", f"js/app.js?v={ver['js']}", "favicon.svg",
+           "img/stars-a.svg", "img/stars-b.svg"] + [f"fonts/{f}" for f in fonts]
+    build_id = hashlib.sha1((ver["css"] + ver["js"] + "".join(pre)).encode()).hexdigest()[:8]
+    sw = SW_TEMPLATE.replace("__BUILD__", build_id).replace("__PRECACHE__", json.dumps(pre))
+    write_if_changed(os.path.join(ROOT, "sw.js"), sw)
+    manifest = {
+        "name": "Sportwire", "short_name": "Sportwire", "lang": "it",
+        "description": "La giornata sportiva raccontata da sei redazioni, in breve.",
+        "start_url": "./", "scope": "./", "display": "standalone",
+        "background_color": THEME_COLOR, "theme_color": THEME_COLOR,
+        "icons": [
+            {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png"},
+            {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png"},
+            {"src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"},
+            {"src": "favicon.svg", "sizes": "any", "type": "image/svg+xml"},
+        ],
+    }
+    write_if_changed(os.path.join(ROOT, "manifest.webmanifest"),
+                     json.dumps(manifest, ensure_ascii=False, indent=2) + "\n")
+
+
+# ================================================================ brevi
+BRIEF_MAX = 280
+
+
+def brief_ok(b: object) -> bool:
+    """Un breve entra in pagina solo se è testo semplice e corto (lo pubblica un altro processo: qui non ci si fida)."""
+    return (isinstance(b, str) and 0 < len(b) <= BRIEF_MAX
+            and not any(x in b for x in ("<", ">", "http", "\n")))
+
+
+def load_briefs() -> dict:
+    """data/briefs.json: {id_storia: {"b": testo breve, "at": iso, "n": testate al momento}}.
+    Le voci rovinate si scartano una per una: il sito esce lo stesso, con il sommario della testata."""
+    try:
+        data = json.loads(read_text(os.path.join(ROOT, "data", "briefs.json")))
+    except (OSError, ValueError):
+        return {}
+    if not isinstance(data, dict):
+        return {}
+    out, dropped = {}, 0
+    for sid, b in data.items():
+        if isinstance(b, dict) and (b.get("skip") or brief_ok(b.get("b"))):
+            out[sid] = b
+        else:
+            dropped += 1
+    if dropped:
+        print(f"  ATTENZIONE: {dropped} «in breve» scartati da data/briefs.json (voce rovinata o non a norma)", file=sys.stderr)
+    return out
 
 
 # ================================================================ build
+def write(rel: str, content: str) -> None:
+    path = os.path.join(ROOT, rel)
+    changed = write_if_changed(path, content)
+    print(f"  {'scritto' if changed else 'invariato'} {rel} ({len(content) // 1024} KB)")
+
+
+def item_payload(i: dict) -> dict:
+    return {"id": i["id"], "source": SRC_NAME[i["src"]], "title": i["title"], "link": i["link"],
+            "ts": i["ts"], "summary": i["summary"]}
+
+
 def build(offline: bool = False) -> int:
     print("Sportwire · build")
     now = datetime.now(TZ)
+    ver = {"css": bundle("css"), "js": bundle("js")}
     raw = collect(offline)
 
     dropped = Counter()
@@ -775,16 +748,31 @@ def build(offline: bool = False) -> int:
 
     for it in fresh:
         it["cat"], it["kicker"] = classify(it)
+        it["src_name"] = SRC_NAME[it["src"]]
     stories = cluster(fresh)
     rank(stories, now)
-    bad = validate_images(stories)
+    bad = 0 if offline else validate_images(stories)     # --no-fetch: niente rete, nemmeno per le immagini
+    ids = [s["id"] for s in stories]
+    if len(set(ids)) != len(ids):
+        print("ERRORE: id di storia duplicati", file=sys.stderr)
+        return 1
+    briefs = load_briefs()
+    for st in stories:
+        b = briefs.get(st["id"]) or {}
+        st["brief"] = b.get("b", "")
+        st["brief_at"] = b.get("at", "")
+        st["src_name"] = SRC_NAME[st["src"]]
+        st["src_names"] = [SRC_NAME[x] for x in st["sources"]]
+        st["sec_title"] = SEC_TITLE[st["cat"]]
+        st["kkey"] = norm_key(st["kicker"])
     print(f"  scartati: {dict(dropped)} · immagini non raggiungibili: {bad}")
     print(f"  {len(fresh)} articoli → {len(stories)} notizie "
-          f"({sum(1 for s in stories if len(s['sources']) > 1)} coperte da più testate)")
+          f"({sum(1 for s in stories if len(s['sources']) > 1)} coperte da più testate, "
+          f"{sum(1 for s in stories if s['brief'])} riscritte in breve)")
 
     by_score = sorted(stories, key=lambda s: s["score"], reverse=True)
     by_time = sorted(stories, key=lambda s: s["ts"], reverse=True)
-    used: set[int] = set()
+    used: set = set()
 
     def take(pool, n, need_image=False, cat=None):
         out = []
@@ -802,7 +790,7 @@ def build(offline: bool = False) -> int:
     hero = (take(by_score[:4], 1, need_image=True) or take(by_score, 1))[0]
     top = take(by_score, 6, need_image=True)
     top += take(by_score, 6 - len(top))
-    live = take(by_time, 10)
+    live = take(by_time, 12)
     blocks = []
     for k in SEC_ORDER:
         lead = take(by_score, 1, need_image=True, cat=k)
@@ -810,53 +798,18 @@ def build(offline: bool = False) -> int:
         if lead or rest:
             blocks.append((k, lead, rest))
 
-    n_multi = sum(1 for s in stories if len(s["sources"]) > 1)
     sec_counts = Counter(s["cat"] for s in stories)
-    brief = (f'<p class="brief"><strong>{len(stories)} notizie</strong> nelle ultime {window} ore da '
-             f'{len({s for st in stories for s in st["sources"]})} redazioni · '
-             f'{n_multi} raccontate da più testate: le trovi in alto.</p>')
+    ctx = R.Ctx(now=now, site_url=SITE_URL, window=window, n_stories=len(stories),
+                n_sources=len({s for st in stories for s in st["sources"]}),
+                n_multi=sum(1 for s in stories if len(s["sources"]) > 1),
+                sections=SECTIONS, sources=[(k, n, home) for k, n, _u, home, _q in SOURCES],
+                sec_counts=dict(sec_counts), ver=ver, theme_color=THEME_COLOR)
 
-    blocks_html = []
-    for k, lead, rest in blocks:
-        lead_html = card_html(lead[0], now, with_section=False) if lead else ""
-        rows = "\n      ".join(row_html(s, now, with_section=False, thumb=False) for s in rest)
-        blocks_html.append(f"""  <section class="block" aria-labelledby="h-{k}">
-    <div class="block__head">
-      <h2 class="block__title" id="h-{k}"><a href="{k}.html">{esc(SEC_TITLE[k])}</a></h2>
-      <a class="block__more" href="{k}.html">Tutte le {sec_counts[k]} notizie <span aria-hidden="true">→</span></a>
-    </div>
-    <div class="block__grid{'' if lead else ' block__grid--rows'}">
-      {lead_html}
-      <ul class="rows">
-      {rows}
-      </ul>
-    </div>
-  </section>""")
-
-    home = f"""{brief}
-{hero_html(hero, now)}
-  <div class="front">
-    <section class="front__main" aria-labelledby="h-top">
-      <h2 class="section-head" id="h-top">Da non perdere</h2>
-      <div class="cards">
-    {chr(10).join(card_html(s, now, eager=i < 3) for i, s in enumerate(top))}
-      </div>
-    </section>
-    <aside class="front__aside" aria-labelledby="h-live">
-      <h2 class="section-head" id="h-live"><span class="pulse" aria-hidden="true"></span>Ultim’ora</h2>
-      <ol class="timeline">
-      {chr(10).join(tl_html(s, now) for s in live)}
-      </ol>
-    </aside>
-  </div>
-{chr(10).join(blocks_html)}
-"""
     desc = (f"{hero['title']} — e altre {len(stories) - 1} notizie sportive di oggi da Gazzetta, "
-            f"Corriere dello Sport, Tuttosport, Sky Sport, ANSA e OA Sport.")
-    write("index.html", page(rel="index.html", title="Sportwire · la giornata sportiva",
-                             description=desc, h1="Sportwire · prima pagina", h1_hidden=True,
-                             body=home, active="index", now=now, og_image=hero["image"],
-                             n_stories=len(stories)))
+            f"Corriere dello Sport, Tuttosport, Sky Sport, ANSA e OA Sport, riscritte in breve.")
+    write("index.html", R.page(ctx, rel="index.html", title="Sportwire · il cielo dello sport di oggi",
+                               description=desc, body=R.home_body(ctx, hero, top, live, blocks),
+                               active="index", og_image=hero["image"]))
 
     for k in SEC_ORDER:
         sec = sorted([s for s in stories if s["cat"] == k], key=lambda s: s["ts"], reverse=True)
@@ -864,31 +817,16 @@ def build(offline: bool = False) -> int:
             continue
         feats = sorted([s for s in sec if s["image"]], key=lambda s: s["score"], reverse=True)[:3]
         rest = [s for s in sec if s not in feats]
-        kicks = Counter(s["kicker"] for s in sec)
-        generic = norm_key(SEC_TITLE[k])
-        order = [(kk, n) for kk, n in kicks.most_common() if norm_key(kk) != generic]
-        order += [(kk, n) for kk, n in kicks.items() if norm_key(kk) == generic]     # "Varie" in coda
-        chips = "".join(
-            f'<button type="button" class="chip" data-filter="{esc(norm_key(kk))}" aria-pressed="false">'
-            f'{esc("Varie" if norm_key(kk) == generic else kk)}<span class="chip__n">{n}</span></button>'
-            for kk, n in order)
-        body = f"""<p class="page-meta">{len(sec)} notizie nelle ultime {window} ore · aggiornato alle {esc(now.strftime('%H:%M'))}</p>
-<div class="chips" role="group" aria-label="Filtra per argomento" hidden>
-  <button type="button" class="chip" data-filter="*" aria-pressed="true">Tutte<span class="chip__n">{len(sec)}</span></button>{chips}
-</div>
-<div class="cards cards--feature">
-  {chr(10).join(card_html(s, now, with_section=False, eager=True) for s in feats)}
-</div>
-<ul class="rows rows--grid">
-  {chr(10).join(row_html(s, now, with_section=False) for s in rest)}
-</ul>
-<p class="empty" hidden>Nessuna notizia per questo argomento nelle ultime {window} ore.</p>
-"""
         lead = feats[0] if feats else sec[0]
-        write(f"{k}.html", page(rel=f"{k}.html", title=f"{SEC_TITLE[k]} · Sportwire",
-                                description=f"{SEC_TITLE[k]}: {lead['title']} e le altre notizie di oggi.",
-                                h1=SEC_TITLE[k], h1_hidden=False, body=body, active=k, now=now,
-                                og_image=lead["image"], n_stories=len(stories)))
+        write(f"{k}.html", R.page(ctx, rel=f"{k}.html", title=f"{SEC_TITLE[k]} · Sportwire",
+                                  description=f"{SEC_TITLE[k]}: {lead['title']} e le altre notizie di oggi.",
+                                  body=R.section_body(ctx, k, sec, feats, rest), active=k,
+                                  og_image=lead["image"]))
+
+    write("cronologia.html", R.page(ctx, rel="cronologia.html", title="Cronologia · Sportwire",
+                                    description="Il diario di bordo delle notizie che hai aperto, solo su questo dispositivo.",
+                                    body=R.history_body(ctx), active="cronologia", og_image=hero["image"],
+                                    noindex=True))
 
     home_ids = {id(s) for s in [hero] + top + live + [x for _k, a, b in blocks for x in a + b]}
     data = {
@@ -896,15 +834,17 @@ def build(offline: bool = False) -> int:
         "counts": {k: sec_counts.get(k, 0) for k in SEC_ORDER},
         "dropped": dict(dropped),
         "stories": [{
-            "title": s["title"], "link": s["link"], "source": SRC_NAME[s["src"]], "section": s["cat"],
-            "kicker": s["kicker"], "ts": s["ts"], "image": s["image"], "summary": s["summary"],
-            "video": s["video"], "live": s["live"], "score": round(s["score"], 2),
+            "id": s["id"], "title": s["title"], "link": s["link"], "source": s["src_name"], "section": s["cat"],
+            "kicker": s["kicker"], "ts": s["ts"], "first_ts": s["first_ts"], "image": s["image"],
+            "summary": s["summary"], "brief": s["brief"], "brief_at": s["brief_at"],
+            "video": s["video"], "live": s["live"], "score": round(s["score"], 2), "heat": s["heat"],
             "sources": [SRC_NAME[x] for x in s["sources"]], "on_home": id(s) in home_ids,
-            "also": [{"source": SRC_NAME[i["src"]], "title": i["title"], "link": i["link"]} for i in s["also"]],
+            "related": s["related"],
+            "items": [item_payload(i) for i in sorted(s["items"], key=lambda i: i["ts"])],
         } for s in by_score],
     }
-    with open(os.path.join(ROOT, "data", "news.json"), "w", encoding="utf-8") as fh:
-        json.dump(data, fh, ensure_ascii=False, indent=1)
+    write("data/news.json", json.dumps(data, ensure_ascii=False, separators=(",", ":")))
+    write_pwa(ver)
     print("  sezioni: " + " · ".join(f"{k} {sec_counts.get(k, 0)}" for k in SEC_ORDER))
     print(f"  apertura: [{hero['score']:.1f}] {hero['title']} ({', '.join(SRC_NAME[s] for s in hero['sources'])})")
     return 0

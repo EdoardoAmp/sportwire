@@ -1,0 +1,42 @@
+/* il cielo: mappa delle notizie (tempo × sport) */
+.sky { margin-top: clamp(3rem, 7vw, 5.5rem); }
+.sky__frame { position: relative; margin-top: 1.25rem; border-radius: var(--r-3); background: var(--paper-1); overflow: hidden; --lab: 112px; }
+.sky__stage { position: relative; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scrollbar-width: thin; scrollbar-color: var(--paper-3) transparent; }
+.sky__canvas { position: relative; }
+.sky__lane { position: absolute; left: 0; right: 0; background: oklch(1 0 0 / .028); border-radius: 0; }
+.sky__lane:nth-of-type(even) { background: transparent; }
+.sky__labels { position: absolute; z-index: 8; left: 0; top: 0; width: var(--lab); pointer-events: none; background: linear-gradient(90deg, var(--paper-1) 70%, transparent); }
+.sky__label { position: absolute; left: 0; width: 100%; display: flex; flex-direction: column; justify-content: center; gap: .15rem; padding-left: 1rem; }
+.sky__label b { font: 800 1.05rem/1 var(--f-display); font-stretch: 78%; letter-spacing: .01em; }
+.sky__label span { font: 500 .66rem/1 var(--f-mono); letter-spacing: .08em; color: var(--ink-3); }
+.sky__tick { position: absolute; top: 0; bottom: 0; width: 1px; background: oklch(1 0 0 / .05); }
+.sky__tick i { position: absolute; bottom: 8px; left: 8px; font: 500 .66rem/1 var(--f-mono); font-style: normal; letter-spacing: .06em; color: var(--ink-3); white-space: nowrap; }
+.sky__now { position: absolute; top: 0; bottom: 0; width: 1px; background: linear-gradient(180deg, transparent, oklch(0.70 0.19 24 / .7), transparent); }
+.sky__now i { position: absolute; bottom: 8px; right: 8px; white-space: nowrap; font: 700 .66rem/1 var(--f-mono); font-style: normal; letter-spacing: .1em; text-transform: uppercase; color: var(--hot); }
+.sky__lines { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
+.sky__lines line { stroke: var(--accent); stroke-opacity: .7; stroke-width: 1px; stroke-dasharray: 3 4; vector-effect: non-scaling-stroke; }
+
+.star { --d: 8px; position: absolute; z-index: 2; width: var(--d); height: var(--d); margin: calc(var(--d) / -2) 0 0 calc(var(--d) / -2); padding: 0; border-radius: 50%; background: var(--star); opacity: .92; transition: transform var(--t-fast) var(--ease), box-shadow var(--t-fast), opacity var(--t-mid), background var(--t-fast); }
+.star::before { content: ""; position: absolute; inset: -12px; border-radius: 50%; }
+.star:hover, .star:focus-visible, .star.is-on { z-index: 5; transform: scale(1.55); box-shadow: 0 0 0 4px oklch(0.96 0.02 85 / .16), 0 0 26px 2px oklch(0.96 0.02 85 / .45); opacity: 1; }
+.star:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.star--multi { background: var(--accent); box-shadow: 0 0 16px -1px oklch(0.80 0.155 68 / .75); }
+.star--live { background: var(--hot); animation: pulse 2.4s ease-out infinite; }
+.star.is-read { background: var(--ink-3); opacity: .42; box-shadow: none; }
+.sky.is-focus .star:not(.is-on):not(.is-rel) { opacity: .4; }
+.star.is-rel { z-index: 4; box-shadow: 0 0 0 3px oklch(0.80 0.155 68 / .35); opacity: 1; }
+
+.sky__peek { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .75rem 1.5rem; align-items: center; min-height: 136px; padding: 1.15rem clamp(1rem, 3vw, 1.75rem); background: var(--paper-2); }
+.sky__peek .kicker { margin-bottom: .3rem; }
+.sky__peek-title { font: 700 clamp(1.2rem, 1rem + .8vw, 1.6rem)/1.12 var(--f-display); font-stretch: 84%; text-wrap: balance; }
+.sky__peek .brief { margin-top: .4rem; -webkit-line-clamp: 2; }
+.sky__peek .meta { margin-top: .5rem; }
+@media (max-width: 640px) { .sky__peek { grid-template-columns: 1fr; } .sky__peek .btn { width: 100%; } .sky__frame { --lab: 82px; } .sky__label { padding-left: .75rem; } }
+
+.sky__legend { display: flex; flex-wrap: wrap; gap: .5rem 1.4rem; margin-top: 1rem; font: 500 .7rem/1 var(--f-mono); letter-spacing: .06em; color: var(--ink-3); }
+.sky__legend li { display: inline-flex; align-items: center; gap: .55em; }
+.key { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--star); }
+.key--multi { background: var(--accent); }
+.key--live { background: var(--hot); }
+.key--read { background: var(--ink-3); opacity: .5; }
+.key--line { width: 18px; height: 1px; border-radius: 0; background: var(--ink-3); }

@@ -1,6 +1,6 @@
 # Sportwire · refresh orario su GitHub Actions (gratis per i repo pubblici, niente server da mantenere).
 # Ogni ora: legge i feed RSS, rigenera le pagine, salva i dati nel repo (commit "live:" unico, riscritto
-# a ogni giro) e pubblica su GitHub Pages. Parte anche a ogni push su main e a mano ("Run workflow").
+# a ogni giro) e pubblica su GitHub Pages. Il refresh gira anche dopo che l'agente ha pubblicato nuovi «in breve». Parte anche a ogni push su main e a mano ("Run workflow").
 # Nota: GitHub disattiva i cron dei repo senza commit da 60 giorni; il commit "live:" orario lo evita.
 name: refresh
 
@@ -32,10 +32,27 @@ jobs:
         with:
           fetch-depth: 2
 
+      # Gli «in breve» li scrive l'agente (Hermes) e li pubblica sul ramo `briefs` (briefs.py publish): main lo
+      # scrive solo questo workflow, quindi non ci sono mai conflitti. Qui li si copia in data/ prima del build.
+      - name: Prendi gli «in breve» (ramo briefs)
+        run: |
+          if git fetch -q --depth 1 origin briefs; then
+            git show FETCH_HEAD:briefs.json > data/briefs.json
+            echo "in breve: $(python3 -c 'import json; print(len(json.load(open("data/briefs.json"))))') voci"
+          else
+            echo "nessun ramo briefs: uso data/briefs.json del repo"
+          fi
+
       - name: Build dai feed
         env:
           TZ: Europe/Rome
         run: python3 build.py
+
+      - name: Test
+        run: |
+          python3 -m venv /tmp/venv-test
+          /tmp/venv-test/bin/pip install -q pytest
+          /tmp/venv-test/bin/python -m pytest -q tests
 
       - name: Salva i dati nel repo
         run: |
