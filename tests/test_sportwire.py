@@ -290,3 +290,35 @@ def test_build_drops_broken_briefs_instead_of_failing(tmp_path, monkeypatch):
     assert build.load_briefs() == {}
     (tmp_path / "data" / "briefs.json").write_text("[1, 2]", encoding="utf-8")
     assert build.load_briefs() == {}
+
+
+def test_apply_fetches_sources_when_the_story_has_no_prepared_work(tmp_path, monkeypatch):
+    """Un work.json di un altro giro (o di un'altra cartella) non deve spegnere anti-copia e controllo dei numeri."""
+    monkeypatch.setattr(briefs, "STATE", str(tmp_path))
+    monkeypatch.setattr(briefs, "WORK_JSON", str(tmp_path / "manca.json"))
+    monkeypatch.setattr(briefs, "BRIEFS", str(tmp_path / "b.json"))
+    news = tmp_path / "n.json"
+    news.write_text(json.dumps({"stories": [{"id": "aaaaaaaa", "title": "Titolo", "summary": "Sommario", "items": []}]}), encoding="utf-8")
+    monkeypatch.setattr(briefs, "NEWS", str(news))
+    monkeypatch.setattr(briefs, "gather", lambda s: dict(SRC_WORK, id=s["id"], chars=300))
+    copy = "Il capitano ha spiegato che la squadra ha lavorato bene in settimana e che a suo dire tutto è pronto per la sfida."
+    good = "Il capitano parla della preparazione e chiede maturità contro la Francia: per lui serve una prova più adulta del gruppo intero."
+    ans = tmp_path / "a.json"
+    ans.write_text(json.dumps({"aaaaaaaa": copy}), encoding="utf-8")
+    assert briefs.apply(str(ans)) == 1                                  # copia: rifiutata anche senza work.json
+    assert "aaaaaaaa" not in json.loads((tmp_path / "b.json").read_text(encoding="utf-8"))
+    ans.write_text(json.dumps({"aaaaaaaa": good}), encoding="utf-8")
+    assert briefs.apply(str(ans)) == 0
+    assert json.loads((tmp_path / "b.json").read_text(encoding="utf-8"))["aaaaaaaa"]["b"] == good
+
+
+def test_prepare_clears_every_answers_file_of_the_previous_round(tmp_path, monkeypatch):
+    monkeypatch.setattr(briefs, "STATE", str(tmp_path))
+    monkeypatch.setattr(briefs, "WORK_JSON", str(tmp_path / "w.json"))
+    monkeypatch.setattr(briefs, "WORK_TXT", str(tmp_path / "w.txt"))
+    monkeypatch.setattr(briefs, "BRIEFS", str(tmp_path / "b.json"))
+    monkeypatch.setattr(briefs, "NEWS", str(tmp_path / "n.json"))
+    for name in ("answers.json", "answers2.json", "answers3.json"):
+        (tmp_path / name).write_text("{}", encoding="utf-8")
+    briefs.prepare(5)
+    assert not list(tmp_path.glob("answers*.json"))

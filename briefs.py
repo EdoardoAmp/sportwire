@@ -19,6 +19,7 @@ Sul sito finisce solo la riscrittura (data/briefs.json), mai il testo originale 
 from __future__ import annotations
 
 import argparse
+import glob
 import json
 import os
 import re
@@ -50,7 +51,7 @@ WAKE_HOME, WAKE_TOTAL = 2, 6    # l'agente si sveglia se aspettano ≥2 storie d
 BRANCH = "briefs"
 
 RULES = """COME SI SCRIVE UN «IN BREVE» (leggi prima di scrivere)
-1. Italiano, 1–2 frasi, 150–280 caratteri, presente, tono asciutto da agenzia. Prima il fatto (chi, cosa, dove, quanto,
+1. Italiano, 1–2 frasi, 150–260 caratteri (spazi compresi; oltre 280 apply rifiuta), presente, tono asciutto da agenzia. Prima il fatto (chi, cosa, dove, quanto,
    quando), poi la conseguenza o il dato che ne cambia la lettura.
 2. Solo ciò che sta nei testi qui sotto. Nomi, cifre e risultati come nelle fonti (apply rifiuta i numeri che le fonti non hanno). Se le testate divergono lo dici
    («per la Gazzetta… per Sky…») o togli il dato.
@@ -147,8 +148,9 @@ def gather(s: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def render_work(items: List[Dict[str, Any]], kinds: Dict[str, str]) -> str:
-    out = [RULES, "", "Rispondi scrivendo state/answers.json: {\"<id>\": \"testo in breve\" | null, …} per TUTTE le storie qui sotto.",
-           "Poi:  python3 briefs.py apply state/answers.json", "=" * 78]
+    out = [RULES, "", f"CARTELLA DI LAVORO: {ROOT}  (scrivi e lancia tutto qui, con questi percorsi assoluti)",
+           f"Rispondi scrivendo {STATE}/answers.json: {{\"<id>\": \"testo in breve\" | null, …}} per TUTTE le storie qui sotto.",
+           f"Poi:  cd {ROOT} && /usr/bin/python3 briefs.py apply {STATE}/answers.json", "=" * 78]
     for k, w in enumerate(items, 1):
         thin = "  ⚠ TESTO SCARSO: scrivi solo se titolo e sommari bastano, altrimenti null" if w["chars"] < 350 else ""
         out += ["", f"[{k}/{len(items)}] id={w['id']} · {w['cat']}{' · ' + w['kicker'] if w['kicker'] else ''} · {kinds[w['id']]}"
@@ -167,9 +169,8 @@ def render_work(items: List[Dict[str, Any]], kinds: Dict[str, str]) -> str:
 def prepare(limit: int, only_important: bool = False) -> int:
     news, briefs = load(NEWS, {}), load(BRIEFS, {})
     todo = pending(news, briefs, only_important)
-    for stale in ("answers.json",):
-        if os.path.exists(os.path.join(STATE, stale)):
-            os.remove(os.path.join(STATE, stale))       # risposte del giro scorso: non si mescolano con quelle nuove
+    for stale in glob.glob(os.path.join(STATE, "answers*.json")):
+        os.remove(stale)                                # risposte del giro scorso (anche answers2…): non si mescolano con le nuove
     if not todo:
         print("niente da fare: ogni storia ha già il suo «in breve» (o è stata valutata).")
         for p in (WORK_JSON, WORK_TXT):
@@ -296,7 +297,16 @@ def apply(path: str) -> int:
         if not isinstance(text, str):
             bad.append((sid, "il testo deve essere una stringa o null"))
             continue
-        err = check(text, work.get(sid))
+        w = work.get(sid)
+        if w is None:
+            # Nessun materiale preparato per questa storia (work.json di un altro giro o di un'altra cartella): senza le
+            # fonti l'anti-copia e il controllo dei numeri non guarderebbero niente, quindi si scaricano adesso.
+            try:
+                w = gather(s)
+            except Exception as exc:                    # noqa: BLE001
+                bad.append((sid, f"non riesco a scaricare le fonti per controllarlo ({type(exc).__name__})"))
+                continue
+        err = check(text, w)
         if err:
             bad.append((sid, err))
             continue
