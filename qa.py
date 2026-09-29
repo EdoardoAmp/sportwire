@@ -303,11 +303,36 @@ def function_checks(browser) -> int:
         pg.wait_for_timeout(300)
         check(pg.evaluate("!document.querySelector('.finder.is-open')"), "", f"{tag}Esc non chiude la ricerca", out)
 
+        # ricerca con refuso: una parola lunga di un titolo, con due lettere scambiate, deve ritrovare quella notizia
+        probe = pg.evaluate("""() => {
+            for (const a of document.querySelectorAll('a[data-story]')) {
+              const w = (a.textContent || '').split(/[^A-Za-zÀ-ÿ]+/).filter((x) => x.length >= 8)[0];
+              if (w) return { id: a.dataset.story, w };
+            }
+            return null; }""")
+        if probe:
+            w = probe["w"]
+            typo = w[:3] + w[4] + w[3] + w[5:]
+            if typo == w:
+                typo = w[:2] + w[3] + w[2] + w[4:]
+            pg.keyboard.press("/")
+            pg.wait_for_timeout(300)
+            pg.fill(".finder__input", typo)
+            pg.wait_for_timeout(400)
+            ids = pg.evaluate("[...document.querySelectorAll('.hit')].map((h) => h.dataset.id)")
+            check(probe["id"] in ids, "", f"{tag}ricerca: «{typo}» (refuso di «{w}») non ritrova la notizia", out)
+            pg.keyboard.press("Escape")
+            pg.wait_for_timeout(300)
+
         # pagina cronologia
         pg.goto(BASE + "/cronologia.html", wait_until="networkidle")
         pg.wait_for_timeout(600)
         vis = pg.evaluate("document.querySelectorAll('.visit').length")
         check(vis >= 1, "", f"{tag}cronologia.html non mostra la lettura appena fatta", out)
+        cells = pg.evaluate("document.querySelectorAll('.heat__grid .cell').length")
+        lit = pg.evaluate("document.querySelectorAll('.heat__grid .cell[data-l]:not([data-l=\"0\"])').length")
+        check(cells == 84, "", f"{tag}cronologia: la mappa delle settimane ha {cells} caselle (attese 84)", out)
+        check(lit >= 1, "", f"{tag}cronologia: la lettura di oggi non colora nessuna casella", out)
         pg.evaluate("localStorage.removeItem('sw:cronologia:v1')")
         pg.reload(wait_until="networkidle")
         pg.wait_for_timeout(400)
@@ -336,11 +361,58 @@ def function_checks(browser) -> int:
         ctx.set_offline(False)
     ctx.close()
 
-    # reduced motion: niente animazioni infinite in corso
-    ctx = browser.new_context(viewport={"width": 1280, "height": 800}, reduced_motion="reduce", locale="it-IT")
+    # swipe sul telefono: avanti, indietro, e dal bordo dello schermo (gesto del sistema) non deve fare niente
+    ctx = browser.new_context(viewport={"width": 390, "height": 844}, device_scale_factor=2, is_mobile=True, has_touch=True, locale="it-IT")
     pg = ctx.new_page()
     pg.goto(BASE + "/index.html", wait_until="networkidle")
+    pg.wait_for_timeout(500)
+    pg.evaluate("document.querySelector('a[data-story]').click()")
+    pg.wait_for_timeout(900)
+
+    def swipe(x0, x1, y=420):
+        pg.evaluate("""([x0, x1, y]) => { const el = document.querySelector('.reader__sheet');
+            const fire = (type, x) => el.dispatchEvent(new PointerEvent(type, { pointerType: 'touch', clientX: x, clientY: y, bubbles: true, isPrimary: true }));
+            fire('pointerdown', x0); fire('pointerup', x1); }""", [x0, x1, y])
+        pg.wait_for_timeout(700)
+
+    first = pg.inner_text(".reader__title")
+    swipe(300, 120)
+    second = pg.inner_text(".reader__title")
+    check(second != first, "", "swipe: scorrendo a sinistra il dossier non passa alla notizia successiva", out)
+    swipe(120, 300)
+    check(pg.inner_text(".reader__title") == first, "", "swipe: scorrendo a destra il dossier non torna indietro", out)
+    swipe(10, 200)
+    check(pg.inner_text(".reader__title") == first, "", "swipe: un gesto che parte dal bordo ha cambiato notizia", out)
+    ctx.close()
+
+    # transizioni di vista: col movimento normale il dossier passa da una transizione (se il browser le ha) e non lascia classi vt-*
+    ctx = browser.new_context(viewport={"width": 1280, "height": 800}, locale="it-IT")
+    pg = ctx.new_page()
+    pg.add_init_script("window.__vt = 0; const _o = Document.prototype.startViewTransition; if (_o) Document.prototype.startViewTransition = function (cb) { window.__vt++; return _o.call(this, cb); };")
+    pg.goto(BASE + "/index.html", wait_until="networkidle")
+    pg.wait_for_timeout(600)
+    if pg.evaluate("typeof document.startViewTransition === 'function'"):
+        pg.evaluate("document.querySelector('a[data-story]').click()")
+        pg.wait_for_timeout(1000)
+        check(pg.evaluate("!!document.querySelector('.reader.is-open')"), "", "transizioni: il dossier non si apre", out)
+        check(pg.evaluate("window.__vt") >= 1, "", "transizioni: l'apertura non usa la transizione di vista", out)
+        pg.keyboard.press("Escape")
+        pg.wait_for_timeout(700)
+        check(pg.evaluate("document.documentElement.className.indexOf('vt-') === -1"), "", "transizioni: classi vt-* rimaste sulla pagina", out)
+    ctx.close()
+
+    # reduced motion: niente animazioni infinite in corso, niente transizioni di vista
+    ctx = browser.new_context(viewport={"width": 1280, "height": 800}, reduced_motion="reduce", locale="it-IT")
+    pg = ctx.new_page()
+    pg.add_init_script("window.__vt = 0; const _o = Document.prototype.startViewTransition; if (_o) Document.prototype.startViewTransition = function (cb) { window.__vt++; return _o.call(this, cb); };")
+    pg.goto(BASE + "/index.html", wait_until="networkidle")
     pg.wait_for_timeout(800)
+    pg.evaluate("document.querySelector('a[data-story]').click()")
+    pg.wait_for_timeout(600)
+    check(pg.evaluate("!!document.querySelector('.reader.is-open')"), "", "reduced-motion: il dossier non si apre", out)
+    check(pg.evaluate("window.__vt") == 0, "", "reduced-motion: partono transizioni di vista", out)
+    pg.keyboard.press("Escape")
+    pg.wait_for_timeout(400)
     running = pg.evaluate("document.getAnimations().filter(a => a.playState === 'running' && a.effect && a.effect.getComputedTiming().iterations === Infinity).length")
     check(running == 0, "", f"reduced-motion: {running} animazioni infinite ancora attive", out)
     ctx.close()

@@ -17,6 +17,8 @@ const ICON_OUT = '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="t
 const ICON_X = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>';
 const ICON_SEARCH = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 16l4.6 4.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
 const ICON_PREV = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M14.5 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const ICON_PLAY = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg>';
+const ICON_STOP = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="6.5" y="6.5" width="11" height="11" rx="2.2" fill="currentColor"/></svg>';
 const ICON_NEXT = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M9.5 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
 const relTime = (iso) => {
@@ -65,6 +67,84 @@ const trapTab = (root, e) => {
   if (e.shiftKey && (document.activeElement === a || !root.contains(document.activeElement))) { e.preventDefault(); z.focus(); }
   else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); }
 };
+
+/* Transizioni di vista (API nativa del browser): il passaggio tra due stati della pagina diventa una dissolvenza o un
+   volo dell'elemento condiviso. Dove l'API non c'è, o con «riduci movimento», l'aggiornamento è immediato.
+   Tutte le modifiche al DOM vanno DENTRO `update`: il browser fotografa lo stato vecchio solo al fotogramma dopo. */
+const canVT = !reduce && typeof document.startViewTransition === "function";
+let vtBusy = 0;
+function withVT(update, cls = "vt") {
+  if (!canVT) { update(); return null; }
+  const root = document.documentElement;
+  let t;
+  root.classList.add(cls);
+  vtBusy++;
+  try { t = document.startViewTransition(update); }
+  catch { vtBusy--; root.classList.remove(cls); update(); return null; }
+  const done = () => { if (--vtBusy <= 0) { vtBusy = 0; root.classList.remove("vt", "vt-step", "vt-open"); } };
+  t.finished.then(done, done);
+  t.ready.catch(() => {});                                   // «saltata» perché ne è partita un'altra: non è un errore
+  t.updateCallbackDone.catch((err) => console.error(err));   // un errore vero nell'aggiornamento non deve sparire
+  return t;
+}
+
+/* uFuzzy v1.0.19 · https://github.com/leeoniya/uFuzzy · ricerca tollerante ai refusi (8,5 KB, nessuna dipendenza).
+   Copia non modificata di dist/uFuzzy.iife.min.js. Licenza MIT, qui sotto per intero come richiede la licenza.
+
+   MIT License
+
+   Copyright (c) 2022 Leon Sorokin
+
+   Permission is hereby granted, free of charge, to any person obtaining a copy
+   of this software and associated documentation files (the "Software"), to deal
+   in the Software without restriction, including without limitation the rights
+   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   copies of the Software, and to permit persons to whom the Software is
+   furnished to do so, subject to the following conditions:
+
+   The above copyright notice and this permission notice shall be included in all
+   copies or substantial portions of the Software.
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   SOFTWARE.
+*/
+/*! https://github.com/leeoniya/uFuzzy (v1.0.19) */
+var uFuzzy=function(){"use strict";const e=(e,t)=>e>t?1:t>e?-1:0,t=1/0,l=e=>e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"),n="eexxaacctt",r=/\p{P}/gu,i=["en",{numeric:!0,sensitivity:"base"}],s=(e,t,l)=>e.replace("A-Z",t).replace("a-z",l),a={unicode:!1,alpha:null,interSplit:"[^A-Za-z\\d']+",intraSplit:"[a-z][A-Z]",interBound:"[^A-Za-z\\d]",intraBound:"[A-Za-z]\\d|\\d[A-Za-z]|[a-z][A-Z]",interLft:0,interRgt:0,interChars:".",interIns:t,intraChars:"[a-z\\d']",intraIns:null,intraContr:"'[a-z]{1,2}\\b",intraMode:0,intraSlice:[1,t],intraSub:null,intraTrn:null,intraDel:null,intraFilt:()=>!0,toUpper:e=>e.toLocaleUpperCase(),toLower:e=>e.toLocaleLowerCase(),compare:null,sort:(t,l,n,r=e)=>{let{idx:i,chars:s,terms:a,interLft2:u,interLft1:g,start:f,intraIns:c,interIns:h,cases:o}=t;return i.map(((e,t)=>t)).sort(((e,t)=>s[t]-s[e]||c[e]-c[t]||a[t]+u[t]+.5*g[t]-(a[e]+u[e]+.5*g[e])||h[e]-h[t]||f[e]-f[t]||o[t]-o[e]||r(l[i[e]],l[i[t]])))}},u=(e,l)=>0==l?"":1==l?e+"??":l==t?e+"*?":e+`{0,${l}}?`,g="(?:\\b|_)";function f(t){t=Object.assign({},a,t);let{unicode:f,interLft:c,interRgt:o,intraMode:p,intraSlice:d,intraIns:m,intraSub:x,intraTrn:R,intraDel:b,intraContr:A,intraSplit:y,interSplit:I,intraBound:S,interBound:z,intraChars:E,toUpper:L,toLower:k,compare:C}=t;m??=p,x??=p,R??=p,b??=p,C??="undefined"==typeof Intl?e:new Intl.Collator(...i).compare;let j=t.letters??t.alpha;if(null!=j){let e=L(j),t=k(j);I=s(I,e,t),y=s(y,e,t),z=s(z,e,t),S=s(S,e,t),E=s(E,e,t),A=s(A,e,t)}let Z=f?"u":"";const $='".+?"',w=RegExp($,"gi"+Z),D=RegExp(`(?:\\s+|^)-(?:${E}+|${$})`,"gi"+Z);let{intraRules:T}=t;null==T&&(T=e=>{let t=a.intraSlice,l=0,n=0,r=0,i=0;if(/[^\d]/.test(e)){let s=e.length;s>4?(t=d,l=m,n=x,r=R,i=b):3>s||(r=Math.min(R,1),4==s&&(l=Math.min(m,1)))}return{intraSlice:t,intraIns:l,intraSub:n,intraTrn:r,intraDel:i}});let B=!!y,M=RegExp(y,"g"+Z),U=RegExp(I,"g"+Z),F=RegExp("^"+I+"|"+I+"$","g"+Z),O=RegExp(A,"gi"+Z);const v=(e,t=!1)=>{let l=[];e=(e=e.replace(w,(e=>(l.push(e),n)))).replace(F,""),t||(e=k(e)),B&&(e=e.replace(M,(e=>e[0]+" "+e[1])));let r=0;return e.split(U).filter((e=>""!=e)).map((e=>e===n?l[r++]:e))},G=/[^\d]+|\d+/g,K=(e,n=0,r=!1)=>{let i=v(e);if(0==i.length)return[];let s,a=Array(i.length).fill("");if(i=i.map(((e,t)=>e.replace(O,(e=>(a[t]=e,""))))),1==p)s=i.map(((e,t)=>{if('"'===e[0])return l(e.slice(1,-1));let n="";for(let l of e.matchAll(G)){let e=l[0],{intraSlice:r,intraIns:i,intraSub:s,intraTrn:g,intraDel:f}=T(e);if(i+s+g+f==0)n+=e+a[t];else{let[l,c]=r,h=e.slice(0,l),o=e.slice(c),p=e.slice(l,c);1==i&&1==h.length&&h!=p[0]&&(h+="(?!"+h+")");let d=p.length,m=[e];if(s)for(let e=0;d>e;e++)m.push(h+p.slice(0,e)+E+p.slice(e+1)+o);if(g)for(let e=0;d-1>e;e++)p[e]!=p[e+1]&&m.push(h+p.slice(0,e)+p[e+1]+p[e]+p.slice(e+2)+o);if(f)for(let e=0;d>e;e++)m.push(h+p.slice(0,e+1)+"?"+p.slice(e+1)+o);if(i){let e=u(E,1);for(let t=0;d>t;t++)m.push(h+p.slice(0,t)+e+p.slice(t)+o)}n+="(?:"+m.join("|")+")"+a[t]}}return n}));else{let e=u(E,m);2==n&&m>0&&(e=")("+e+")("),s=i.map(((t,n)=>'"'===t[0]?l(t.slice(1,-1)):t.split("").map(((e,t,l)=>(1==m&&0==t&&l.length>1&&e!=l[t+1]&&(e+="(?!"+e+")"),e))).join(e)+a[n]))}let f=2==c?g:"",h=2==o?g:"",d=h+u(t.interChars,t.interIns)+f;return n>0?r?s=f+"("+s.join(")"+h+"|"+f+"(")+")"+h:(s="("+s.join(")("+d+")(")+")",s="(.??"+f+")"+s+"("+h+".*)"):(s=s.join(d),s=f+s+h),[RegExp(s,"i"+Z),i,a]},N=(e,t,l)=>{let[n]=K(t);if(null==n)return null;let r=[];if(null!=l)for(let t=0;l.length>t;t++){let i=l[t];n.test(e[i])&&r.push(i)}else for(let t=0;e.length>t;t++)n.test(e[t])&&r.push(t);return r};let P=!!S,W=RegExp(z,Z),Y=RegExp(S,Z);const _=(e,l,n)=>{let[r,i,s]=K(n,1),a=v(n,!0),[u]=K(n,2),g=i.length,f=Array(g),h=Array(g);for(let e=0;g>e;e++){let t=i[e],l=a[e],n='"'==t[0]?t.slice(1,-1):t+s[e],r='"'==l[0]?l.slice(1,-1):l+s[e];f[e]=n,h[e]=r}let p=e.length,d=Array(p).fill(0),m={idx:Array(p),start:d.slice(),chars:d.slice(),cases:d.slice(),terms:d.slice(),interIns:d.slice(),intraIns:d.slice(),interLft2:d.slice(),interRgt2:d.slice(),interLft1:d.slice(),interRgt1:d.slice(),ranges:Array(p)},x=1==c||1==o,R=0;for(let n=0;e.length>n;n++){let i=l[e[n]],s=i.match(r),a=s.index+s[1].length,p=a,d=!1,b=0,A=0,y=0,I=0,S=0,z=0,E=0,L=0,C=0,j=[];for(let e=0,l=2;g>e;e++,l+=2){let n=k(s[l]),r=f[e],u=r.length,m=n.length,R=n==r;if(s[l]==h[e]&&E++,!R&&s[l+1].length>=u){let t=k(s[l+1]).indexOf(r);t>-1&&(j.push(p,m,t,u),p+=q(s,l,t,u),n=r,m=u,R=!0,0==e&&(a=p))}if(x||R){let t=p-1,g=p+m,f=!1,h=!1;if(-1==t||W.test(i[t]))R&&b++,f=!0;else{if(2==c){d=!0;break}if(P&&Y.test(i[t]+i[t+1]))R&&A++,f=!0;else if(1==c){let t=s[l+1],g=p+m;if(t.length>=u){let c,h=0,o=!1,d=RegExp(r,"ig"+Z);for(;c=d.exec(t);){h=c.index;let e=g+h,t=e-1;if(-1==t||W.test(i[t])){b++,o=!0;break}if(Y.test(i[t]+i[e])){A++,o=!0;break}}o&&(f=!0,j.push(p,m,h,u),p+=q(s,l,h,u),n=r,m=u,R=!0,0==e&&(a=p))}if(!f){d=!0;break}}}if(g==i.length||W.test(i[g]))R&&y++,h=!0;else{if(2==o){d=!0;break}if(P&&Y.test(i[g-1]+i[g]))R&&I++,h=!0;else if(1==o){d=!0;break}}R&&(S+=u,f&&h&&z++)}if(m>u&&(C+=m-u),e>0&&(L+=s[l-1].length),!t.intraFilt(r,n,p)){d=!0;break}g-1>e&&(p+=m+s[l+1].length)}if(!d){m.idx[R]=e[n],m.interLft2[R]=b,m.interLft1[R]=A,m.interRgt2[R]=y,m.interRgt1[R]=I,m.chars[R]=S,m.terms[R]=z,m.cases[R]=E,m.interIns[R]=L,m.intraIns[R]=C,m.start[R]=a;let t=i.match(u),l=t.index+t[1].length,r=j.length,s=r>0?0:1/0,g=r-4;for(let e=2;t.length>e;)if(s>g||j[s]!=l)l+=t[e].length,e++;else{let n=j[s+1],r=j[s+2],i=j[s+3],a=e,u="";for(let e=0;n>e;a++)u+=t[a],e+=t[a].length;t.splice(e,a-e,u),l+=q(t,e,r,i),s+=4}l=t.index+t[1].length;let f=m.ranges[R]=[],c=l,h=l;for(let e=2;t.length>e;e++){let n=t[e].length;l+=n,e%2==0?h=l:n>0&&(f.push(c,h),c=h=l)}h>c&&f.push(c,h),R++}}if(e.length>R)for(let e in m)m[e]=m[e].slice(0,R);return m},q=(e,t,l,n)=>{let r=e[t]+e[t+1].slice(0,l);return e[t-1]+=r,e[t]=e[t+1].slice(l,l+n),e[t+1]=e[t+1].slice(l+n),r.length};return{search:(...e)=>((e,n,i,s=1e3,a)=>{i=i?!0===i?5:i:0;let u=null,g=null,f=[];n=n.replace(D,(e=>{let t=e.trim().slice(1);return t='"'===t[0]?l(t.slice(1,-1)):t.replace(r,""),""!=t&&f.push(t),""}));let c,o=v(n);if(f.length>0){if(c=RegExp(f.join("|"),"i"+Z),0==o.length){let t=[];for(let l=0;e.length>l;l++)c.test(e[l])||t.push(l);return[t,null,null]}}else if(0==o.length)return[null,null,null];if(i>0){let t=v(n);if(t.length>1){let l=t.slice().sort(((e,t)=>t.length-e.length));for(let t=0;l.length>t;t++){if(0==a?.length)return[[],null,null];a=N(e,l[t],a)}if(t.length>i)return[a,null,null];u=h(t).map((e=>e.join(" "))),g=[];let n=new Set;for(let t=0;u.length>t;t++)if(a.length>n.size){let l=a.filter((e=>!n.has(e))),r=N(e,u[t],l);for(let e=0;r.length>e;e++)n.add(r[e]);g.push(r)}else g.push([])}}null==u&&(u=[n],g=[a?.length>0?a:N(e,n)]);let p=null,d=null;if(f.length>0&&(g=g.map((t=>t.filter((t=>!c.test(e[t])))))),s>=g.reduce(((e,t)=>e+t.length),0)){p={},d=[];for(let l=0;g.length>l;l++){let n=g[l];if(null==n||0==n.length)continue;let r=u[l],i=_(n,e,r),s=t.sort(i,e,r,C);if(l>0)for(let e=0;s.length>e;e++)s[e]+=d.length;for(let e in i)p[e]=(p[e]??[]).concat(i[e]);d=d.concat(s)}}return[[].concat(...g),p,d]})(...e),split:v,filter:N,info:_,sort:t.sort}}const c=(()=>{let e={A:"ÁÀÃÂÄĄĂÅĀǍ",a:"áàãâäąăåāǎ",E:"ÉÈÊËĖĘĚĒ",e:"éèêëęěē",I:"ÍÌÎÏĮİĪǏ",i:"íìîïįıīǐ",O:"ÓÒÔÕÖŐŌǑØ",o:"óòôõöőōǒø",U:"ÚÙÛÜŪŲŮŰǓ",u:"úùûüūųůűǔ",C:"ÇČĆ",c:"çčć",D:"ĎĐ",d:"ďđ",G:"ĞĢ",g:"ğģ",K:"Ķ",k:"ķ",L:"ŁĹĽĻ",l:"łĺľļ",N:"ÑŃŇŅ",n:"ñńňņ",R:"ŘŔ",r:"řŕ",S:"ŠŚȘŞ",s:"šśșş",T:"ŢȚŤ",t:"ţțť",W:"Ŵ",w:"ŵ",Y:"ÝŸŶ",y:"ýÿŷ",Z:"ŻŹŽ",z:"żźž"},t={},l="";for(let n in e)e[n].split("").forEach((e=>{l+=e,t[e]=n}));let n=RegExp(`[${l}]`,"g"),r=e=>t[e];return e=>{if("string"==typeof e)return e.replace(n,r);let t=Array(e.length);for(let l=0;e.length>l;l++)t[l]=e[l].replace(n,r);return t}})();function h(e){let t,l,n=(e=e.slice()).length,r=[e.slice()],i=Array(n).fill(0),s=1;for(;n>s;)s>i[s]?(t=s%2&&i[s],l=e[s],e[s]=e[t],e[t]=l,++i[s],s=1,r.push(e.slice())):(i[s]=0,++s);return r}const o=(e,t)=>t?`<mark>${e}</mark>`:e,p=(e,t)=>e+t;return f.latinize=c,f.permute=e=>h([...Array(e.length).keys()]).sort(((e,t)=>{for(let l=0;e.length>l;l++)if(e[l]!=t[l])return e[l]-t[l];return 0})).map((t=>t.map((t=>e[t])))),f.highlight=function(e,t,l=o,n="",r=p){n=r(n,l(e.substring(0,t[0]),!1))??n;for(let i=0;t.length>i;i+=2)n=r(n,l(e.substring(t[i],t[i+1]),!0))??n,t.length-3>i&&(n=r(n,l(e.substring(t[i+1],t[i+2]),!1))??n);return r(n,l(e.substring(t[t.length-1]),!1))??n},f}();
+
+/* Ricerca tollerante ai refusi (uFuzzy, qui sopra). Serve solo quando la ricerca esatta non trova abbastanza:
+   «pogachar» → Pogacar, «orsatto» → Orsato. Gira sui titoli già scaricati, niente rete. */
+const fuzzy = (() => {
+  const uf = typeof uFuzzy === "function"
+    ? new uFuzzy({ intraMode: 1, intraIns: 1, intraSub: 1, intraTrn: 1, intraDel: 1 })   // un errore per parola: scambio, lettera in più/in meno/sbagliata
+    : null;
+  const flat = (t) => uFuzzy.latinize(String(t ?? ""));
+  return {
+    /* haystack: array di testi. Ritorna [{ i, ranges }] dal più pertinente, al più `max`. Sotto le 4 lettere ogni cosa «somiglia» a ogni cosa: niente. */
+    find(haystack, q, max = 8) {
+      const needle = flat(q).trim();
+      if (!uf || needle.replace(/[^a-z0-9]/gi, "").length < 4) return [];
+      const hay = haystack.map(flat);
+      let res;
+      try { res = uf.search(hay, needle, 3, 1e3); } catch { return []; }
+      const [idxs, info, order] = res || [];
+      if (!idxs || !idxs.length || !info || !order) return [];
+      return order.slice(0, max).map((o) => {
+        const i = info.idx[o];
+        return { i, ranges: hay[i].length === String(haystack[i] ?? "").length ? info.ranges[o] : null };   // se latinize ha cambiato la lunghezza, non si evidenzia
+      });
+    },
+    /* Il testo con le parti trovate in <mark>, tutto con l'escape. */
+    mark(text, ranges) {
+      const t = String(text ?? "");
+      return ranges && ranges.length ? uFuzzy.highlight(t, ranges, (part, hit) => (hit ? `<mark>${esc(part)}</mark>` : esc(part))) : esc(t);
+    },
+  };
+})();
 
 /* La tua cronostoria: cosa hai aperto e quando. Solo localStorage, nessun server. */
 const store = (() => {
@@ -181,10 +261,14 @@ function storyFromLog(id) {
 const getStory = (id) => NEWS.byId.get(id) || storyFromDom(id) || storyFromLog(id);
 
 /* Il dossier: la notizia letta dentro Sportwire (foto, in breve, ora per ora, storie collegate).
-   URL profondo #/s/<id>: il tasto Indietro lo chiude, il link si può condividere con se stessi. */
+   URL profondo #/s/<id>: il tasto Indietro lo chiude, il link si può condividere con se stessi.
+   Si scorre con ← → (o j k, o un tocco laterale sul telefono); «Ascolta» legge il breve con la voce italiana del dispositivo. */
 const reader = (() => {
   let el, sheet, scroller, posEl, prevBtn, nextBtn;
   let list = [], current = null, lastFocus = null, isOpen = false;
+  let sx = 0, sy = 0, st = 0, tracking = false;
+  const tts = "speechSynthesis" in window && typeof SpeechSynthesisUtterance === "function" ? speechSynthesis : null;
+  let speaking = false, said = null;
 
   const parse = () => { const m = /^#\/s\/([0-9a-f]{8})$/.exec(location.hash); return m ? m[1] : null; };
   const hashFor = (id) => `#/s/${id}`;
@@ -218,6 +302,7 @@ const reader = (() => {
       if (e.target.closest("[data-close]")) return close();
       if (e.target.closest("[data-prev]")) return step(-1);
       if (e.target.closest("[data-next]")) return step(1);
+      if (e.target.closest("[data-listen]")) return toggleListen();
       const a = e.target.closest("a[data-goto]");
       if (a && !(e.metaKey || e.ctrlKey || e.shiftKey || e.button)) { e.preventDefault(); open(a.dataset.goto, null); return; }
       const out = e.target.closest("a[data-visit]");
@@ -227,9 +312,56 @@ const reader = (() => {
       if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); close(); return; }
       if (e.key === "ArrowLeft" && !e.altKey && !e.metaKey) { e.preventDefault(); step(-1); return; }
       if (e.key === "ArrowRight" && !e.altKey && !e.metaKey) { e.preventDefault(); step(1); return; }
+      if ((e.key === "j" || e.key === "k") && !e.altKey && !e.metaKey && !e.ctrlKey) { e.preventDefault(); step(e.key === "j" ? 1 : -1); return; }
       trapTab(sheet, e);
     });
+    /* col dito: un colpo laterale netto passa alla notizia dopo o prima (il bordo sinistro resta al gesto «indietro» di iOS) */
+    sheet.addEventListener("pointerdown", (e) => { tracking = e.pointerType === "touch" && e.clientX > 28; sx = e.clientX; sy = e.clientY; st = e.timeStamp; });
+    sheet.addEventListener("pointerup", (e) => {
+      if (!tracking) return;
+      tracking = false;
+      const dx = e.clientX - sx, dy = e.clientY - sy;
+      if (Math.abs(dx) > 64 && Math.abs(dx) > Math.abs(dy) * 1.6 && e.timeStamp - st < 800) step(dx < 0 ? 1 : -1);
+    });
+    sheet.addEventListener("pointercancel", () => { tracking = false; });
   }
+
+  /* — Ascolta: sintesi vocale del dispositivo, solo con una voce italiana locale (niente voci in rete) — */
+  const voice = () => {
+    if (!tts) return null;
+    const it = tts.getVoices().filter((v) => /^it([-_]|$)/i.test(v.lang) && v.localService);
+    return it.find((v) => v.default) || it[0] || null;
+  };
+  function paintListen() {
+    const b = scroller && $("[data-listen]", scroller);
+    if (!b) return;
+    b.hidden = !voice();
+    b.setAttribute("aria-pressed", String(speaking));
+    b.innerHTML = `${speaking ? ICON_STOP : ICON_PLAY}<span>${speaking ? "Ferma" : "Ascolta"}</span>`;
+  }
+  function stopListen() {
+    if (tts && speaking) tts.cancel();
+    speaking = false; said = null;
+    paintListen();
+  }
+  function toggleListen() {
+    if (!tts || !current) return;
+    if (speaking) return stopListen();
+    const v = voice();
+    if (!v) return;
+    const title = String(current.title || "").trim();
+    const body = String(current.brief || current.summary || "").trim();
+    try {
+      const u = new SpeechSynthesisUtterance(`${title}${/[.!?…»”]$/.test(title) ? " " : ". "}${body}`.trim());
+      u.voice = v; u.lang = v.lang;
+      const end = () => { if (said === u) { speaking = false; said = null; paintListen(); } };
+      u.onend = end; u.onerror = end;
+      said = u; speaking = true;
+      tts.cancel(); tts.speak(u);
+    } catch { speaking = false; said = null; }          // il browser rifiuta la voce: il pulsante resta com'era
+    paintListen();
+  }
+  if (tts) { tts.addEventListener("voiceschanged", paintListen); addEventListener("pagehide", stopListen); }
 
   const photo = (s) => (s.image ? `<div class="reader__photo media"><img src="${esc(s.image)}" alt="" decoding="async" referrerpolicy="no-referrer" onload="this.classList.add('is-loaded')" onerror="this.parentNode.remove()"></div>` : "");
 
@@ -262,10 +394,12 @@ const reader = (() => {
       ${box}
       <div class="reader__actions">
         <a class="btn btn--primary" href="${esc(s.link)}" target="_blank" rel="noopener" data-visit>Leggi su ${esc(s.source || "la testata")} ${ICON_OUT}</a>
+        <button type="button" class="btn btn--quiet" data-listen aria-pressed="false" hidden>${ICON_PLAY}<span>Ascolta</span></button>
       </div>
       ${chrono(s)}${related(s)}
     </div>`;
     scroller.scrollTop = 0;
+    paintListen();
   }
 
   function updateNav() {
@@ -275,24 +409,55 @@ const reader = (() => {
     nextBtn.disabled = i < 0 || i >= list.length - 1;
   }
 
-  function show(id, ids) {
+  /* La foto della scheda vola nella foto del dossier: un solo elemento condiviso (stesso nome) tra i due stati. */
+  const PHOTO = "story-photo";
+  const fliesFrom = (n) => {
+    if (!canVT || !n || !n.isConnected) return false;
+    const r = n.getBoundingClientRect();
+    return r.width > 40 && r.height > 40 && r.bottom > 0 && r.top < innerHeight && r.right > 0 && r.left < innerWidth;
+  };
+  function morph(from, update) {
+    from.style.viewTransitionName = PHOTO;
+    const clear = () => { from.style.viewTransitionName = ""; const p = scroller && $(".reader__photo", scroller); if (p) p.style.viewTransitionName = ""; };
+    const t = withVT(() => {
+      from.style.viewTransitionName = "";
+      update();
+      const p = $(".reader__photo", scroller);
+      if (p) p.style.viewTransitionName = PHOTO;
+    }, "vt-open");
+    if (t) t.finished.then(clear, clear); else clear();
+  }
+
+  function show(id, ids, from) {
     const s = getStory(id);
     if (!s) return false;
     if (!el) build();
     if (ids && ids.length) list = ids;
     else if (!list.includes(id)) list = pageIds(id);
+    if (speaking && (!current || current.id !== s.id)) stopListen();
     const first = !isOpen;
     current = s;
-    render(s);
-    updateNav();
+    const paint = () => {
+      if (current !== s) return;                        // nel frattempo si è passati a un'altra notizia: la sua paint disegnerà
+      render(s); updateNav();
+      const im = $(".reader__photo img", scroller);     // già in cache: subito visibile, così la foto che vola non arriva vuota
+      if (im && im.complete && im.naturalWidth) im.classList.add("is-loaded");
+    };
     el.setAttribute("aria-labelledby", "rd-title");
     if (first) {
       lastFocus = document.activeElement && document.activeElement !== document.body ? document.activeElement : null;
-      modal.lock();
       isOpen = true;
-      el.classList.add("is-open");
-      requestAnimationFrame(() => sheet.focus({ preventScroll: true }));
-    }
+      const openIt = () => {
+        if (!isOpen) return;                          // chiuso prima che la transizione partisse
+        paint();
+        modal.lock();
+        el.classList.add("is-open");
+        sheet.focus({ preventScroll: true });
+      };
+      if (fliesFrom(from)) morph(from, openIt); else openIt();
+      requestAnimationFrame(() => { if (isOpen && !el.contains(document.activeElement)) sheet.focus({ preventScroll: true }); });
+    } else if (canVT) withVT(paint, "vt-step");
+    else paint();
     document.title = `${s.title} · Sportwire`;
     store.open(s, "d");
     return true;
@@ -300,6 +465,7 @@ const reader = (() => {
 
   function hide() {
     if (!isOpen) return;
+    stopListen();
     isOpen = false;
     el.classList.remove("is-open");
     modal.unlock();
@@ -316,10 +482,10 @@ const reader = (() => {
     return ids;
   }
 
-  function open(id, ids) {
+  function open(id, ids, from) {
     if (!ID_RX.test(id)) return false;
     if (!document.body.dataset.title) document.body.dataset.title = document.title;
-    if (!show(id, ids)) return false;
+    if (!show(id, ids, from)) return false;
     if (parse() !== id) history.pushState({ sw: 1 }, "", hashFor(id));
     return true;
   }
@@ -427,9 +593,10 @@ const finder = (() => {
     return out + (open ? "</mark>" : "");
   };
 
-  function hitHtml(s, i, toks) {
+  function hitHtml(s, i, toks, ranges) {
+    const title = ranges !== undefined ? fuzzy.mark(s.title, ranges) : toks.length ? mark(s.title, toks) : esc(s.title);
     return `<button type="button" class="hit" role="option" id="hit-${i}" data-id="${esc(s.id)}" aria-selected="${i === sel}">
-      <span class="hit__t">${toks.length ? mark(s.title, toks) : esc(s.title)}</span>
+      <span class="hit__t">${title}</span>
       <span class="hit__m">${esc(secName(s.section))} · ${esc(s.source)} · ${esc(relTime(s.ts))}${store.has(s.id) ? " · già letta" : ""}</span></button>`;
   }
 
@@ -450,12 +617,20 @@ const finder = (() => {
       html = group("Le tue ultime letture", recent) + group("In apertura", top);
       if (!NEWS.ready) html += '<p class="finder__empty">Carico le notizie…</p>';
     } else {
-      const scored = allStories().map((s) => [score(s, toks), s]).filter(([sc]) => sc > 0)
-        .sort((a, b) => b[0] - a[0] || (b[1]._t || 0) - (a[1]._t || 0)).slice(0, 30);
-      results = scored.map(([, s]) => s);
-      html = results.length
-        ? `<p class="finder__group">${results.length} ${results.length === 1 ? "risultato" : "risultati"}</p>` + results.map((s, i) => hitHtml(s, i, toks)).join("")
-        : `<p class="finder__empty">Niente per “${esc(q.trim())}” nelle ultime ore. Prova con un cognome o una squadra.</p>`;
+      const stories = allStories();
+      const exact = stories.map((s) => [score(s, toks), s]).filter(([sc]) => sc > 0)
+        .sort((a, b) => b[0] - a[0] || (b[1]._t || 0) - (a[1]._t || 0)).slice(0, 30).map(([, s]) => s);
+      /* Poche risposte esatte: si prova con i refusi («pogachar», «orsatto»), sui soli titoli. */
+      let near = [];
+      if (exact.length < 4) {
+        const have = new Set(exact.map((s) => s.id));
+        near = fuzzy.find(stories.map((s) => s.title), q.trim(), 8).filter((m) => !have.has(stories[m.i].id)).map((m) => ({ s: stories[m.i], ranges: m.ranges }));
+      }
+      results = exact.concat(near.map((n) => n.s));
+      let i = 0;
+      html = (exact.length ? `<p class="finder__group">${exact.length} ${exact.length === 1 ? "risultato" : "risultati"}</p>` + exact.map((s) => hitHtml(s, i++, toks)).join("") : "")
+        + (near.length ? `<p class="finder__group">${exact.length ? "Anche" : "Forse cercavi"}</p>` + near.map((n) => hitHtml(n.s, i++, toks, n.ranges)).join("") : "");
+      if (!results.length) html = `<p class="finder__empty">Niente per “${esc(q.trim())}” nelle ultime ore. Prova con un cognome o una squadra.</p>`;
     }
     sel = 0;
     listEl.innerHTML = html;
@@ -823,6 +998,35 @@ const history_ = (() => {
     return rows;
   }
 
+  /* Le ultime 12 settimane in un colpo d'occhio (una casella per giorno, colonne = settimane, righe = lunedì…domenica). */
+  function heat(all) {
+    const WEEKS = 12, now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const start = new Date(today);
+    start.setDate(today.getDate() - ((today.getDay() + 6) % 7) - (WEEKS - 1) * 7);
+    const counts = new Map();
+    all.forEach((e) => { const k = dayKey(new Date(e.t)); counts.set(k, (counts.get(k) || 0) + 1); });
+    let active = 0, best = null;
+    const cells = [];
+    for (let w = 0; w < WEEKS; w++) {
+      for (let d = 0; d < 7; d++) {
+        const day = new Date(start);
+        day.setDate(start.getDate() + w * 7 + d);
+        if (day > today) { cells.push('<i class="cell cell--future"></i>'); continue; }
+        const n = counts.get(dayKey(day)) || 0;
+        if (n) active++;
+        if (n && (!best || n > best.n)) best = { n, day };
+        const lvl = n === 0 ? 0 : n <= 2 ? 1 : n <= 5 ? 2 : n <= 9 ? 3 : 4;
+        cells.push(`<i class="cell" data-l="${lvl}"${day.getTime() === today.getTime() ? " data-today" : ""} title="${n} ${n === 1 ? "notizia" : "notizie"} · ${esc(dayLabel(day, now))}"></i>`);
+      }
+    }
+    const sum = `${active} ${active === 1 ? "giorno" : "giorni"} di lettura nelle ultime ${WEEKS} settimane${best ? `; il più intenso ${dayLabel(best.day, now).toLowerCase()}, ${best.n} ${best.n === 1 ? "notizia" : "notizie"}` : ""}.`;
+    return `<section class="heat" aria-labelledby="heat-h"><h2 class="heat__title" id="heat-h">Le tue ultime ${WEEKS} settimane</h2>
+      <div class="heat__grid" role="img" aria-label="${esc(sum)}">${cells.join("")}</div>
+      <div class="heat__foot"><p class="mixkey">${esc(sum)}</p>
+      <span class="heat__key" aria-hidden="true">meno ${[0, 1, 2, 3, 4].map((l) => `<i class="cell" data-l="${l}"></i>`).join("")} più</span></div></section>`;
+  }
+
   function page() {
     const host = $("[data-history]");
     if (!host) return;
@@ -872,7 +1076,7 @@ const history_ = (() => {
         }).join("")}</ol></section>`).join("")
       : `<p class="empty">Nessun risultato per “${esc(q)}”.</p>`;
     const keep = document.activeElement && document.activeElement.matches("[data-hsearch]");
-    host.innerHTML = stats + tools + list;
+    host.innerHTML = stats + heat(all) + tools + list;
     if (keep) { const i = $("[data-hsearch]", host); i.focus(); i.setSelectionRange(q.length, q.length); }
   }
 
@@ -912,7 +1116,7 @@ const history_ = (() => {
   /* 1. ingresso: solo dissolvenza, un solo observer */
   const targets = $$(".lead, .resume, .sky, .cards > .card, .front__aside, .block, .rows--grid, .hist");
   if (!reduce && "IntersectionObserver" in window) {
-    const io = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -6% 0px", threshold: 0.04 });
+    const io = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -6% 0px", threshold: 0 });   // soglia 0: un elemento altissimo (cronologia lunga) non potrebbe mai superare una percentuale
     targets.forEach((n) => { n.classList.add("reveal"); io.observe(n); });
   }
 
@@ -935,9 +1139,11 @@ const history_ = (() => {
       if (!btn) return;
       const f = btn.dataset.filter;
       $$(".chip", chips).forEach((c) => c.setAttribute("aria-pressed", String(c === btn)));
-      let shown = 0;
-      items.forEach((n) => { const on = f === "*" || n.dataset.k === f; n.hidden = !on; if (on) shown++; });
-      if (empty) empty.hidden = shown > 0;
+      withVT(() => {
+        let shown = 0;
+        items.forEach((n) => { const on = f === "*" || n.dataset.k === f; n.hidden = !on; if (on) shown++; });
+        if (empty) empty.hidden = shown > 0;
+      });
     });
   }
 
@@ -945,7 +1151,12 @@ const history_ = (() => {
   document.addEventListener("click", (e) => {
     if (e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     const t = e.target.closest("a[data-story]");
-    if (t) { e.preventDefault(); reader.open(t.dataset.story, null); return; }
+    if (t) {
+      e.preventDefault();
+      const card = t.closest("[data-id]");
+      reader.open(t.dataset.story, null, card && $(".card__media, .lead__planet", card));
+      return;
+    }
     const ext = e.target.closest('[data-id] a[href^="http"]');
     if (ext) {
       const s = getStory(ext.closest("[data-id]").dataset.id);

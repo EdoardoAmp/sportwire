@@ -5,7 +5,7 @@
   /* 1. ingresso: solo dissolvenza, un solo observer */
   const targets = $$(".lead, .resume, .sky, .cards > .card, .front__aside, .block, .rows--grid, .hist");
   if (!reduce && "IntersectionObserver" in window) {
-    const io = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -6% 0px", threshold: 0.04 });
+    const io = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -6% 0px", threshold: 0 });   // soglia 0: un elemento altissimo (cronologia lunga) non potrebbe mai superare una percentuale
     targets.forEach((n) => { n.classList.add("reveal"); io.observe(n); });
   }
 
@@ -28,9 +28,11 @@
       if (!btn) return;
       const f = btn.dataset.filter;
       $$(".chip", chips).forEach((c) => c.setAttribute("aria-pressed", String(c === btn)));
-      let shown = 0;
-      items.forEach((n) => { const on = f === "*" || n.dataset.k === f; n.hidden = !on; if (on) shown++; });
-      if (empty) empty.hidden = shown > 0;
+      withVT(() => {
+        let shown = 0;
+        items.forEach((n) => { const on = f === "*" || n.dataset.k === f; n.hidden = !on; if (on) shown++; });
+        if (empty) empty.hidden = shown > 0;
+      });
     });
   }
 
@@ -38,7 +40,12 @@
   document.addEventListener("click", (e) => {
     if (e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     const t = e.target.closest("a[data-story]");
-    if (t) { e.preventDefault(); reader.open(t.dataset.story, null); return; }
+    if (t) {
+      e.preventDefault();
+      const card = t.closest("[data-id]");
+      reader.open(t.dataset.story, null, card && $(".card__media, .lead__planet", card));
+      return;
+    }
     const ext = e.target.closest('[data-id] a[href^="http"]');
     if (ext) {
       const s = getStory(ext.closest("[data-id]").dataset.id);

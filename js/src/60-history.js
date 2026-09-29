@@ -52,6 +52,35 @@ const history_ = (() => {
     return rows;
   }
 
+  /* Le ultime 12 settimane in un colpo d'occhio (una casella per giorno, colonne = settimane, righe = lunedì…domenica). */
+  function heat(all) {
+    const WEEKS = 12, now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const start = new Date(today);
+    start.setDate(today.getDate() - ((today.getDay() + 6) % 7) - (WEEKS - 1) * 7);
+    const counts = new Map();
+    all.forEach((e) => { const k = dayKey(new Date(e.t)); counts.set(k, (counts.get(k) || 0) + 1); });
+    let active = 0, best = null;
+    const cells = [];
+    for (let w = 0; w < WEEKS; w++) {
+      for (let d = 0; d < 7; d++) {
+        const day = new Date(start);
+        day.setDate(start.getDate() + w * 7 + d);
+        if (day > today) { cells.push('<i class="cell cell--future"></i>'); continue; }
+        const n = counts.get(dayKey(day)) || 0;
+        if (n) active++;
+        if (n && (!best || n > best.n)) best = { n, day };
+        const lvl = n === 0 ? 0 : n <= 2 ? 1 : n <= 5 ? 2 : n <= 9 ? 3 : 4;
+        cells.push(`<i class="cell" data-l="${lvl}"${day.getTime() === today.getTime() ? " data-today" : ""} title="${n} ${n === 1 ? "notizia" : "notizie"} · ${esc(dayLabel(day, now))}"></i>`);
+      }
+    }
+    const sum = `${active} ${active === 1 ? "giorno" : "giorni"} di lettura nelle ultime ${WEEKS} settimane${best ? `; il più intenso ${dayLabel(best.day, now).toLowerCase()}, ${best.n} ${best.n === 1 ? "notizia" : "notizie"}` : ""}.`;
+    return `<section class="heat" aria-labelledby="heat-h"><h2 class="heat__title" id="heat-h">Le tue ultime ${WEEKS} settimane</h2>
+      <div class="heat__grid" role="img" aria-label="${esc(sum)}">${cells.join("")}</div>
+      <div class="heat__foot"><p class="mixkey">${esc(sum)}</p>
+      <span class="heat__key" aria-hidden="true">meno ${[0, 1, 2, 3, 4].map((l) => `<i class="cell" data-l="${l}"></i>`).join("")} più</span></div></section>`;
+  }
+
   function page() {
     const host = $("[data-history]");
     if (!host) return;
@@ -101,7 +130,7 @@ const history_ = (() => {
         }).join("")}</ol></section>`).join("")
       : `<p class="empty">Nessun risultato per “${esc(q)}”.</p>`;
     const keep = document.activeElement && document.activeElement.matches("[data-hsearch]");
-    host.innerHTML = stats + tools + list;
+    host.innerHTML = stats + heat(all) + tools + list;
     if (keep) { const i = $("[data-hsearch]", host); i.focus(); i.setSelectionRange(q.length, q.length); }
   }
 

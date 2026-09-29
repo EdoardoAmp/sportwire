@@ -14,6 +14,8 @@ const ICON_OUT = '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="t
 const ICON_X = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>';
 const ICON_SEARCH = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 16l4.6 4.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
 const ICON_PREV = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M14.5 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const ICON_PLAY = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg>';
+const ICON_STOP = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="6.5" y="6.5" width="11" height="11" rx="2.2" fill="currentColor"/></svg>';
 const ICON_NEXT = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M9.5 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
 const relTime = (iso) => {
@@ -62,3 +64,23 @@ const trapTab = (root, e) => {
   if (e.shiftKey && (document.activeElement === a || !root.contains(document.activeElement))) { e.preventDefault(); z.focus(); }
   else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); }
 };
+
+/* Transizioni di vista (API nativa del browser): il passaggio tra due stati della pagina diventa una dissolvenza o un
+   volo dell'elemento condiviso. Dove l'API non c'è, o con «riduci movimento», l'aggiornamento è immediato.
+   Tutte le modifiche al DOM vanno DENTRO `update`: il browser fotografa lo stato vecchio solo al fotogramma dopo. */
+const canVT = !reduce && typeof document.startViewTransition === "function";
+let vtBusy = 0;
+function withVT(update, cls = "vt") {
+  if (!canVT) { update(); return null; }
+  const root = document.documentElement;
+  let t;
+  root.classList.add(cls);
+  vtBusy++;
+  try { t = document.startViewTransition(update); }
+  catch { vtBusy--; root.classList.remove(cls); update(); return null; }
+  const done = () => { if (--vtBusy <= 0) { vtBusy = 0; root.classList.remove("vt", "vt-step", "vt-open"); } };
+  t.finished.then(done, done);
+  t.ready.catch(() => {});                                   // «saltata» perché ne è partita un'altra: non è un errore
+  t.updateCallbackDone.catch((err) => console.error(err));   // un errore vero nell'aggiornamento non deve sparire
+  return t;
+}

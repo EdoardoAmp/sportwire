@@ -9,3 +9,22 @@
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
   .js .reveal { opacity: 1; }
 }
+
+/* Transizioni di vista (withVT in 00-core.js: partono solo se il browser le ha e il movimento non è ridotto).
+   Un momento orchestrato: la foto della scheda vola nel dossier. Il resto è dissolvenza, mai scivolamenti. */
+::view-transition-group(*) { animation-duration: 420ms; animation-timing-function: var(--ease); }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: 200ms; animation-timing-function: var(--ease); }
+
+/* All'apertura la dissolvenza la fa la transizione di vista (root vecchio → root nuovo, 200ms): il dossier non ha la sua,
+   altrimenti le due si sommano e la pagina traspare attraverso il pannello. */
+.vt-open .reader, .vt-open .reader__photo img { transition: none; }
+.vt-open .reader__photo img { opacity: 1; }
+::view-transition-old(story-photo), ::view-transition-new(story-photo) { width: 100%; height: 100%; object-fit: cover; overflow: clip; }
+
+.vt-step .reader__scroll { view-transition-name: dossier; }
+.vt-step::view-transition-old(root) { display: none; }
+.vt-step::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+::view-transition-old(dossier) { animation: vt-out 200ms var(--ease) both; }
+::view-transition-new(dossier) { animation: vt-in 200ms var(--ease) both; }
+@keyframes vt-out { to { opacity: 0; } }
+@keyframes vt-in { from { opacity: 0; } }

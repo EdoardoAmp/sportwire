@@ -1,8 +1,12 @@
 /* Il dossier: la notizia letta dentro Sportwire (foto, in breve, ora per ora, storie collegate).
-   URL profondo #/s/<id>: il tasto Indietro lo chiude, il link si può condividere con se stessi. */
+   URL profondo #/s/<id>: il tasto Indietro lo chiude, il link si può condividere con se stessi.
+   Si scorre con ← → (o j k, o un tocco laterale sul telefono); «Ascolta» legge il breve con la voce italiana del dispositivo. */
 const reader = (() => {
   let el, sheet, scroller, posEl, prevBtn, nextBtn;
   let list = [], current = null, lastFocus = null, isOpen = false;
+  let sx = 0, sy = 0, st = 0, tracking = false;
+  const tts = "speechSynthesis" in window && typeof SpeechSynthesisUtterance === "function" ? speechSynthesis : null;
+  let speaking = false, said = null;
 
   const parse = () => { const m = /^#\/s\/([0-9a-f]{8})$/.exec(location.hash); return m ? m[1] : null; };
   const hashFor = (id) => `#/s/${id}`;
@@ -36,6 +40,7 @@ const reader = (() => {
       if (e.target.closest("[data-close]")) return close();
       if (e.target.closest("[data-prev]")) return step(-1);
       if (e.target.closest("[data-next]")) return step(1);
+      if (e.target.closest("[data-listen]")) return toggleListen();
       const a = e.target.closest("a[data-goto]");
       if (a && !(e.metaKey || e.ctrlKey || e.shiftKey || e.button)) { e.preventDefault(); open(a.dataset.goto, null); return; }
       const out = e.target.closest("a[data-visit]");
@@ -45,9 +50,56 @@ const reader = (() => {
       if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); close(); return; }
       if (e.key === "ArrowLeft" && !e.altKey && !e.metaKey) { e.preventDefault(); step(-1); return; }
       if (e.key === "ArrowRight" && !e.altKey && !e.metaKey) { e.preventDefault(); step(1); return; }
+      if ((e.key === "j" || e.key === "k") && !e.altKey && !e.metaKey && !e.ctrlKey) { e.preventDefault(); step(e.key === "j" ? 1 : -1); return; }
       trapTab(sheet, e);
     });
+    /* col dito: un colpo laterale netto passa alla notizia dopo o prima (il bordo sinistro resta al gesto «indietro» di iOS) */
+    sheet.addEventListener("pointerdown", (e) => { tracking = e.pointerType === "touch" && e.clientX > 28; sx = e.clientX; sy = e.clientY; st = e.timeStamp; });
+    sheet.addEventListener("pointerup", (e) => {
+      if (!tracking) return;
+      tracking = false;
+      const dx = e.clientX - sx, dy = e.clientY - sy;
+      if (Math.abs(dx) > 64 && Math.abs(dx) > Math.abs(dy) * 1.6 && e.timeStamp - st < 800) step(dx < 0 ? 1 : -1);
+    });
+    sheet.addEventListener("pointercancel", () => { tracking = false; });
   }
+
+  /* — Ascolta: sintesi vocale del dispositivo, solo con una voce italiana locale (niente voci in rete) — */
+  const voice = () => {
+    if (!tts) return null;
+    const it = tts.getVoices().filter((v) => /^it([-_]|$)/i.test(v.lang) && v.localService);
+    return it.find((v) => v.default) || it[0] || null;
+  };
+  function paintListen() {
+    const b = scroller && $("[data-listen]", scroller);
+    if (!b) return;
+    b.hidden = !voice();
+    b.setAttribute("aria-pressed", String(speaking));
+    b.innerHTML = `${speaking ? ICON_STOP : ICON_PLAY}<span>${speaking ? "Ferma" : "Ascolta"}</span>`;
+  }
+  function stopListen() {
+    if (tts && speaking) tts.cancel();
+    speaking = false; said = null;
+    paintListen();
+  }
+  function toggleListen() {
+    if (!tts || !current) return;
+    if (speaking) return stopListen();
+    const v = voice();
+    if (!v) return;
+    const title = String(current.title || "").trim();
+    const body = String(current.brief || current.summary || "").trim();
+    try {
+      const u = new SpeechSynthesisUtterance(`${title}${/[.!?…»”]$/.test(title) ? " " : ". "}${body}`.trim());
+      u.voice = v; u.lang = v.lang;
+      const end = () => { if (said === u) { speaking = false; said = null; paintListen(); } };
+      u.onend = end; u.onerror = end;
+      said = u; speaking = true;
+      tts.cancel(); tts.speak(u);
+    } catch { speaking = false; said = null; }          // il browser rifiuta la voce: il pulsante resta com'era
+    paintListen();
+  }
+  if (tts) { tts.addEventListener("voiceschanged", paintListen); addEventListener("pagehide", stopListen); }
 
   const photo = (s) => (s.image ? `<div class="reader__photo media"><img src="${esc(s.image)}" alt="" decoding="async" referrerpolicy="no-referrer" onload="this.classList.add('is-loaded')" onerror="this.parentNode.remove()"></div>` : "");
 
@@ -80,10 +132,12 @@ const reader = (() => {
       ${box}
       <div class="reader__actions">
         <a class="btn btn--primary" href="${esc(s.link)}" target="_blank" rel="noopener" data-visit>Leggi su ${esc(s.source || "la testata")} ${ICON_OUT}</a>
+        <button type="button" class="btn btn--quiet" data-listen aria-pressed="false" hidden>${ICON_PLAY}<span>Ascolta</span></button>
       </div>
       ${chrono(s)}${related(s)}
     </div>`;
     scroller.scrollTop = 0;
+    paintListen();
   }
 
   function updateNav() {
@@ -93,24 +147,55 @@ const reader = (() => {
     nextBtn.disabled = i < 0 || i >= list.length - 1;
   }
 
-  function show(id, ids) {
+  /* La foto della scheda vola nella foto del dossier: un solo elemento condiviso (stesso nome) tra i due stati. */
+  const PHOTO = "story-photo";
+  const fliesFrom = (n) => {
+    if (!canVT || !n || !n.isConnected) return false;
+    const r = n.getBoundingClientRect();
+    return r.width > 40 && r.height > 40 && r.bottom > 0 && r.top < innerHeight && r.right > 0 && r.left < innerWidth;
+  };
+  function morph(from, update) {
+    from.style.viewTransitionName = PHOTO;
+    const clear = () => { from.style.viewTransitionName = ""; const p = scroller && $(".reader__photo", scroller); if (p) p.style.viewTransitionName = ""; };
+    const t = withVT(() => {
+      from.style.viewTransitionName = "";
+      update();
+      const p = $(".reader__photo", scroller);
+      if (p) p.style.viewTransitionName = PHOTO;
+    }, "vt-open");
+    if (t) t.finished.then(clear, clear); else clear();
+  }
+
+  function show(id, ids, from) {
     const s = getStory(id);
     if (!s) return false;
     if (!el) build();
     if (ids && ids.length) list = ids;
     else if (!list.includes(id)) list = pageIds(id);
+    if (speaking && (!current || current.id !== s.id)) stopListen();
     const first = !isOpen;
     current = s;
-    render(s);
-    updateNav();
+    const paint = () => {
+      if (current !== s) return;                        // nel frattempo si è passati a un'altra notizia: la sua paint disegnerà
+      render(s); updateNav();
+      const im = $(".reader__photo img", scroller);     // già in cache: subito visibile, così la foto che vola non arriva vuota
+      if (im && im.complete && im.naturalWidth) im.classList.add("is-loaded");
+    };
     el.setAttribute("aria-labelledby", "rd-title");
     if (first) {
       lastFocus = document.activeElement && document.activeElement !== document.body ? document.activeElement : null;
-      modal.lock();
       isOpen = true;
-      el.classList.add("is-open");
-      requestAnimationFrame(() => sheet.focus({ preventScroll: true }));
-    }
+      const openIt = () => {
+        if (!isOpen) return;                          // chiuso prima che la transizione partisse
+        paint();
+        modal.lock();
+        el.classList.add("is-open");
+        sheet.focus({ preventScroll: true });
+      };
+      if (fliesFrom(from)) morph(from, openIt); else openIt();
+      requestAnimationFrame(() => { if (isOpen && !el.contains(document.activeElement)) sheet.focus({ preventScroll: true }); });
+    } else if (canVT) withVT(paint, "vt-step");
+    else paint();
     document.title = `${s.title} · Sportwire`;
     store.open(s, "d");
     return true;
@@ -118,6 +203,7 @@ const reader = (() => {
 
   function hide() {
     if (!isOpen) return;
+    stopListen();
     isOpen = false;
     el.classList.remove("is-open");
     modal.unlock();
@@ -134,10 +220,10 @@ const reader = (() => {
     return ids;
   }
 
-  function open(id, ids) {
+  function open(id, ids, from) {
     if (!ID_RX.test(id)) return false;
     if (!document.body.dataset.title) document.body.dataset.title = document.title;
-    if (!show(id, ids)) return false;
+    if (!show(id, ids, from)) return false;
     if (parse() !== id) history.pushState({ sw: 1 }, "", hashFor(id));
     return true;
   }

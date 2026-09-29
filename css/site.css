@@ -125,6 +125,7 @@ ul, ol { padding: 0; list-style: none; }
 .btn--primary:hover { background: var(--accent-hi); box-shadow: var(--shadow-glow); }
 .btn--quiet { background: var(--paper-3); color: var(--ink); }
 .btn--quiet:hover { background: oklch(0.34 0.032 268); }
+.btn--quiet[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
 
 .chip { display: inline-flex; align-items: center; min-height: 44px; padding: 0 1.05rem; border-radius: var(--r-pill); background: var(--paper-2); color: var(--ink-2); font: 500 .88rem/1 var(--f-text); white-space: nowrap; transition: background var(--t-fast), color var(--t-fast); }
 .chip:hover { background: var(--paper-3); color: var(--ink); }
@@ -363,6 +364,7 @@ main.wrap { padding-top: calc(var(--bar-h) + 14px + clamp(.5rem, 2vw, 1.5rem)); 
 /* dossier (lettura in pagina) e ricerca */
 .reader, .finder { position: fixed; inset: 0; z-index: 100; visibility: hidden; opacity: 0; transition: opacity var(--t-mid) var(--ease), visibility 0s linear var(--t-mid); }
 .reader.is-open, .finder.is-open { visibility: visible; opacity: 1; transition-delay: 0s; }
+.reader__sheet { touch-action: pan-y pinch-zoom; }
 .reader__scrim, .finder__scrim { position: absolute; inset: 0; background: var(--scrim); }
 
 .reader { display: flex; justify-content: flex-end; }
@@ -442,6 +444,26 @@ main.wrap { padding-top: calc(var(--bar-h) + 14px + clamp(.5rem, 2vw, 1.5rem)); 
 .mix i { display: block; min-width: 6px; background: var(--paper-3); }
 .mix i:first-child { background: var(--accent); }
 .mixkey { display: flex; flex-wrap: wrap; gap: .3rem 1rem; margin-top: .6rem; font: 500 .68rem/1.3 var(--f-mono); letter-spacing: .04em; color: var(--ink-3); }
+.heat { display: grid; grid-template-columns: max-content minmax(0, 30ch); gap: .8rem 2.2rem; padding: 1.1rem 1.4rem 1.3rem; border-radius: var(--r-2); background: var(--paper-1); width: fit-content; max-width: 100%; justify-self: start; }
+.heat__title { grid-column: 1 / -1; }
+.heat__title { font: 500 .7rem/1.3 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.heat__grid { display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, auto); grid-template-columns: repeat(12, minmax(0, 38px)); gap: 4px; }
+.heat__foot { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; gap: .9rem; }
+.heat__foot .mixkey { max-width: 34ch; line-height: 1.5; }
+@media (max-width: 719px) {
+  .heat { grid-template-columns: minmax(0, 1fr); width: 100%; padding-inline: 1.1rem; }
+  .heat__foot { flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem 1.5rem; }
+  .heat__foot .mixkey { max-width: none; }
+}
+.heat__key { display: inline-flex; align-items: center; gap: 4px; font: 500 .68rem/1 var(--f-mono); color: var(--ink-3); }
+.heat__key .cell { width: 12px; aspect-ratio: 1; border-radius: 3px; }
+.cell { display: block; aspect-ratio: 1; border-radius: 4px; background: var(--paper-3); }
+.cell[data-l="1"] { background: oklch(0.80 0.155 68 / .32); }
+.cell[data-l="2"] { background: oklch(0.80 0.155 68 / .56); }
+.cell[data-l="3"] { background: oklch(0.80 0.155 68 / .80); }
+.cell[data-l="4"] { background: var(--accent); }
+.cell[data-today] { outline: 1.5px solid var(--ink-2); outline-offset: 1px; }
+.cell--future { background: none; }
 .hist__tools { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; }
 .hist__search { flex: 1 1 260px; min-height: 46px; padding: 0 1.1rem; border-radius: var(--r-pill); background: var(--paper-2); border: 0; outline: none; color: var(--ink); font: 400 .98rem/1 var(--f-text); }
 .hist__search::placeholder { color: var(--ink-3); }
@@ -481,3 +503,22 @@ main.wrap { padding-top: calc(var(--bar-h) + 14px + clamp(.5rem, 2vw, 1.5rem)); 
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
   .js .reveal { opacity: 1; }
 }
+
+/* Transizioni di vista (withVT in 00-core.js: partono solo se il browser le ha e il movimento non è ridotto).
+   Un momento orchestrato: la foto della scheda vola nel dossier. Il resto è dissolvenza, mai scivolamenti. */
+::view-transition-group(*) { animation-duration: 420ms; animation-timing-function: var(--ease); }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: 200ms; animation-timing-function: var(--ease); }
+
+/* All'apertura la dissolvenza la fa la transizione di vista (root vecchio → root nuovo, 200ms): il dossier non ha la sua,
+   altrimenti le due si sommano e la pagina traspare attraverso il pannello. */
+.vt-open .reader, .vt-open .reader__photo img { transition: none; }
+.vt-open .reader__photo img { opacity: 1; }
+::view-transition-old(story-photo), ::view-transition-new(story-photo) { width: 100%; height: 100%; object-fit: cover; overflow: clip; }
+
+.vt-step .reader__scroll { view-transition-name: dossier; }
+.vt-step::view-transition-old(root) { display: none; }
+.vt-step::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+::view-transition-old(dossier) { animation: vt-out 200ms var(--ease) both; }
+::view-transition-new(dossier) { animation: vt-in 200ms var(--ease) both; }
+@keyframes vt-out { to { opacity: 0; } }
+@keyframes vt-in { from { opacity: 0; } }

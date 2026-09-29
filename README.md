@@ -1,8 +1,8 @@
 # Sportwire
 
 Rassegna stampa sportiva statica e **spaziale**: ogni notizia è una stella nel *cielo di oggi* (tempo × sport),
-si legge dentro il sito (il *dossier*), resta nella tua *cronologia* e ha il suo *in breve*, scritto a mano
-dall'agente. Aggrega i feed RSS pubblici di ANSA, Gazzetta, Corriere dello Sport, Tuttosport, Sky Sport e OA Sport.
+si legge dentro il sito (il *dossier*), resta nella tua *cronologia* e ha il suo *in breve*, scritto
+dall'agente Hermes. Aggrega i feed RSS pubblici di ANSA, Gazzetta, Corriere dello Sport, Tuttosport, Sky Sport e OA Sport.
 Nessun account, nessun cookie, nessun tracker: la cronologia vive solo nel `localStorage` del tuo dispositivo.
 
 Non ripubblica articoli: mostra titoli, sommari, miniature e un riassunto originale di 1-2 frasi; ogni notizia rimanda
@@ -12,9 +12,9 @@ all'articolo sul sito della testata.
 
 | | Come funziona |
 |---|---|
-| **Le notizie sono il sito** | Ogni storia si apre in un *dossier* dentro la pagina (`#/s/<id>`, indirizzo condivisibile): foto, «in breve», ora per ora delle testate che la raccontano, storie collegate. Frecce e tastiera per scorrere, `Esc` per chiudere. |
-| **La tua cronologia** | `cronologia.html`: cosa hai letto, giorno per giorno, con statistiche, ricerca, esporta (JSON) e cancella. «Riprendi da qui» in home. Solo `localStorage`. |
-| **«In breve»** | 1-2 frasi riscritte dall'agente (Hermes), mai da un modello locale. `briefs.py` prepara il lavoro, **rifiuta le copie** (8 parole di fila uguali alla fonte) e pubblica. Dove non c'è un breve compare il sommario della testata, dichiarato come tale. |
+| **Le notizie sono il sito** | Ogni storia si apre in un *dossier* dentro la pagina (`#/s/<id>`, indirizzo condivisibile): foto, «in breve», ora per ora delle testate che la raccontano, storie collegate. Frecce, `j`/`k` o uno swipe sul telefono per scorrere, `Esc` per chiudere. La foto della scheda «vola» nel dossier (View Transitions API, solo dove il browser la offre e il movimento non è ridotto). **Ascolta** legge titolo e breve con la voce italiana del dispositivo. |
+| **La tua cronologia** | `cronologia.html`: cosa hai letto, giorno per giorno, con statistiche, la mappa delle ultime 12 settimane, ricerca, esporta (JSON) e cancella. «Riprendi da qui» in home. Solo `localStorage`. |
+| **«In breve»** | 1-2 frasi riscritte dall'agente (Hermes) con DeepSeek V4.1 Flash via OpenRouter, mai da un modello locale (niente Spark/Ollama); il modello serve solo a scrivere. `briefs.py` prepara il lavoro, **rifiuta le copie** (8 parole di fila uguali alla fonte) e pubblica. Dove non c'è un breve compare il sommario della testata, dichiarato come tale. |
 
 ## Uso
 
@@ -36,8 +36,10 @@ python3 briefs.py apply state/answers.json    # controlla (lunghezza, tono, copi
 python3 briefs.py publish        # ramo `briefs` + refresh del sito
 ```
 
-`briefs.py gate` è lo script del cron di Hermes: se non c'è niente di importante da scrivere stampa
-`{"wakeAgent": false}` e l'agente non viene nemmeno svegliato. Il ramo `briefs` lo scrive solo `publish`,
+`briefs.py gate` è lo script del cron di Hermes (`sportwire-in-breve`, ogni ora al minuto :35, modello bloccato su
+`deepseek/deepseek-v4.1-flash` via OpenRouter): se non c'è niente di importante da scrivere stampa
+`{"wakeAgent": false}` e l'agente non viene nemmeno svegliato. Il modello non è mai fidato: `apply` ricontrolla
+ogni breve contro le fonti (copie, cifre, lunghezza) qualunque cosa abbia scritto. Il ramo `briefs` lo scrive solo `publish`,
 `main` lo scrive solo il workflow: non ci sono conflitti.
 
 ## File
@@ -50,6 +52,7 @@ python3 briefs.py publish        # ramo `briefs` + refresh del sito
 | `css/src/*.css`, `js/src/*.js` | sorgenti numerati; `build.py` li unisce in `css/site.css` e `js/app.js` (con `?v=` nell'URL) |
 | `sw.js`, `manifest.webmanifest`, `icons/` | app installabile, pagine e dati offline (rete prima, cache poi) |
 | `fonts/` | Archivo, Geist, Geist Mono self-hosted: il browser non contatta nessun terzo per i caratteri |
+| `js/src/05-ufuzzy.js` | [uFuzzy](https://github.com/leeoniya/uFuzzy) v1.0.19 (MIT, 8,5 KB, copia non modificata con la sua licenza): la ricerca perdona i refusi. Unica libreria di terzi; un test verifica che il bundle non contatti altri domini |
 | `qa.py`, `tests/` | QA nel browser · test unitari |
 | `data/news.json` `data/briefs.json` `data/raw.json` | storie pubblicate · «in breve» · feed grezzi |
 | `make_icons.py` | rigenera le icone dell'app |

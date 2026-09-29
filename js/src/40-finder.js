@@ -77,9 +77,10 @@ const finder = (() => {
     return out + (open ? "</mark>" : "");
   };
 
-  function hitHtml(s, i, toks) {
+  function hitHtml(s, i, toks, ranges) {
+    const title = ranges !== undefined ? fuzzy.mark(s.title, ranges) : toks.length ? mark(s.title, toks) : esc(s.title);
     return `<button type="button" class="hit" role="option" id="hit-${i}" data-id="${esc(s.id)}" aria-selected="${i === sel}">
-      <span class="hit__t">${toks.length ? mark(s.title, toks) : esc(s.title)}</span>
+      <span class="hit__t">${title}</span>
       <span class="hit__m">${esc(secName(s.section))} · ${esc(s.source)} · ${esc(relTime(s.ts))}${store.has(s.id) ? " · già letta" : ""}</span></button>`;
   }
 
@@ -100,12 +101,20 @@ const finder = (() => {
       html = group("Le tue ultime letture", recent) + group("In apertura", top);
       if (!NEWS.ready) html += '<p class="finder__empty">Carico le notizie…</p>';
     } else {
-      const scored = allStories().map((s) => [score(s, toks), s]).filter(([sc]) => sc > 0)
-        .sort((a, b) => b[0] - a[0] || (b[1]._t || 0) - (a[1]._t || 0)).slice(0, 30);
-      results = scored.map(([, s]) => s);
-      html = results.length
-        ? `<p class="finder__group">${results.length} ${results.length === 1 ? "risultato" : "risultati"}</p>` + results.map((s, i) => hitHtml(s, i, toks)).join("")
-        : `<p class="finder__empty">Niente per “${esc(q.trim())}” nelle ultime ore. Prova con un cognome o una squadra.</p>`;
+      const stories = allStories();
+      const exact = stories.map((s) => [score(s, toks), s]).filter(([sc]) => sc > 0)
+        .sort((a, b) => b[0] - a[0] || (b[1]._t || 0) - (a[1]._t || 0)).slice(0, 30).map(([, s]) => s);
+      /* Poche risposte esatte: si prova con i refusi («pogachar», «orsatto»), sui soli titoli. */
+      let near = [];
+      if (exact.length < 4) {
+        const have = new Set(exact.map((s) => s.id));
+        near = fuzzy.find(stories.map((s) => s.title), q.trim(), 8).filter((m) => !have.has(stories[m.i].id)).map((m) => ({ s: stories[m.i], ranges: m.ranges }));
+      }
+      results = exact.concat(near.map((n) => n.s));
+      let i = 0;
+      html = (exact.length ? `<p class="finder__group">${exact.length} ${exact.length === 1 ? "risultato" : "risultati"}</p>` + exact.map((s) => hitHtml(s, i++, toks)).join("") : "")
+        + (near.length ? `<p class="finder__group">${exact.length ? "Anche" : "Forse cercavi"}</p>` + near.map((n) => hitHtml(n.s, i++, toks, n.ranges)).join("") : "");
+      if (!results.length) html = `<p class="finder__empty">Niente per “${esc(q.trim())}” nelle ultime ore. Prova con un cognome o una squadra.</p>`;
     }
     sel = 0;
     listEl.innerHTML = html;

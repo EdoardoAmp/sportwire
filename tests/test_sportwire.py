@@ -276,6 +276,31 @@ def test_published_news_json_is_consistent():
         assert len(b) <= briefs.MAX_CH, f"brief troppo lungo in {s['id']}"
 
 
+# ------------------------------------------------------------------ pagina senza tracker
+def _read(*parts):
+    return open(os.path.join(ROOT, *parts), encoding="utf-8").read()
+
+
+def test_bundle_talks_only_to_its_own_news_json():
+    """Il colophon dice «nessun tracker»: il bundle non deve mai contattare un altro dominio."""
+    import re
+    js = _read("js", "app.js")
+    calls = re.findall(r"fetch\(([^)]*)\)", js)
+    assert calls and all("data/news.json" in c for c in calls), calls
+    for bad in ("sendBeacon", "XMLHttpRequest", "WebSocket", "EventSource", "document.cookie", "importScripts"):
+        assert bad not in js, bad
+    css = _read("css", "site.css")
+    assert "http://" not in css and "https://" not in css and "@import" not in css
+    hosts = set(re.findall(r"https?://([A-Za-z0-9.-]+)", js))
+    assert hosts <= {"github.com", "www.w3.org"}, hosts            # solo il rimando alla libreria e lo spazio dei nomi SVG
+
+
+def test_third_party_library_keeps_its_license_and_is_not_edited():
+    src = _read("js", "src", "05-ufuzzy.js")
+    assert "MIT License" in src and "Permission is hereby granted" in src and "Leon Sorokin" in src
+    assert "uFuzzy" in _read("js", "app.js")
+
+
 # ------------------------------------------------------------------ build resistente
 def test_build_drops_broken_briefs_instead_of_failing(tmp_path, monkeypatch):
     import build

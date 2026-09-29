@@ -25,6 +25,7 @@ ul, ol { padding: 0; list-style: none; }
 .btn--primary:hover { background: var(--accent-hi); box-shadow: var(--shadow-glow); }
 .btn--quiet { background: var(--paper-3); color: var(--ink); }
 .btn--quiet:hover { background: oklch(0.34 0.032 268); }
+.btn--quiet[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
 
 .chip { display: inline-flex; align-items: center; min-height: 44px; padding: 0 1.05rem; border-radius: var(--r-pill); background: var(--paper-2); color: var(--ink-2); font: 500 .88rem/1 var(--f-text); white-space: nowrap; transition: background var(--t-fast), color var(--t-fast); }
 .chip:hover { background: var(--paper-3); color: var(--ink); }
