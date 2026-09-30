@@ -1,4 +1,9 @@
 {
+ "00bbb6f7": {
+  "at": "2026-09-30T15:08:35+02:00",
+  "b": "Elisa Valensin lascia Milano e il tecnico Fausto Frigerio: la 19enne lombarda si trasferisce a Padova per seguire Marco Airale e cambia specialità, dicendo addio ai 400 e ai 200 metri per puntare sui 100.",
+  "n": 1
+ },
  "014065d2": {
   "at": "2026-09-29T23:36:23+02:00",
   "b": "Eurolega, il derby è dell'Olimpia Milano: 87-85 sulla Virtus Bologna con il canestro sulla sirena di Devon Hall, 12 punti di cui 8 nell'ultimo quarto. Bologna pareggia a 4'' dalla fine con Diarra (22 di valutazione), Milano domina a rimbalzo (41, 10 di Burnell).",
@@ -31,6 +36,11 @@
   "b": "Zinedine Zidane torna sull'esultanza a bordo campo al gol di Michael Olise nel trionfo di Bruxelles contro il Belgio: «L'ho accompagnato nella giocata», dice il ct della Francia, che ora ritrova l'Italia a Parigi in Nations League.",
   "n": 1
  },
+ "03071949": {
+  "at": "2026-09-30T15:08:35+02:00",
+  "b": "Il calcolo della Gazzetta sulle regioni di nascita degli italiani in Serie A dice che a dominare sono le grandi regioni del Nord: nella Nazionale la difesa era per tre quarti lombarda e il Sud è rappresentato solo da Castellammare di Stabia.",
+  "n": 1
+ },
  "037e493e": {
   "at": "2026-09-29T23:00:10+02:00",
   "b": "La Roma nega a Dybala e Molina il viaggio a Buenos Aires per il saluto di Messi alla nazionale. Il club richiama ragioni sportive e logistiche: la trasferta sottrae allenamenti a ridosso della gara di Como.",
@@ -53,9 +63,9 @@
   "skip": true
  },
  "0529df31": {
-  "at": "2026-09-30T14:07:39+02:00",
-  "b": "Matteo Arnaldi approda agli ottavi dell'ATP 500 di Tokyo: il ligure batte in rimonta Rei Sakamoto 2-6, 6-4, 6-4 in due ore e 10 minuti. Per lui si chiude un digiuno di due mesi nel circuito maggiore.",
-  "n": 1
+  "at": "2026-09-30T15:08:35+02:00",
+  "b": "Matteo Arnaldi batte in rimonta il giapponese Rei Sakamoto 2-6, 6-4, 6-4 dopo 2 ore e 10 minuti: il ligure accede agli ottavi dell'ATP 500 di Tokyo e affronterà il vincitore del match tra Carlos Alcaraz e Alex Michelsen.",
+  "n": 4
  },
  "0603ffbb": {
   "at": "2026-09-30T04:56:55+02:00",
@@ -67,9 +77,19 @@
   "b": "Nessuna lesione muscolare per Francisco Conceiçao: secondo Sky Sport e ANSA l'attaccante della Juventus ha solo una contusione alla coscia. L'allarme era scattato con la sua sostituzione nella sfida di Nations League.",
   "n": 2
  },
+ "06e4ab65": {
+  "at": "2026-09-30T16:07:42+02:00",
+  "b": "Ufficiale: Tadej Pogacar non prenderà parte agli Europei. La Slovenia ha reso nota la lista definitiva per la prova su strada e il miglior ciclista del mondo non c'è tra gli otto selezionati: salta così la sua gara di domenica a Lubiana.",
+  "n": 1
+ },
  "0773d2d8": {
   "at": "2026-09-30T05:36:40+02:00",
   "b": "In Campania i tesserati della Federazione Italiana Vela sono passati da 7.500 a 8.794 in una sola settimana, quella della regata preliminare di America's Cup a Napoli: 1.294 nuovi iscritti e un +17,3%, con il 90% dei nuovi tra i 6 e i 14 anni.",
+  "n": 1
+ },
+ "07c01533": {
+  "at": "2026-09-30T16:07:42+02:00",
+  "b": "Giorgio Scalvini, a Coverciano con gli azzurri, dice che contro la Francia, sfida di venerdì a Parigi valida come terzo impegno di Nations League, l'Italia capirà il suo livello. Il difensore dell'Atalanta sottolinea che il successo sulla Turchia ha dato consapevolezza.",
   "n": 1
  },
  "0870f68f": {
@@ -157,6 +177,13 @@
   "b": "Comincia l'Eurocup, 32 squadre e sei italiane al via: Trento conquista i primi due punti passando 73-76 sul campo del Neptunas Klaipeda, mentre Venezia travolge in casa la Francoforte.",
   "n": 1
  },
+ "12a0584e": {
+  "at": "2026-09-30T15:08:35+02:00",
+  "b": "",
+  "n": 1,
+  "skip": true,
+  "v": 2
+ },
  "15c8ae11": {
   "at": "2026-09-29T21:53:39+02:00",
   "b": "",
@@ -217,9 +244,19 @@
   "b": "Il Parma riparte da Alberto Gilardino: accordo fino a giugno 2027, con opzione per le due stagioni successive; domani la conferenza stampa, venerdì l'amichevole con l'Entella a Collecchio. Il tecnico punterà su David Romero, arrivato dal Tigre per 7 milioni.",
   "n": 1
  },
+ "1a70a6ef": {
+  "at": "2026-09-30T16:07:42+02:00",
+  "b": "Al primo turno a Pechino il russo Karen Khachanov elimina il canadese Felix Auger-Aliassime, numero due del tabellone, 6-3 6-3. Novak Djokovic batte il portoghese Nuno Borges 6-3 7-6(2) al rientro dopo la sconfitta al primo turno degli US Open.",
+  "n": 1
+ },
  "1b146c2b": {
   "at": "2026-09-30T12:37:12+02:00",
   "b": "La stampa britannica apre sull'ipotesi della retrocessione del Manchester City, giudicato colpevole di tutte le violazioni finanziarie. Il Times cita 900 milioni di sterline di ricavi gonfiati, il Daily Telegraph evoca l'espulsione dalla Premier League.",
+  "n": 1
+ },
+ "1b809009": {
+  "at": "2026-09-30T15:08:35+02:00",
+  "b": "Agli Europei 2026 di tiro a volo di Malakasa, in Grecia, l'Italia conquista l'argento a squadre nello skeet junior femminile: Arianna Nember e Dalia Buselli accedono alla finale, mentre Eleonora Ruta chiude 11ma.",
   "n": 1
  },
  "1bb3badc": {
@@ -231,6 +268,13 @@
   "at": "2026-09-30T05:36:25+02:00",
   "b": "Nella ventesima edizione della Coppa Italia di Tamburello Open, a Monale i trentini del Noarna hanno superato i monferrini del Cinaglio 2-0 (6-1, 6-2) in finale di Serie B, davanti a un pubblico record. Sabato a Cavriana è già in programma la rivincita.",
   "n": 1
+ },
+ "1c136a3b": {
+  "at": "2026-09-30T15:08:35+02:00",
+  "b": "",
+  "n": 1,
+  "skip": true,
+  "v": 2
  },
  "1c3844ea": {
   "at": "2026-09-30T13:08:59+02:00",
@@ -252,6 +296,11 @@
   "b": "",
   "n": 1,
   "skip": true
+ },
+ "1f1114fd": {
+  "at": "2026-09-30T15:08:35+02:00",
+  "b": "Al posto del Bentegodi nascerà un nuovo stadio da 30mila posti: l'Hellas Verona ha presentato in comune il documento di fattibilità, con 300 milioni di investimento in gran parte privati e l'obiettivo di ospitare le partite di Euro 2032.",
+  "n": 1
  },
  "1f787e1d": {
   "at": "2026-09-30T05:36:25+02:00",
@@ -474,6 +523,11 @@
   "b": "Nissan porta in Europa il Kicks, crossover compatto di segmento B con motore ibrido e-Power. Lo costruirà a Sunderland, nel Regno Unito, con un investimento da 170 milioni di sterline, nello stabilimento di Qashqai, Juke e Leaf.",
   "n": 1
  },
+ "3b737847": {
+  "at": "2026-09-30T15:08:35+02:00",
+  "b": "Esteban Ocon non sarà più un pilota Haas: il team americano ha ufficializzato mercoledì 30 settembre la separazione a fine stagione, dopo due anni. Tra i possibili sostituti spicca l'italiano Leonardo Fornaroli.",
+  "n": 1
+ },
  "3c3a944a": {
   "at": "2026-09-30T13:39:08+02:00",
   "b": "Nel Milan di Ruben Amorim alcuni giocatori sembravano in partenza in estate e ora hanno un ruolo da protagonista. Il caso più evidente è Pervis Estupiñan: il terzino ecuadoriano era ormai diretto all'Aston Villa, ma Amorim ha bloccato la cessione per valutarlo in ritiro.",
@@ -523,6 +577,16 @@
   "b": "I Mondiali 2027 di volley femminile si disputeranno tra Canada e USA dal 20 agosto fino al 5 settembre, con 32 squadre qualificate; quarti e fase finale all'Honda Center di Anaheim, con l'Italia campionessa del mondo in carica.",
   "n": 1
  },
+ "42a3db3f": {
+  "at": "2026-09-30T15:08:35+02:00",
+  "b": "Sky ha lanciato a Milano la quinta edizione di Sky Up The Edit, l'iniziativa per le scuole che stimola competenze digitali e lavoro di squadra attraverso la creazione di contenuti multimediali: al dibattito ha partecipato il ministro Andrea Abodi.",
+  "n": 1
+ },
+ "443ecbdb": {
+  "at": "2026-09-30T16:07:42+02:00",
+  "b": "Agli Europei di Lubiana le gare in linea si corrono prima delle prove contro il tempo, tutte in programma mercoledì 7 ottobre. Il cuore della rassegna è il tracciato di Sencur, appena fuori Lubiana, dove lo strappo di Mozjanca va ripetuto più volte.",
+  "n": 1
+ },
  "4464f494": {
   "at": "2026-09-30T09:36:29+02:00",
   "b": "Malagò, appena eletto presidente della Figc con quasi il 70% dei voti, rischia il commissariamento per un cavillo legale sul tesseramento: il caso italiano è seguito con attenzione anche a Copenaghen, all'assemblea dei club europei.",
@@ -547,6 +611,11 @@
   "at": "2026-09-29T22:33:53+02:00",
   "b": "La commissione indipendente della Premier ha giudicato il Manchester City colpevole di tutte le accuse di violazioni finanziarie commesse in nove stagioni, dal 2009-10 al 2017-18: contratti fittizi e ricavi gonfiati. La sanzione arriverà in un secondo momento.",
   "n": 2
+ },
+ "4541651a": {
+  "at": "2026-09-30T16:07:42+02:00",
+  "b": "Cristiano Ronaldo ha raggiunto i compagni all'Eleda Stadion di Malmö ma si è allenato con un programma separato dalla squadra, iniziando circa trenta minuti prima della seduta. Per A Bola un episodio alimenta i dubbi sulla presenza contro la Danimarca.",
+  "n": 1
  },
  "45e256bc": {
   "at": "2026-09-30T09:36:29+02:00",
@@ -586,6 +655,11 @@
   "n": 1,
   "skip": true
  },
+ "4b64c36a": {
+  "at": "2026-09-30T15:08:35+02:00",
+  "b": "A sette giornate dall'inizio, la neopromossa che rende meglio in Serie C è il Grosseto: terzo con 15 punti nel girone B, a quattro lunghezze dallo Spezia capolista. Nel girone A la Folgore Caratese ha centrato la prima vittoria solo alla settima giornata.",
+  "n": 1
+ },
  "4c2116b5": {
   "at": "2026-09-30T14:37:25+02:00",
   "b": "Manu Koné, centrocampista della Roma, sarà avversario dell'Italia in Nations League con la Francia: ha definito il ct Zinedine Zidane «una leggenda» e «molto vicino ai giocatori».",
@@ -594,6 +668,11 @@
  "4c932ac8": {
   "at": "2026-09-30T06:36:27+02:00",
   "b": "Nella chiesa di San Pietro di Quinto, a Genova, il popolo blucerchiato ha dato l'ultimo saluto a Pietro «Piero» Battara, portiere e allenatore della Sampdoria. Tra i presenti ex campioni come Lombardo, Pagliuca e Pari e il sacerdote tifoso don Guido Porcile.",
+  "n": 1
+ },
+ "4d0729fc": {
+  "at": "2026-09-30T15:08:35+02:00",
+  "b": "Gilardino siede sulla panchina del Parma: l'ex tecnico di Genoa e Pisa ha un accordo fino al termine della stagione, con opzione per altre due annate, e succede a Carlos Cuesta, che ha rescisso il contratto il 27 settembre.",
   "n": 1
  },
  "4d94e46c": {
@@ -667,6 +746,11 @@
  "54f6c2f0": {
   "at": "2026-09-30T11:36:35+02:00",
   "b": "Lorenzo Musetti salta l'ATP 500 di Tokyo per una frattura all'anulare della mano destra, rimediata nell'ultimo allenamento. Il carrarino ha dato l'annuncio sui social e proverà a recuperare in tempo per il Masters di Shanghai.",
+  "n": 1
+ },
+ "5591fe56": {
+  "at": "2026-09-30T15:08:35+02:00",
+  "b": "Agli Europei 2026 di tiro a volo di Malakasa, in Grecia, Tammaro Cassandro ed Erik Pittini sono tra i sei tiratori a quota 73 in corsa per l'ingresso in finale dello skeet senior maschile: solo cinque dei sei ce la faranno.",
   "n": 1
  },
  "5691c9ef": {
@@ -793,6 +877,11 @@
   "b": "Per la Gazzetta il calcio italiano non sa riconoscere le soluzioni che ha davanti: Kayode, scartato giovanissimo dalla Juve, è stato la novità in Turchia, mentre Amorim viene criticato dopo quattro mesi da imbattuto.",
   "n": 1
  },
+ "670b27f0": {
+  "at": "2026-09-30T15:08:35+02:00",
+  "b": "Pep Guardiola ha rassicurato i tifosi del Manchester City dopo la sentenza sul club: il City è stato riconosciuto colpevole su 114 dei 115 addebiti e resta da definire il pacchetto di sanzioni.",
+  "n": 1
+ },
  "6834e11f": {
   "at": "2026-09-30T04:56:55+02:00",
   "b": "Amichevole: il Brasile batte l'Australia 4-2 con i gol di Vanderson, Raphinha su rigore, Bruno Guimaraes al 69' e Vinicius jr su rigore. Douglas Luiz resta in panchina per tutto il match; Raphinha esce per infortunio a inizio ripresa.",
@@ -880,6 +969,11 @@
   "b": "Terza edizione per la staffetta corporate The Loop Milano, in programma domenica 25 ottobre al Parco CityLife: quattro frazioni da 5 km per 20 km a squadra, partenza alle 9. Ideata da MG Sport, patrocinio Confcommercio, presentata il 29 settembre in Palazzo Castiglioni.",
   "n": 2
  },
+ "7350c348": {
+  "at": "2026-09-30T15:08:35+02:00",
+  "b": "Sarah Felberbaum adotterà Gaia, la 21enne figlia avuta da Daniele De Rossi dalla prima moglie Tamara Pisnoli. A confermarlo è la stessa attrice, spiegando che la decisione è stata della ragazza.",
+  "n": 1
+ },
  "73a9d8d3": {
   "at": "2026-09-30T13:39:08+02:00",
   "b": "Il campionato di pallanuoto, edizione numero 108, scatterà sabato 3 ottobre in un calendario compresso dagli impegni della nazionale, che punta al pass per Los Angeles 2028. In porta il CT Campagna dovrebbe puntare ancora su Gianmarco Nicosia e Marco Del Lungo.",
@@ -896,6 +990,11 @@
   "n": 1,
   "skip": true,
   "v": 2
+ },
+ "75d7b548": {
+  "at": "2026-09-30T16:07:42+02:00",
+  "b": "Margherita Panziera, ex nuotatrice azzurra che ha chiuso la carriera un anno fa e ora fa l'allenatrice, dopo il viaggio a Los Angeles dice di non aver pensato alle Olimpiadi del 2028 e, del suo palmares da 38 titoli italiani, ammette di dover essere meno severa con sé.",
+  "n": 1
  },
  "76781054": {
   "at": "2026-09-30T10:36:35+02:00",
@@ -978,6 +1077,11 @@
   "b": "Gianmarco Tamberi indica Tokyo come il suo risultato simbolo: è il motivo per cui, dice, a Budapest ha saltato di nuovo 2,37 e ha vinto gli Ultimate Championships. Con Marcell Jacobs, racconta, in quell'abbraccio c'era l'incredulità per un traguardo irraggiungibile.",
   "n": 1
  },
+ "7cbc338e": {
+  "at": "2026-09-30T15:08:35+02:00",
+  "b": "Sabato 10 ottobre a Ostia il galà The R.O.M.A. mette in palio cinque titoli tutti al femminile, quattro dei quali internazionali: alla manifestazione sono annunciati circa 300 atleti in rappresentanza di 20 Paesi.",
+  "n": 1
+ },
  "7d1f747d": {
   "at": "2026-09-30T08:36:25+02:00",
   "b": "Domenica 3 ottobre si corre la 109ª edizione del Giro dell'Emilia, che parte da Ferrara invece che da Mirandola, con arrivo a Bologna. Dopo Loiano (6,6 km al 5,7%) e lo strappo di Pianoro (1,8 km al 9,2%) il circuito finale va ripetuto quattro volte.",
@@ -991,6 +1095,11 @@
  "7e7e696c": {
   "at": "2026-09-30T13:39:08+02:00",
   "b": "Alberto Gilardino è il nuovo allenatore del Parma, chiamato a prendere il posto dell'esonerato Cuesta: l'accordo è per una stagione con opzione per le altre due. È il terzo cambio di panchina in Serie A, dopo quello del Bologna.",
+  "n": 1
+ },
+ "7f5030ba": {
+  "at": "2026-09-30T15:36:35+02:00",
+  "b": "Secondo turno dell'United Rugby Championship nel weekend: la Benetton Treviso, dopo il pareggio con i Dragons, cerca in casa la prima vittoria stagionale contro il Connacht, battuto all'esordio 15-29 dagli Stormers. Out Sebastian Negri.",
   "n": 1
  },
  "80f0ed96": {
@@ -1159,6 +1268,11 @@
   "b": "Javier Tebas, presidente della Liga, avverte dal summit Fifpro di Londra: il calendario è ormai insostenibile e i calciatori corrono verso un «punto di rottura inevitabile». Cita il Mondiale per club allargato e quello a 48 squadre e chiede a Fifa e Uefa un intervento deciso.",
   "n": 1
  },
+ "8e3777d5": {
+  "at": "2026-09-30T15:08:35+02:00",
+  "b": "Guardiola rompe il silenzio sul caso del Manchester City e ribadisce il proprio sostegno al club: in un messaggio ai tifosi assicura che resterà al fianco di società, giocatori e staff. In 10 anni ha portato al City 17 trofei.",
+  "n": 1
+ },
  "8f71b1ea": {
   "at": "2026-09-29T23:00:10+02:00",
   "b": "Raspadori lascia Coverciano dopo gli esami per il colpo alla coscia subito contro la Turchia e torna a Bergamo per curarsi. Mancini non chiama sostituti: restano 32 azzurri per le gare con Francia e Turchia.",
@@ -1193,6 +1307,11 @@
  "918c4d34": {
   "at": "2026-09-29T21:53:39+02:00",
   "b": "Venus Williams e Andrea Preti festeggiano in Puglia il primo anniversario di matrimonio, un anno dopo le nozze a Ischia, e condividono sui social foto e video del viaggio.",
+  "n": 1
+ },
+ "9266fa0a": {
+  "at": "2026-09-30T16:07:42+02:00",
+  "b": "Il ministro dello Sport Andrea Abodi dice che, oltre alle 13 città e ai 16 progetti, ci sono tutte le carte in regola per co-organizzare gli Europei del 2032; la scelta delle sedi arriverà nei prossimi giorni, sulla base di quanto la Figc trasmetterà alla Uefa.",
   "n": 1
  },
  "92a36cb6": {
@@ -1315,6 +1434,11 @@
   "n": 1,
   "skip": true,
   "v": 2
+ },
+ "a0c41fa6": {
+  "at": "2026-09-30T15:08:35+02:00",
+  "b": "Joan Laporta racconta di avere chiamato Beppe Marotta per portare Lautaro al Barcellona: il presidente blaugrana riferisce che il dirigente nerazzurro gli rispose subito che il giocatore non era in vendita, senza farlo finire di parlare.",
+  "n": 4
  },
  "a125c5c9": {
   "at": "2026-09-30T02:36:02+02:00",
@@ -1460,6 +1584,11 @@
   "b": "Sugli impianti per gli Europei 2032 l'Allianz Stadium è avanti a tutti: è l'unico a rispettare i 125 requisiti strutturali e operativi chiesti dalla Uefa, media, hospitality e servizi compresi. Malagò ha ammesso che al momento gli stadi pronti sono soltanto uno.",
   "n": 1
  },
+ "ae1bc864": {
+  "at": "2026-09-30T15:36:35+02:00",
+  "b": "Il difensore Giorgio Scalvini presenta la sfida tra Italia e Francia, terza giornata di Nations League: si gioca allo Stade de France venerdì 2 ottobre. Dopo il successo di Bursa dice che i senatori stanno aiutando tanto e il gruppo è unito.",
+  "n": 1
+ },
  "ae3c8c78": {
   "at": "2026-09-30T14:07:39+02:00",
   "b": "L'Eroica torna nel primo fine settimana di ottobre a Gaiole in Chianti, dove il prossimo anno si festeggeranno 30 anni dalla prima edizione. Il sabato i percorsi da 209 e 135 chilometri, la domenica gli altri tre itinerari.",
@@ -1522,6 +1651,11 @@
   "b": "È ufficiale: Tadej Pogacar non correrà gli Europei di ciclismo in Slovenia, dove domenica è in programma la prova in linea. Il miglior ciclista al mondo resta fuori dagli otto selezionati, dopo l'intervento alla clavicola.",
   "n": 3
  },
+ "b2cd4592": {
+  "at": "2026-09-30T16:07:42+02:00",
+  "b": "La Coppa del Mondo di sci alpino ritocca i montepremi: per ogni gara si passa da una borsa complessiva di 167.619 euro a 168.000. La vittoria vale 55.000 euro (erano 54.709), mentre il terzo posto sale da 13.968 a 15.000 euro.",
+  "n": 1
+ },
  "b34cfc54": {
   "at": "2026-09-30T06:36:27+02:00",
   "b": "Salgono a otto le società che hanno cambiato allenatore dopo sette giornate di campionato. Ieri gli esoneri di Alessandro Birindelli dal Novara e di Roberto Boscaglia dalla Sambenedettese; per i piemontesi i profili di Longo e Toscano sono sfumati.",
@@ -1540,6 +1674,11 @@
  "b8340643": {
   "at": "2026-09-29T21:53:39+02:00",
   "b": "In conferenza stampa un giornalista di Liverpool, avvisando di parlare male il tedesco, ha chiesto a Klopp, ct della Germania, se andasse bene l'accento scouse. La replica, «il tuo inglese è terribile», ha fatto ridere la sala.",
+  "n": 1
+ },
+ "b85d3ae3": {
+  "at": "2026-09-30T16:07:42+02:00",
+  "b": "La Serie C è l'unico campionato professionistico in campo in Italia nel fine settimana: per l'8/a giornata sono 27 le partite, con il big match Salernitana-Bari di domenica 4 ottobre anche su Rai Sport. Il Girone C resta il più prolifico, con 198 gol.",
   "n": 1
  },
  "b866cef1": {
@@ -1571,6 +1710,11 @@
  "bbd38f85": {
   "at": "2026-09-30T10:36:35+02:00",
   "b": "Manchester City colpevole su tutte le violazioni finanziarie dal 2009-10 al 2017-18 e su gran parte delle accuse di mancata collaborazione: lo conferma la Premier League. Ricavi gonfiati per oltre 900 milioni di sterline. Il club annuncia ricorso.",
+  "n": 1
+ },
+ "bbdf014c": {
+  "at": "2026-09-30T15:36:35+02:00",
+  "b": "Brandon McNulty, campione del mondo in linea ai Mondiali 2026, porterà la maglia iridata per i prossimi dodici mesi e sarà tra i gregari di Pogacar alla UAE Emirates XRG. Resta da vedere quando esordirà con l'arcobaleno.",
   "n": 1
  },
  "bc558856": {
@@ -2015,6 +2159,11 @@
   "b": "Il designatore Daniele Orsato ammette a Lissone sette errori arbitrali in stagione: in campionato tre rigori non fischiati e due espulsioni mancate, in Coppa Italia due errori sui rigori. Intanto il tempo effettivo sale a 59'24'', con soli 5 rigori in cinque turni.",
   "n": 2
  },
+ "eb57b97d": {
+  "at": "2026-09-30T15:08:35+02:00",
+  "b": "Cristiana Girelli, capitana dell'Italia, dice che i playoff «si preparano da sole» e che gli stimoli sono altissimi: il primo turno dello spareggio Mondiale donne 2027 si gioca il 9 ottobre contro la Bielorussia.",
+  "n": 1
+ },
  "ebc232c8": {
   "at": "2026-09-30T13:39:08+02:00",
   "b": "Nel Torino di Abate Kian Fitz-Jim si è preso un posto da titolare: l'olandese ha giocato dall'inizio tutte e cinque le partite, come Saul Coco e Nikola Vlasic, e corre molto, con 11,74 chilometri percorsi contro il Sassuolo, sesto dato in una singola gara.",
@@ -2040,6 +2189,11 @@
   "b": "Agli Europei 2026 di tiro a volo, a Malakasa, Sara Bongini chiude con una serie perfetta sui 25 piattelli e sale al secondo posto a quota 73/75. Davanti a tutti la svedese Victoria Larsson con 74/75.",
   "n": 1
  },
+ "efb7bb07": {
+  "at": "2026-09-30T15:08:35+02:00",
+  "b": "Tommaso Dati, 24enne toscano, si prepara al salto nel World Tour dopo una splendida stagione con il Team UYKO: in ottobre Coppa Bernocchi, Tour de Kyushu e Japan Cup saranno le ultime corse con la Continental giapponese.",
+  "n": 1
+ },
  "f04260ae": {
   "at": "2026-09-30T07:36:25+02:00",
   "b": "L'Under 21 di Baldini è in viaggio verso l'Armenia per la penultima partita del girone di qualificazione all'Europeo. Cher Ndour chiede di imporre il proprio ritmo contro una squadra che si chiude bene: il 5 ottobre a Pescara arriva la Polonia capolista.",
@@ -2059,6 +2213,11 @@
  "f2082e6f": {
   "at": "2026-09-30T06:36:27+02:00",
   "b": "Michael Kayode, autore del gol all'esordio azzurro contro la Turchia, è nato a Borgomanero il 10 luglio 2004: scartato dai giovani della Juventus, è passato dal Gozzano e poi alla Fiorentina, che lo ha lanciato in A nell'agosto 2023, a 19 anni.",
+  "n": 1
+ },
+ "f27174a6": {
+  "at": "2026-09-30T15:08:35+02:00",
+  "b": "In attesa del voto del Coni nei prossimi giorni, il ministro dello Sport Andrea Abodi difende il lavoro di Mancini alla guida della Nazionale: il ct deve poter lavorare con tranquillità, dice, perché non è in discussione.",
   "n": 1
  },
  "f38f68d9": {
