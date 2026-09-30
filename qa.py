@@ -9,7 +9,9 @@
 2. Layout su 5 larghezze × tutte le pagine: meta viewport, niente scroll orizzontale, immagini rotte,
    errori console, contrasto WCAG (con sfondi semitrasparenti composti), target ≥44px sotto i 640px.
 3. Funzioni: dossier (click → pannello, URL #/s/<id>, Esc, deep link), cronologia (registra, pagina, cancella),
-   ricerca (/ apre, risultati, Esc), cielo (una stella per notizia), service worker + offline, reduced-motion.
+   ricerca (/ apre, risultati, Esc), cielo (una stella per notizia, in tutte e due le finestre), squadre e suggerimento,
+   service worker + offline, reduced-motion.
+4. Prestazioni: LCP della prima pagina su telefono con rete lenta (≈1,6 Mbps, 150 ms) entro 2,5 s.
 Esce con 0 se tutto passa, altrimenti con il numero di problemi.
 """
 from __future__ import annotations
@@ -583,12 +585,50 @@ def function_checks(browser) -> int:
     return len(out)
 
 
+LCP_BUDGET_MS = 2500
+
+
+def lcp_check(browser) -> int:
+    """Largest Contentful Paint della prima pagina su un telefono con rete lenta (≈1,6 Mbps giù, 150 ms di latenza,
+    come un 4G debole): deve stare entro 2,5 s. Prima visita, cache vuota. Se il browser non ha l'API lo dice e salta."""
+    ctx = browser.new_context(viewport={"width": 390, "height": 844}, device_scale_factor=2, is_mobile=True, has_touch=True,
+                              locale="it-IT", service_workers="block")
+    pg = ctx.new_page()
+    cdp = ctx.new_cdp_session(pg)
+    cdp.send("Network.enable")
+    cdp.send("Network.setCacheDisabled", {"cacheDisabled": True})
+    cdp.send("Network.emulateNetworkConditions", {"offline": False, "latency": 150,
+                                                   "downloadThroughput": 1.6e6 / 8, "uploadThroughput": 750e3 / 8})
+    pg.add_init_script("""window.__lcp = null; window.__lcpApi = PerformanceObserver.supportedEntryTypes.includes('largest-contentful-paint');
+      if (window.__lcpApi) new PerformanceObserver((l) => { const e = l.getEntries().pop(); if (e) window.__lcp = { t: e.startTime, el: e.element ? (e.element.className || e.element.tagName) : '?' }; })
+        .observe({ type: 'largest-contentful-paint', buffered: true });""")
+    enc = {}
+    pg.on("response", lambda r: enc.__setitem__("css", r.headers.get("content-encoding", "")) if "/css/site.css" in r.url else None)
+    pg.goto(BASE + "/index.html", wait_until="load", timeout=60000)
+    pg.wait_for_timeout(1500)
+    api = pg.evaluate("window.__lcpApi")
+    lcp = pg.evaluate("window.__lcp")
+    ctx.close()
+    note = "" if enc.get("css") else " · server senza compressione (python -m http.server): caso peggiore, online è gzip"
+    if not api:
+        print("prestazioni: il browser non ha l'API largest-contentful-paint · SALTATO")
+        return 0
+    if not lcp:
+        print("prestazioni: nessun LCP registrato · SALTATO")
+        return 0
+    ok = lcp["t"] <= LCP_BUDGET_MS
+    print(f"prestazioni: LCP su telefono con rete lenta {lcp['t']:.0f} ms (limite {LCP_BUDGET_MS}) · elemento {str(lcp['el'])[:30]}{note} · "
+          + ("OK" if ok else "OLTRE IL LIMITE"))
+    return 0 if ok else 1
+
+
 def main() -> int:
     total = content_checks()
     with sync_playwright() as pw:
         b = launch(pw)
         total += layout_checks(b)
         total += function_checks(b)
+        total += lcp_check(b)
         b.close()
     print("\nQA: " + ("tutto a posto" if not total else f"{total} problemi da sistemare"))
     return 1 if total else 0

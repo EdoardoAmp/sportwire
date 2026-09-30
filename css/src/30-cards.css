@@ -2,6 +2,7 @@
 .brief-line { margin-bottom: .5rem; font: 500 .74rem/1.5 var(--f-mono); letter-spacing: .04em; color: var(--ink-3); }
 .brief-line strong { color: var(--ink); font-weight: 600; }
 .brief-line__own { color: var(--accent); white-space: nowrap; }
+.brief-line__at { white-space: nowrap; }                                   /* stesso mono e stesso ink-3 della riga */
 .brief-line__own::before { content: "✦ "; }
 
 /* — apertura: un pianeta con una luna per testata — */

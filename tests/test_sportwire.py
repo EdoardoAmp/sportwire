@@ -544,6 +544,16 @@ def test_pages_use_the_static_brand_card_never_a_publisher_photo():
         assert Image.open(path).size == (1200, 630), name
 
 
+def test_home_brief_line_says_when_the_edition_was_made():
+    import re
+    html_ = _read("index.html")
+    m = re.search(r'<span class="brief-line__at">aggiornato alle <time datetime="([^"]+)">(\d\d:\d\d)</time></span>', html_)
+    assert m, "manca «aggiornato alle HH:MM» nella riga d'apertura"
+    gen = json.loads(_read("data", "news.json"))["generated"]
+    assert m.group(1)[:16] == gen[:16] and m.group(2) == gen[11:16]
+    assert html_.count("data-stamp") == 1                                   # l'avviso «nuova edizione» legge solo il piè di pagina
+
+
 def test_render_clips_collects_videos_and_escapes():
     ctx = render.Ctx(now=datetime.now().astimezone(), site_url="https://x/", window=36, n_stories=1, n_sources=1, n_multi=0,
                      sections=[("calcio", "Calcio")], sources=[], sec_counts={"calcio": 1}, ver={"css": "a", "js": "b"}, theme_color="#000")

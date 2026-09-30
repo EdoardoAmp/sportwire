@@ -278,7 +278,8 @@ def home_body(ctx: Ctx, hero: dict, top: list, live: list, blocks: list, clips: 
       </div>
     </section>""")
     return f"""<p class="brief-line"><strong>{ctx.n_stories} notizie</strong> nelle ultime {ctx.window} ore da {ctx.n_sources} redazioni ·
-  {ctx.n_multi} raccontate da più testate · <span class="brief-line__own">{ctx.n_own} riassunte da Sportwire</span></p>
+  {ctx.n_multi} raccontate da più testate · <span class="brief-line__own">{ctx.n_own} riassunte da Sportwire</span> ·
+  <span class="brief-line__at">aggiornato alle <time datetime="{esc(ctx.now.isoformat())}">{esc(ctx.now.strftime('%H:%M'))}</time></span></p>
 {lead_html(hero, ctx)}
 <section class="follow" data-follow hidden aria-labelledby="h-follow"></section>
 <section class="resume" data-resume hidden aria-labelledby="h-resume"></section>
