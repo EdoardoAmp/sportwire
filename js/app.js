@@ -755,11 +755,26 @@ const reader = (() => {
 
   const photo = (s) => (s.image ? `<div class="reader__photo media"><img src="${esc(s.image)}" alt="" decoding="async" referrerpolicy="no-referrer" onload="this.classList.add('is-loaded')" onerror="this.parentNode.remove()"></div>` : "");
 
+  /* La frase che ogni redazione ha messo sotto il suo titolo (sommario del feed): si mostra solo se dice qualcosa in
+     più. Niente se è vuota, se ripete il titolo, se è già apparsa più su (Sky ripubblica lo stesso lancio) o se è il
+     sommario che il riquadro sopra mostra già. */
+  /* stessa frase anche con un refuso corretto o una coda diversa: almeno l'80% delle parole in comune */
+  const bag = (k) => new Set(k.split(" ").filter((w) => w.length > 2));
+  const same = (a, b) => { let n = 0; a.forEach((w) => { if (b.has(w)) n++; }); return n >= 0.8 * Math.min(a.size, b.size); };
+  function quoteOf(i, seen) {
+    const q = String(i.summary || "").trim(), k = norm(q), t = norm(i.title), w = bag(k);
+    if (k.length < 24 || t.includes(k) || (k.startsWith(t) && k.length - t.length < 40) || seen.some((x) => same(w, x))) return "";
+    seen.push(w);
+    return q;
+  }
   function chrono(s) {
     const items = (s.items || []).slice().sort((a, b) => Date.parse(a.ts) - Date.parse(b.ts));
     if (items.length < 2) return "";
-    return `<section aria-labelledby="rd-h"><h3 id="rd-h">Come l’hanno raccontata, ora per ora</h3><ol class="chrono">${items.map((i) =>
-      `<li><time datetime="${esc(i.ts)}">${hhmm(new Date(i.ts))}</time><a href="${esc(i.link)}" target="_blank" rel="noopener" data-visit><b>${esc(i.source)}</b><span>${esc(i.title)}</span></a></li>`).join("")}</ol></section>`;
+    const seen = s.brief || !s.summary ? [] : [bag(norm(s.summary))];
+    return `<section aria-labelledby="rd-h"><h3 id="rd-h">Chi ne scrive, ora per ora</h3><ol class="chrono">${items.map((i) => {
+      const q = quoteOf(i, seen);
+      return `<li><time datetime="${esc(i.ts)}">${hhmm(new Date(i.ts))}</time><a href="${esc(i.link)}" target="_blank" rel="noopener" data-visit><b>${esc(i.source)}</b><span>${esc(i.title)}</span>${q ? `<q>${esc(q)}</q>` : ""}</a></li>`;
+    }).join("")}</ol></section>`;
   }
   function related(s) {
     const rel = (s.related || []).map((id) => NEWS.byId.get(id)).filter(Boolean);

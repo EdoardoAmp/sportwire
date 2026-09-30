@@ -361,6 +361,21 @@ def function_checks(browser) -> int:
             st2 = pg.evaluate("() => ({ open: !!document.querySelector('.reader.is-open'), hash: location.hash })")
             check(not st2["open"] and st2["hash"] in ("", "#"), "", f"{tag}Esc non chiude il dossier ({st2})", out)
 
+        # dossier: nell'elenco «chi ne scrive» ogni frase di testata sta dentro il suo link, al massimo 2 righe, riga ≥44px
+        multi = next((s for s in news["stories"] if len({i.get("summary", "") for i in s.get("items", [])}) >= 3), None)
+        if multi:
+            pg.goto(f"{BASE}/index.html#/s/{multi['id']}", wait_until="networkidle")
+            pg.wait_for_timeout(900)
+            q = pg.evaluate("""() => { const qs = [...document.querySelectorAll('.reader .chrono q')];
+                return { n: qs.length, inLink: qs.every((x) => x.closest('ol.chrono > li > a[href]')),
+                         clamp: qs.every((x) => getComputedStyle(x).webkitLineClamp === '2'),
+                         lines: Math.max(0, ...qs.map((x) => Math.round(x.getBoundingClientRect().height / parseFloat(getComputedStyle(x).lineHeight)))),
+                         short: [...document.querySelectorAll('.reader .chrono a')].filter((a) => a.getBoundingClientRect().height < 44).length }; }""")
+            check(q["n"] >= 1 and q["inLink"] and q["clamp"] and q["lines"] <= 2 and q["short"] == 0, "",
+                  f"{tag}dossier: frasi delle testate non a norma {q}", out)
+            pg.keyboard.press("Escape")
+            pg.wait_for_timeout(500)
+
         # deep link
         pg.goto(f"{BASE}/index.html#/s/{first}", wait_until="networkidle")
         pg.wait_for_timeout(800)
