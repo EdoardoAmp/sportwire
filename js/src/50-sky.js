@@ -9,16 +9,27 @@ const sky = (() => {
     }
     return out.sort((a, b) => Math.hypot(a[0] * 1.15, a[1]) - Math.hypot(b[0] * 1.15, b[1]));
   })();
-  let root, stage, frame, peek, canvas, svg, stars = [], byLane = new Map(), selected = null, hovered = null, drawn = false;
+  let root, stage, frame, peek, canvas, svg, stars = [], byLane = new Map(), selected = null, hovered = null, drawn = false, last = null;
+  /* Finestra del tempo: le ultime 12 ore (stesso asse, più spazio per ogni ora) o tutta l'edizione (36 ore). È uno stato
+     vero della pagina: resta scegliendo altre notizie e ricaricando, per tutta la sessione (sessionStorage). */
+  const WKEY = "sw:cielo:ore", SHORT = 12;
+  let short = (() => { try { return sessionStorage.getItem(WKEY) === String(SHORT); } catch { return false; } })();
+  const canShort = (data) => data.window_hours > SHORT;
+  const spanOf = (data) => (short && canShort(data) ? SHORT : data.window_hours);
+  let tools = null, edge = null, busy = false;
 
   const labW = () => (matchMedia("(max-width: 640px)").matches ? 82 : 112);
   const pxPerHour = () => (matchMedia("(max-width: 640px)").matches ? 46 : 58);
 
   function layout(data) {
+    const span = spanOf(data);
     const t1 = Math.max(Date.parse(data.generated), ...data.stories.map((s) => s._t)) + 25 * 60e3;
-    const t0 = t1 - data.window_hours * 3600e3;
+    const t0 = t1 - span * 3600e3;
     const lab = labW();
-    const plotW = Math.round(data.window_hours * pxPerHour());
+    /* stessa larghezza minima della mappa di 36 ore: con 12 ore ogni ora è larga il triplo (o quanto basta a
+       riempire lo schermo), non si ottiene una striscia corta */
+    const view = stage ? stage.clientWidth - lab - 24 : 0;
+    const plotW = Math.round(Math.max(span * pxPerHour() * (span < data.window_hours ? 2.2 : 1), view));
     const order = Object.keys(SECTIONS);
     const lanes = order.filter((k) => data.stories.some((s) => s.section === k));
     const pos = new Map();
@@ -49,7 +60,7 @@ const sky = (() => {
       placed.forEach((p) => { p.dy = -(lo + hi) / 2; });
       pos.set(k, placed);
     });
-    return { t0, t1, lab, plotW, lanes, pos, heights };
+    return { t0, t1, lab, plotW, lanes, pos, heights, span };
   }
 
   function build(data) {
@@ -87,12 +98,16 @@ const sky = (() => {
       y0 += h;
     });
 
-    /* ore */
+    /* ore: una tacca ogni 6 ore sulla mappa intera, ogni 2 nella finestra di 12; niente tacca troppo vicina alla linea
+       dell'edizione (le due etichette si accavallerebbero) */
+    const every = L.span <= 12 ? 2 : 6;
+    const edX = L.lab + ((Date.parse(data.generated) - L.t0) / (L.t1 - L.t0)) * L.plotW;
     const first = new Date(L.t0); first.setMinutes(0, 0, 0);
     for (let t = first.getTime(); t <= L.t1; t += 3600e3) {
       const d = new Date(t);
-      if (t < L.t0 || d.getHours() % 6) continue;
+      if (t < L.t0 || d.getHours() % every) continue;
       const x = L.lab + ((t - L.t0) / (L.t1 - L.t0)) * L.plotW;
+      if (Math.abs(x - edX) < 120) continue;
       const tick = document.createElement("div");
       tick.className = "sky__tick";
       tick.style.left = `${x}px`;
@@ -138,7 +153,93 @@ const sky = (() => {
     /* tab stop unico (roving): la stella più recente */
     const lead = stars.slice().sort((a, b) => b.s._t - a.s._t)[0];
     if (lead) lead.el.tabIndex = 0;
+    last = { L, nowX };
     return lead;
+  }
+
+
+  /* — la finestra del tempo (12 ore / tutta l'edizione) e il segno «adesso» sul bordo destro — */
+  const say = (msg, kind) => {                 // stato del selettore detto a parole (vuoto, errore), letto dai lettori di schermo
+    const p = tools && $(".sky__state", tools);
+    if (!p) return;
+    p.textContent = msg || "";
+    p.hidden = !msg;
+    p.dataset.kind = kind || "";
+  };
+  function paintTools(data) {
+    if (!tools) return;
+    const full = data.window_hours, on = spanOf(data) === SHORT;
+    $$(".seg__btn", tools).forEach((b) => {
+      const isShort = b.dataset.win === "short";
+      b.setAttribute("aria-pressed", String(isShort === on));
+      if (isShort) { b.disabled = !canShort(data); b.title = b.disabled ? `L’edizione copre già solo ${full} ore` : ""; }
+      else b.textContent = `Ultime ${full} ore`;
+    });
+  }
+  /* il segno sul bordo destro: dice che lì è «adesso» (lì nascono le stelle nuove); se si è tornati indietro nel tempo
+     diventa un pulsante per tornarci. Attivo solo quando la linea dell'edizione è fuori dalla vista. */
+  function paintEdge() {
+    if (!edge || !last) return;
+    const away = last.nowX > stage.scrollLeft + stage.clientWidth - 8;
+    edge.disabled = !away;
+    edge.setAttribute("aria-label", away ? "Torna ad adesso" : "Adesso: le notizie più recenti sono a destra");
+  }
+  function setShort(want) {
+    const data = NEWS.data;
+    if (!data || busy || want === short || (want && !canShort(data))) return;
+    const was = short;
+    busy = true;
+    root.setAttribute("aria-busy", "true");
+    short = want;
+    try { sessionStorage.setItem(WKEY, want ? String(SHORT) : "0"); } catch { /* navigazione privata: vale per questa pagina */ }
+    try {
+      const keep = selected && selected.s.id;
+      const before = new Map(stars.map((r) => { const q = r.el.getBoundingClientRect(); return [r.s.id, [q.left + q.width / 2, q.top + q.height / 2]]; }));
+      const lead = build(data);
+      scrollToNow(lead);
+      const r = (keep && rec(keep)) || lead;
+      selected = r || null;
+      if (r) { focusOn(r, false); showPeek(r.s); }
+      motion.glide(stars, before, stage, canvas);
+      say(stars.length ? "" : `Nessuna notizia nelle ultime ${SHORT} ore: la mappa intera ne ha ${data.stories.length}.`, "empty");
+    } catch (err) {
+      short = was;                                   // si torna alla vista di prima, e lo si dice
+      try { sessionStorage.setItem(WKEY, was ? String(SHORT) : "0"); } catch { /* ok */ }
+      try { const lead = build(data); scrollToNow(lead); } catch { /* resta com'era */ }
+      say("Non riesco a ridisegnare la mappa: resta la vista di prima.", "error");
+      console.error(err);
+    }
+    busy = false;
+    root.removeAttribute("aria-busy");
+    paintTools(data);
+    paintEdge();
+  }
+  function mountTools(data) {
+    if (!tools) {
+      tools = document.createElement("div");
+      tools.className = "sky__tools";
+      tools.innerHTML = `<div class="seg" role="group" aria-label="Quante ore mostra la mappa">
+          <button type="button" class="seg__btn" data-win="short" aria-pressed="false">Ultime ${SHORT} ore</button>
+          <button type="button" class="seg__btn" data-win="full" aria-pressed="true" data-full>Ultime 36 ore</button>
+        </div>
+        <p class="sky__state" role="status" aria-live="polite" hidden></p>`;
+      frame.before(tools);
+      tools.addEventListener("click", (e) => {
+        const b = e.target.closest(".seg__btn");
+        if (b && !b.disabled) setShort(b.dataset.win === "short");
+      });
+    }
+    if (!edge) {
+      edge = document.createElement("button");
+      edge.type = "button";
+      edge.className = "sky__edge";
+      edge.innerHTML = `<span>adesso</span>${ICON_NEXT}`;
+      tools.append(edge);                            // sulla riga del selettore: si vede anche quando la mappa è più alta dello schermo
+      edge.addEventListener("click", () => { if (!edge.disabled) stage.scrollTo({ left: stage.scrollWidth, behavior: reduce ? "auto" : "smooth" }); });
+      stage.addEventListener("scroll", () => { if (!edge.dataset.raf) { edge.dataset.raf = "1"; requestAnimationFrame(() => { delete edge.dataset.raf; paintEdge(); }); } }, { passive: true });
+    }
+    paintTools(data);
+    say("");
   }
 
   /* Apre la mappa sul "adesso": l'ultima notizia a ~88% dello schermo, così si vedono anche le ore prima. */
@@ -204,12 +305,15 @@ const sky = (() => {
     stage = $("[data-sky-stage]", root);
     frame = $(".sky__frame", root);
     peek = $("[data-sky-peek]", root);
-    const lead = build(NEWS.data);
     root.hidden = false;
+    mountTools(NEWS.data);
+    const lead = build(NEWS.data);
     drawn = true;
     motion.stars(canvas, stage);
     scrollToNow(lead);
+    paintEdge();
     if (lead) { selected = lead; focusOn(lead, false); showPeek(lead.s); }
+    if (!stars.length && short) say(`Nessuna notizia nelle ultime ${SHORT} ore: la mappa intera ne ha ${NEWS.data.stories.length}.`, "empty");
 
     if (!root.dataset.bound) {
       root.dataset.bound = "1";
@@ -274,11 +378,11 @@ const sky = (() => {
         if (r) reader.open(r.s.id, laneIds(r.lane));
       });
       let rz;
-      addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (drawn && NEWS.ready) { const keep = selected && selected.s.id, left = stage.scrollLeft; build(NEWS.data); stage.scrollLeft = left; const r = keep && rec(keep); if (r) { selected = r; focusOn(r, false); } } }, 250); });
+      addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (drawn && NEWS.ready) { const keep = selected && selected.s.id, left = stage.scrollLeft; build(NEWS.data); stage.scrollLeft = left; paintEdge(); const r = keep && rec(keep); if (r) { selected = r; focusOn(r, false); } } }, 250); });
     }
   }
 
   /* Le letture fanno sbiadire le stelle già viste. */
   const refresh = () => { if (!drawn) return; stars.forEach((r) => r.el.classList.toggle("is-read", store.has(r.s.id))); };
-  return { init, refresh };
+  return { init, refresh, windowHours: () => (NEWS.ready ? spanOf(NEWS.data) : 0) };
 })();

@@ -1,6 +1,7 @@
 # Sportwire
 
-Rassegna stampa sportiva statica e **spaziale**: ogni notizia è una stella nel *cielo di oggi* (tempo × sport),
+Rassegna stampa sportiva statica e **spaziale**: ogni notizia è una stella nel *cielo di oggi* (tempo × sport, con la
+finestra delle ultime 12 ore o dell'intera edizione e il segno «adesso» sul bordo dove nascono le stelle nuove),
 si legge dentro il sito (il *dossier*), resta nella tua *cronologia* e ha il suo *in breve*, scritto
 dall'agente Hermes. Aggrega i feed RSS pubblici di ANSA, Gazzetta, Corriere dello Sport, Tuttosport, Sky Sport e OA Sport.
 Nessun account, nessun cookie, nessun tracker: la cronologia vive solo nel `localStorage` del tuo dispositivo.

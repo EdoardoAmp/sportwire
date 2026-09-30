@@ -236,84 +236,106 @@ def function_checks(browser) -> int:
         pg.wait_for_timeout(700)
         tag = f"[{name}] "
 
-        # cielo: una stella per notizia
-        stars = pg.evaluate("document.querySelectorAll('.star').length")
-        check(stars == n_stories, "", f"{tag}cielo: {stars} stelle per {n_stories} notizie", out)
-
-        # tocco vicino a una stella isolata: deve scegliere quella (le stelle sono minuscole, il dito no)
-        if mobile:
-            spot = pg.evaluate("""() => {
-              const st = document.querySelector('[data-sky-stage]'); st.scrollIntoView({ block: 'center', behavior: 'instant' });
-              const S = [...document.querySelectorAll('.star')].map((e) => { const q = e.getBoundingClientRect(); return { id: e.dataset.sid, x: q.left + q.width / 2, y: q.top + q.height / 2 }; });
-              /* sotto i nomi delle corsie il tocco non vale (per scelta): si prova una stella nella parte scoperta */
-              const lab = document.querySelector('.sky__labels').getBoundingClientRect().right, R = st.getBoundingClientRect().right;
-              for (const a of S.filter((s) => s.x > lab + 24 && s.x < R - 24)) {
-                const near = Math.min(...S.filter((b) => b.id !== a.id).map((b) => Math.hypot(a.x - b.x, a.y - b.y)));
-                if (near > 44) return { id: a.id };
-              }
-              return null;
-            }""")
-            if spot:
+        # cielo: i controlli girano in ENTRAMBE le finestre (tutta l'edizione e ultime 12 ore), scelte col selettore vero
+        sw = news["window_hours"]
+        cutoff = datetime.fromisoformat(news["generated"]) - timedelta(hours=12)
+        n_short = sum(1 for s in news["stories"] if datetime.fromisoformat(s["ts"]) >= cutoff - timedelta(minutes=25))
+        for win in (["full", "short"] if sw > 12 else ["full"]):
+            if win == "short":
+                pg.evaluate("document.querySelector('[data-sky]').scrollIntoView({block: 'start', behavior: 'instant'})")
                 pg.wait_for_timeout(300)
-                xy = pg.evaluate("(id) => { const q = document.querySelector('.star[data-sid=\"' + id + '\"]').getBoundingClientRect(); return [q.left + q.width / 2, q.top + q.height / 2]; }", spot["id"])
-                if 0 < xy[0] < w - 14 and 60 < xy[1] < h - 14:
-                    pg.touchscreen.tap(xy[0] + 12, xy[1] + 9)
-                    pg.wait_for_timeout(250)
-                    got = pg.evaluate("(document.querySelector('.star.is-on') || {}).dataset && document.querySelector('.star.is-on').dataset.sid")
-                    check(got == spot["id"], "", f"{tag}tocco a 15px da una stella isolata: selezionata {got!r}, attesa {spot['id']!r}", out)
-                    # secondo tocco sulla stessa stella: apre la notizia
-                    pg.touchscreen.tap(xy[0] + 12, xy[1] + 9)
+                pg.click('.seg__btn[data-win="short"]')
+                pg.wait_for_timeout(900)
+                pressed = pg.evaluate("document.querySelector('.seg__btn[data-win=\"short\"]').getAttribute('aria-pressed')")
+                check(pressed == "true", "", f"{tag}cielo: il selettore 12 ore non risulta premuto", out)
+            n_expected = n_stories if win == "full" else n_short
+            tag_w = f"{tag}[{'36' if win == 'full' else '12'}h] "
+            # cielo: una stella per notizia
+            stars = pg.evaluate("document.querySelectorAll('.star').length")
+            check(abs(stars - n_expected) <= 1, "", f"{tag_w}cielo: {stars} stelle per {n_expected} notizie", out)
+
+            # tocco vicino a una stella isolata: deve scegliere quella (le stelle sono minuscole, il dito no)
+            if mobile:
+                spot = pg.evaluate("""() => {
+                  const st = document.querySelector('[data-sky-stage]'); st.scrollIntoView({ block: 'center', behavior: 'instant' });
+                  const S = [...document.querySelectorAll('.star')].map((e) => { const q = e.getBoundingClientRect(); return { id: e.dataset.sid, x: q.left + q.width / 2, y: q.top + q.height / 2 }; });
+                  /* sotto i nomi delle corsie il tocco non vale (per scelta): si prova una stella nella parte scoperta */
+                  const lab = document.querySelector('.sky__labels').getBoundingClientRect().right, R = st.getBoundingClientRect().right;
+                  for (const a of S.filter((s) => s.x > lab + 24 && s.x < R - 24)) {
+                    const near = Math.min(...S.filter((b) => b.id !== a.id).map((b) => Math.hypot(a.x - b.x, a.y - b.y)));
+                    if (near > 44) return { id: a.id };
+                  }
+                  return null;
+                }""")
+                if spot:
+                    pg.wait_for_timeout(300)
+                    xy = pg.evaluate("(id) => { const q = document.querySelector('.star[data-sid=\"' + id + '\"]').getBoundingClientRect(); return [q.left + q.width / 2, q.top + q.height / 2]; }", spot["id"])
+                    if 0 < xy[0] < w - 14 and 60 < xy[1] < h - 14:
+                        pg.touchscreen.tap(xy[0] + 12, xy[1] + 9)
+                        pg.wait_for_timeout(250)
+                        got = pg.evaluate("(document.querySelector('.star.is-on') || {}).dataset && document.querySelector('.star.is-on').dataset.sid")
+                        check(got == spot["id"], "", f"{tag_w}tocco a 15px da una stella isolata: selezionata {got!r}, attesa {spot['id']!r}", out)
+                        # secondo tocco sulla stessa stella: apre la notizia
+                        pg.touchscreen.tap(xy[0] + 12, xy[1] + 9)
+                        pg.wait_for_timeout(500)
+                        opened = pg.evaluate("location.hash")
+                        check(opened == f"#/s/{spot['id']}", "", f"{tag_w}secondo tocco sulla stella: aperto {opened!r}", out)
+                        pg.keyboard.press("Escape")
+                        pg.wait_for_timeout(500)
+            else:
+                # col mouse ogni stella dev'essere raggiungibile, anche nelle nubi fitte: il bersaglio è il centro più vicino
+                pg.evaluate("document.querySelector('[data-sky]').scrollIntoView({block: 'start', behavior: 'instant'})")
+                pg.wait_for_timeout(700)
+                miss = pg.evaluate("""() => {
+                  const st = document.querySelector('[data-sky-stage]'); const lab = document.querySelector('.sky__labels').getBoundingClientRect().right;
+                  const sr = st.getBoundingClientRect(); let tried = 0, wrong = 0;
+                  for (const s of document.querySelectorAll('.star')) {
+                    const q = s.getBoundingClientRect(), x = q.left + q.width / 2, y = q.top + q.height / 2;
+                    if (x < lab + 4 || x > sr.right - 4 || y < 0 || y > innerHeight) continue;
+                    tried++;
+                    const t = document.elementFromPoint(x, y);
+                    if (!t || !st.contains(t)) wrong++;
+                  }
+                  return [tried, wrong];
+                }""")
+                check(miss[1] == 0, "", f"{tag_w}cielo: {miss[1]} stelle su {miss[0]} coperte da altro", out)
+                dense = pg.evaluate("""() => {
+                  const S = [...document.querySelectorAll('.star')].map((e) => { const q = e.getBoundingClientRect(); return { id: e.dataset.sid, x: q.left + q.width / 2, y: q.top + q.height / 2 }; });
+                  const lab = document.querySelector('.sky__labels').getBoundingClientRect().right, R = document.querySelector('[data-sky-stage]').getBoundingClientRect().right;
+                  return S.filter((a) => a.x > lab + 6 && a.x < R - 6 && a.y > 70 && a.y < innerHeight - 10
+                    && S.some((b) => b.id !== a.id && Math.hypot(a.x - b.x, a.y - b.y) < 16)).slice(0, 6);
+                }""")
+                centre = "(id) => { const q = document.querySelector('.star[data-sid=\"' + id + '\"]').getBoundingClientRect(); return [q.left + q.width / 2, q.top + q.height / 2]; }"
+                bad = []
+                for d in dense:
+                    x, y = pg.evaluate(centre, d["id"])                     # posizione di adesso, non di prima
+                    pg.mouse.move(x, y)
+                    pg.wait_for_timeout(150)
+                    got = pg.evaluate("(document.querySelector('.star.is-on') || {dataset: {}}).dataset.sid")
+                    if got != d["id"]:
+                        bad.append((d["id"], got))
+                check(not bad, "", f"{tag_w}cielo: nella nube il mouse sul centro sceglie un'altra stella {bad[:3]}", out)
+                if dense:
+                    x, y = pg.evaluate(centre, dense[0]["id"])
+                    pg.mouse.click(x, y)
                     pg.wait_for_timeout(500)
                     opened = pg.evaluate("location.hash")
-                    check(opened == f"#/s/{spot['id']}", "", f"{tag}secondo tocco sulla stella: aperto {opened!r}", out)
+                    check(opened == f"#/s/{dense[0]['id']}", "", f"{tag_w}clic su una stella: aperto {opened!r}", out)
                     pg.keyboard.press("Escape")
                     pg.wait_for_timeout(500)
-        else:
-            # col mouse ogni stella dev'essere raggiungibile, anche nelle nubi fitte: il bersaglio è il centro più vicino
-            pg.evaluate("document.querySelector('[data-sky]').scrollIntoView({block: 'start', behavior: 'instant'})")
+                pg.mouse.move(5, 5)
+        # la finestra resta dopo il ricaricamento (sessionStorage), poi si torna a tutta l'edizione
+        if sw > 12:
+            pg.reload(wait_until="networkidle")
             pg.wait_for_timeout(700)
-            miss = pg.evaluate("""() => {
-              const st = document.querySelector('[data-sky-stage]'); const lab = document.querySelector('.sky__labels').getBoundingClientRect().right;
-              const sr = st.getBoundingClientRect(); let tried = 0, wrong = 0;
-              for (const s of document.querySelectorAll('.star')) {
-                const q = s.getBoundingClientRect(), x = q.left + q.width / 2, y = q.top + q.height / 2;
-                if (x < lab + 4 || x > sr.right - 4 || y < 0 || y > innerHeight) continue;
-                tried++;
-                const t = document.elementFromPoint(x, y);
-                if (!t || !st.contains(t)) wrong++;
-              }
-              return [tried, wrong];
-            }""")
-            check(miss[1] == 0, "", f"{tag}cielo: {miss[1]} stelle su {miss[0]} coperte da altro", out)
-            dense = pg.evaluate("""() => {
-              const S = [...document.querySelectorAll('.star')].map((e) => { const q = e.getBoundingClientRect(); return { id: e.dataset.sid, x: q.left + q.width / 2, y: q.top + q.height / 2 }; });
-              const lab = document.querySelector('.sky__labels').getBoundingClientRect().right, R = document.querySelector('[data-sky-stage]').getBoundingClientRect().right;
-              return S.filter((a) => a.x > lab + 6 && a.x < R - 6 && a.y > 70 && a.y < innerHeight - 10
-                && S.some((b) => b.id !== a.id && Math.hypot(a.x - b.x, a.y - b.y) < 16)).slice(0, 6);
-            }""")
-            centre = "(id) => { const q = document.querySelector('.star[data-sid=\"' + id + '\"]').getBoundingClientRect(); return [q.left + q.width / 2, q.top + q.height / 2]; }"
-            bad = []
-            for d in dense:
-                x, y = pg.evaluate(centre, d["id"])                     # posizione di adesso, non di prima
-                pg.mouse.move(x, y)
-                pg.wait_for_timeout(150)
-                got = pg.evaluate("(document.querySelector('.star.is-on') || {dataset: {}}).dataset.sid")
-                if got != d["id"]:
-                    bad.append((d["id"], got))
-            check(not bad, "", f"{tag}cielo: nella nube il mouse sul centro sceglie un'altra stella {bad[:3]}", out)
-            if dense:
-                x, y = pg.evaluate(centre, dense[0]["id"])
-                pg.mouse.click(x, y)
-                pg.wait_for_timeout(500)
-                opened = pg.evaluate("location.hash")
-                check(opened == f"#/s/{dense[0]['id']}", "", f"{tag}clic su una stella: aperto {opened!r}", out)
-                pg.keyboard.press("Escape")
-                pg.wait_for_timeout(500)
-            pg.mouse.move(5, 5)
-            # il clic sulla stella ha aperto (e registrato) una notizia: si riparte puliti per i controlli sulla cronologia
-            pg.evaluate("localStorage.clear()")
-            pg.goto(BASE + "/index.html", wait_until="networkidle")
-            pg.wait_for_timeout(500)
+            kept = pg.evaluate("(document.querySelector('.seg__btn[data-win=\"short\"]') || {}).getAttribute && document.querySelector('.seg__btn[data-win=\"short\"]').getAttribute('aria-pressed')")
+            check(kept == "true", "", f"{tag}cielo: la finestra di 12 ore non resta dopo il ricaricamento", out)
+            pg.evaluate("document.querySelector('[data-sky]').scrollIntoView({block: 'start', behavior: 'instant'})")
+            pg.wait_for_timeout(300)
+            pg.click('.seg__btn[data-win="full"]')
+            pg.wait_for_timeout(900)
+            check(pg.evaluate("document.querySelectorAll('.star').length") == n_stories, "", f"{tag}cielo: tornando a tutta l'edizione mancano stelle", out)
+        # i clic sulle stelle hanno aperto (e registrato) notizie: le squadre qui sotto ripartono da localStorage vuoto
 
         # le tue squadre: dal profilo vuoto alla scelta, poi le notizie in cima (tutto in localStorage)
         pg.evaluate("localStorage.clear()")

@@ -40,3 +40,31 @@
 .key--live { background: var(--hot); }
 .key--read { background: var(--ink-3); opacity: .5; }
 .key--line { width: 18px; height: 1px; border-radius: 0; background: var(--ink-3); }
+
+/* — finestra del tempo (12 ore / tutta l'edizione) e segno «adesso» — */
+.sky__tools { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem 1rem; margin-top: 1.25rem; }
+.sky__tools + .sky__frame { margin-top: .75rem; }
+.seg { display: inline-flex; gap: 2px; padding: 4px; border-radius: var(--r-pill); background: var(--paper-1); }
+.seg__btn { display: inline-flex; align-items: center; min-height: 44px; padding: 0 1rem; border-radius: var(--r-pill);
+  color: var(--ink-2); font: 500 .86rem/1 var(--f-text); white-space: nowrap;
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease-out); }
+.seg__btn:hover { background: var(--paper-3); color: var(--ink); }
+.seg__btn[aria-pressed="true"] { background: var(--ink); color: var(--void); }
+.seg__btn:active { transform: scale(.97); transition-duration: 90ms; }
+.seg__btn:disabled { color: var(--ink-3); background: none; cursor: not-allowed; transform: none; }
+.sky[aria-busy="true"] .seg__btn { cursor: progress; }
+.sky__state { font: 500 .74rem/1.4 var(--f-mono); letter-spacing: .03em; color: var(--ink-3); }
+.sky__state[data-kind="error"] { color: var(--hot); }
+
+.sky__edge { position: relative; display: inline-flex; align-items: center; gap: .3rem; margin-left: auto;
+  min-height: 44px; padding: 0 .55rem 0 .9rem; border-radius: var(--r-pill); background: var(--paper-2); color: var(--ink);
+  font: 600 .7rem/1 var(--f-mono); letter-spacing: .12em; text-transform: uppercase;
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease-out); }
+/* a riposo è solo il segno: «adesso» è la linea rossa sul bordo destro della mappa, lì nascono le stelle nuove */
+.sky__edge:disabled::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--hot); }
+.sky__edge:hover { background: var(--paper-3); }
+.sky__edge:active { transform: scale(.97); transition-duration: 90ms; }
+.sky__edge:disabled { background: none; color: var(--hot); cursor: default; transform: none; }   /* a riposo è solo il segno */
+.sky__edge svg { width: 14px; height: 14px; }
+.sky__edge:disabled svg { display: none; }
+@media (max-width: 640px) { .seg { flex: 1 1 auto; } .seg__btn { flex: 1; justify-content: center; padding: 0 .7rem; } }

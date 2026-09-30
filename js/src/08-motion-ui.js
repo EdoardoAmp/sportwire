@@ -152,5 +152,28 @@ const motion = (() => {
     addEventListener("beforeprint", () => { canvas.style.clipPath = ""; }, { once: true });
   }
 
-  return { on, entrance, sheetIn, sheetOut, step, finderIn, pop, peek, fresh, filtered, box, reset, stars };
+  /* — il cielo cambia finestra (12 ore / tutta l'edizione): ogni stella scivola dalla posizione di prima alla nuova
+       con una molla (FLIP: si misura prima e dopo, si anima solo il transform); quelle che entrano nella finestra
+       compaiono. Si animano solo le stelle dentro la vista: le altre non si vedono. Con «riduci movimento» la mappa
+       si ridisegna con una dissolvenza di 0,2 s. — */
+  function glide(recs, before, stage, canvas) {
+    if (calm) { go(canvas, { opacity: [0.35, 1] }, {}); return; }
+    if (!on || !recs.length) return;
+    const sr = stage.getBoundingClientRect();
+    recs.forEach((r, i) => {
+      const q = r.el.getBoundingClientRect(), x = q.left + q.width / 2, y = q.top + q.height / 2;
+      if (x < sr.left - 60 || x > sr.right + 60) return;
+      const cs = getComputedStyle(r.el), end = cs.transform === "none" ? "" : cs.transform;
+      const was = before.get(r.s.id);
+      if (was) {
+        go(r.el, { transform: [`translate(${(was[0] - x).toFixed(1)}px, ${(was[1] - y).toFixed(1)}px) ${end}`, end || "none"] },
+          { ...spring(0.5, 0.16), delay: Math.min(i, 40) * 0.004 });
+      } else {
+        go(r.el, { opacity: [0, cs.opacity], transform: [`scale(.3) ${end}`, end || "none"] }, { ...spring(0.45, 0.2), delay: 0.12 });
+      }
+    });
+    go($$(".sky__tick, .sky__now", canvas), { opacity: [0, 1] }, { duration: 0.3, ease: [0.23, 1, 0.32, 1] });
+  }
+
+  return { on, entrance, sheetIn, sheetOut, step, finderIn, pop, peek, fresh, filtered, box, reset, stars, glide };
 })();
