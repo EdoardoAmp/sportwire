@@ -31,7 +31,7 @@
       if (chips.scrollWidth > chips.clientWidth) chips.scrollTo({ left: btn.offsetLeft - chips.clientWidth / 2 + btn.offsetWidth / 2, behavior: reduce ? "auto" : "smooth" });
       withVT(() => {
         let shown = 0;
-        items.forEach((n) => { const on = f === "*" || n.dataset.k === f; n.hidden = !on; if (on) shown++; });
+        items.forEach((n) => { const on = f === "*" || (f === "__mine" ? n.classList.contains("is-mine") : n.dataset.k === f); n.hidden = !on; if (on) shown++; });
         if (empty) empty.hidden = shown > 0;
       });
     });

@@ -313,6 +313,28 @@ def function_checks(browser) -> int:
             pg.goto(BASE + "/index.html", wait_until="networkidle")
             pg.wait_for_timeout(500)
 
+        # le tue squadre: dal profilo vuoto alla scelta, poi le notizie in cima (tutto in localStorage)
+        pg.evaluate("localStorage.clear()")
+        pg.goto(BASE + "/index.html", wait_until="networkidle")
+        pg.wait_for_timeout(500)
+        fs = pg.evaluate("() => { const b = document.querySelector('[data-follow]'); return b ? { hidden: b.hidden, chips: b.querySelectorAll('[data-follow-toggle]').length } : null; }")
+        check(bool(fs) and not fs["hidden"] and fs["chips"] > 0, "", f"{tag}squadre: nessun invito a scegliere chi seguire ({fs})", out)
+        if fs and fs["chips"]:
+            pg.evaluate("document.querySelector('[data-follow]').scrollIntoView({block: 'center', behavior: 'instant'})")
+            pg.click("[data-follow] [data-follow-toggle]")
+            pg.wait_for_timeout(200)
+            pg.click("[data-follow-done]")
+            pg.wait_for_timeout(300)
+            n_items = pg.evaluate("document.querySelectorAll('[data-follow] .follow__item').length")
+            saved = pg.evaluate("(JSON.parse(localStorage.getItem('sw:squadre:v1') || '{}').list || []).length")
+            check(n_items > 0 and saved == 1, "", f"{tag}squadre: dopo la scelta {n_items} notizie in cima, {saved} nomi salvati", out)
+            pg.reload(wait_until="networkidle")
+            pg.wait_for_timeout(500)
+            check(pg.evaluate("document.querySelectorAll('[data-follow] .follow__item').length") > 0, "", f"{tag}squadre: la scelta non resta dopo il ricaricamento", out)
+        pg.evaluate("localStorage.clear()")
+        pg.goto(BASE + "/index.html", wait_until="networkidle")
+        pg.wait_for_timeout(500)
+
         # dossier dal click su una notizia
         link = pg.query_selector("a[data-story]:visible")
         sid = link.get_attribute("data-story") if link else None

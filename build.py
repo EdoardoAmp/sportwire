@@ -203,8 +203,11 @@ def parse_feed(src: str, raw: bytes) -> list[dict]:
     return out
 
 
+RAW_OVERRIDE = ""       # --raw: prove su dati grezzi di un'altra ora (solo lettura)
+
+
 def collect(offline: bool = False) -> list[dict]:
-    path = os.path.join(ROOT, "data", "raw.json")
+    path = RAW_OVERRIDE or os.path.join(ROOT, "data", "raw.json")
     if offline:
         with open(path, encoding="utf-8") as fh:
             return json.load(fh)
@@ -435,10 +438,45 @@ def tokens(title: str) -> set[str]:
     return {stem(w) for w in norm_key(title).split() if len(w) > 2 and w not in STOP and not w.isdigit()}
 
 
+# Squadre e paesi di più parole: diventano una parola sola, così «Repubblica Ceca-Inghilterra» non è la partita
+# «Repubblica-Ceca» e «San Marino-Albania» non è «Marino-Albania». Le forme lunghe dei club diventano quella corta
+# che usano i titoli («Real Madrid-Barcellona» e «Real-Barcellona» sono la stessa partita).
+COMPOUNDS = [(re.compile(rx, re.I), to) for rx, to in [
+    (r"\brep(?:ubblica|\.)[\s-]+ceca\b", "Cechia"), (r"\bsan[\s-]+marino\b", "Sanmarino"),
+    (r"\b(?:isole[\s-]+)?f(?:a|æ)r(?:\s|-)?o(?:e|ë)r\b", "Faroer"), (r"\bisole[\s-]+faroe?\b", "Faroer"),
+    (r"\bmacedonia[\s-]+del[\s-]+nord\b", "Macedonia"), (r"\birlanda[\s-]+del[\s-]+nord\b", "Nordirlanda"),
+    (r"\bbosnia[\s-]+(?:ed?[\s-]+)?erzegovina\b", "Bosnia"), (r"\bcosta[\s-]+d['’]avorio\b", "Costadavorio"),
+    (r"\barabia[\s-]+saudita\b", "Arabia"), (r"\bnuova[\s-]+zelanda\b", "Nuovazelanda"),
+    (r"\bstati[\s-]+uniti\b", "Usa"), (r"\bcorea[\s-]+del[\s-]+sud\b", "Corea"), (r"\blas[\s-]+vegas\b", "Lasvegas"),
+    (r"\breal[\s-]+madrid\b", "Real"), (r"\batl[eé]tico[\s-]+madrid\b", "Atletico"),
+    (r"\bparis[\s-]+saint[\s-]+germain\b", "Psg"), (r"\bbayern[\s-]+(?:monaco|m[uü]nchen)\b", "Bayern"),
+    (r"\bborussia[\s-]+dortmund\b", "Dortmund"), (r"\bmanchester[\s-]+city\b", "City"),
+    (r"\bmanchester[\s-]+united\b", "United"), (r"\baston[\s-]+villa\b", "Villa"), (r"\bhellas[\s-]+verona\b", "Verona"),
+    (r"\bolimpia[\s-]+milano\b", "Milano"), (r"\bvirtus[\s-]+(?:segafredo[\s-]+)?bologna\b", "Virtus"),
+]]
+FIX_RX = re.compile(r"\b([A-ZÀ-Ú][\wà-ú’']{2,})\s?[-–]\s?([A-ZÀ-Ú][\wà-ú’']{2,})\b")
+
+
+def compound(title: str) -> str:
+    for rx, to in COMPOUNDS:
+        title = rx.sub(to, title)
+    return title
+
+
 def fixture(title: str) -> str:
     """"Turchia-Italia", "Inter - Cagliari" → chiave della partita; i punteggi (101-93) non contano."""
-    m = re.search(r"\b([A-ZÀ-Ú][\wà-ú’']{2,})\s?[-–]\s?([A-ZÀ-Ú][\wà-ú’']{2,})\b", title)
+    m = FIX_RX.search(compound(title))
     return f"{norm_key(m.group(1))}|{norm_key(m.group(2))}" if m else ""
+
+
+def team_words(title: str) -> set:
+    return set(norm_key(compound(title)).split())
+
+
+# «I risultati di martedì», «tutti i gol della serata»: articoli che parlano di più partite insieme. Entrano nella
+# storia più vicina ma non ne diventano mai il titolo.
+ROUNDUP_RX = re.compile(r"\b(i risultati|risultati di|tutti i gol|tutti i risultati|la giornata di|il punto sul|"
+                        r"classifica(?:he)? de[il] giron)", re.I)
 
 
 def names(title: str) -> set[str]:
@@ -504,6 +542,18 @@ def cluster(items: list[dict]) -> list[dict]:
         it["tok"] = tokens(it["title"])
         it["fx"] = fixture(it["title"])
         it["names"] = names(it["title"])
+    # Titoli senza trattino che nominano le due squadre di una partita già vista («poker della Spagna alla Croazia»):
+    # sono quella partita. Se ne nominano due o più, è un riepilogo.
+    seen_fx = Counter(i["fx"] for i in items if i["fx"])
+    known = {f for f, n in seen_fx.items() if n >= 2}       # partite vere, raccontate da almeno due articoli
+    for it in items:
+        words = team_words(it["title"])
+        hits = sorted(f for f in known if set(f.split("|")) <= words)
+        # squadre di altre partite nominate nel titolo («… Inghilterra sbanca a Praga»): parla di più incontri
+        others = {t for f in known if f not in hits for t in f.split("|")} & words
+        it["multi"] = len(hits) >= 2 or bool(hits and others) or bool(ROUNDUP_RX.search(it["title"]))
+        if not it["fx"] and len(hits) == 1:
+            it["fx"] = hits[0]
     # un nome è "raro" se compare in pochi titoli: Sinner no (è ovunque), McNulty sì
     df = Counter(n for it in items for n in it["names"])
     RARE_NAMES.clear()
@@ -528,8 +578,8 @@ def cluster(items: list[dict]) -> list[dict]:
             stories.remove(st)
     for st in stories:
         its = st["items"]
-        # rappresentante: foto migliore, poi sommario, poi il più recente
-        rep = max(its, key=lambda i: (SRC_IMGQ[i["src"]] if i["image"] else -1, bool(i["summary"]), i["ts"]))
+        # rappresentante: mai un riepilogo di più partite se c'è altro; poi foto migliore, sommario, il più recente
+        rep = max(its, key=lambda i: (not i.get("multi"), SRC_IMGQ[i["src"]] if i["image"] else -1, bool(i["summary"]), i["ts"]))
         first = min(its, key=lambda i: (i["ts"], i["id"]))
         st.update({
             "id": first["id"],                 # la storia si chiama come il suo primo articolo: non cambia se ne arrivano altri
@@ -699,6 +749,8 @@ def write_pwa(ver: dict) -> None:
            "img/stars-a.svg", "img/stars-b.svg"] + [f"fonts/{f}" for f in fonts]
     build_id = hashlib.sha1((ver["css"] + ver["js"] + "".join(pre)).encode()).hexdigest()[:8]
     sw = SW_TEMPLATE.replace("__BUILD__", build_id).replace("__PRECACHE__", json.dumps(pre))
+    if OUT_ROOT:
+        return                                  # prove: service worker e manifest restano quelli del sito
     write_if_changed(os.path.join(ROOT, "sw.js"), sw)
     manifest = {
         "name": "Sportwire", "short_name": "Sportwire", "lang": "it",
@@ -769,8 +821,12 @@ def load_briefs() -> dict:
 
 
 # ================================================================ build
+OUT_ROOT = ""           # --out: prove in una cartella a parte (il sito resta com'è)
+
+
 def write(rel: str, content: str) -> None:
-    path = os.path.join(ROOT, rel)
+    path = os.path.join(OUT_ROOT or ROOT, rel)
+    os.makedirs(os.path.dirname(path), exist_ok=True)
     changed = write_if_changed(path, content)
     print(f"  {'scritto' if changed else 'invariato'} {rel} ({len(content) // 1024} KB)")
 
@@ -780,9 +836,9 @@ def item_payload(i: dict) -> dict:
             "ts": i["ts"], "summary": i["summary"]}
 
 
-def build(offline: bool = False) -> int:
+def build(offline: bool = False, now: datetime | None = None) -> int:
     print("Sportwire · build")
-    now = datetime.now(TZ)
+    now = now or datetime.now(TZ)
     ver = {"css": bundle("css"), "js": bundle("js")}
     raw = collect(offline)
 
@@ -850,14 +906,24 @@ def build(offline: bool = False) -> int:
                 break
         return out
 
-    hero = (take(by_score[:4], 1, need_image=True) or take(by_score, 1))[0]
-    top = take(by_score, 6, need_image=True)
+    # I video (highlights, clip) non si possono riassumere e di notte Sky ne pubblica a decine: in prima pagina passano
+    # dopo i testi. Nel registro di bordo si raccolgono in una riga sola invece di occupare otto voci su dodici.
+    words = [s for s in by_score if not s["video"]]
+    words_t = [s for s in by_time if not s["video"]]
+    hero = (take(words[:4], 1, need_image=True) or take(by_score[:4], 1, need_image=True) or take(by_score, 1))[0]
+    top = take(words, 6, need_image=True)
+    top += take(words, 6 - len(top))
     top += take(by_score, 6 - len(top))
-    live = take(by_time, 12)
+    live = take(words_t, 12)
+    cutoff = live[-1]["ts"] if len(live) == 12 else ""
+    clips = [s for s in by_time if s["video"] and id(s) not in used and s["ts"] >= cutoff][:12]
+    for s in clips:
+        used.add(id(s))
     blocks = []
     for k in SEC_ORDER:
-        lead = take(by_score, 1, need_image=True, cat=k)
-        rest = take(by_time, 4, cat=k)
+        lead = take(words, 1, need_image=True, cat=k) or take(by_score, 1, need_image=True, cat=k)
+        rest = take(words_t, 4, cat=k)
+        rest += take(by_time, 4 - len(rest), cat=k)
         if lead or rest:
             blocks.append((k, lead, rest))
 
@@ -872,7 +938,7 @@ def build(offline: bool = False) -> int:
     desc = (f"{hero['title']} — e altre {len(stories) - 1} notizie sportive di oggi da Gazzetta, "
             f"Corriere dello Sport, Tuttosport, Sky Sport, ANSA e OA Sport, riscritte in breve.")
     write("index.html", R.page(ctx, rel="index.html", title="Sportwire · il cielo dello sport di oggi",
-                               description=desc, body=R.home_body(ctx, hero, top, live, blocks),
+                               description=desc, body=R.home_body(ctx, hero, top, live, blocks, clips),
                                active="index", og_image=hero["image"]))
 
     for k in SEC_ORDER:
@@ -892,7 +958,7 @@ def build(offline: bool = False) -> int:
                                     body=R.history_body(ctx), active="cronologia", og_image=hero["image"],
                                     noindex=True))
 
-    home_ids = {id(s) for s in [hero] + top + live + [x for _k, a, b in blocks for x in a + b]}
+    home_ids = {id(s) for s in [hero] + top + live + [x for _k, a, b in blocks for x in a + b]}   # i video raccolti no
     data = {
         "generated": now.isoformat(), "window_hours": window,
         "counts": {k: sec_counts.get(k, 0) for k in SEC_ORDER},
@@ -917,4 +983,12 @@ def build(offline: bool = False) -> int:
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--no-fetch", action="store_true", help="usa data/raw.json invece della rete")
-    sys.exit(build(offline=ap.parse_args().no_fetch))
+    ap.add_argument("--raw", default="", help="(prove) dati grezzi da un altro file; implica --no-fetch")
+    ap.add_argument("--now", default="", help="(prove) ora dell'edizione, ISO 8601")
+    ap.add_argument("--out", default="", help="(prove) scrive pagine e dati in questa cartella invece che nel sito")
+    a = ap.parse_args()
+    if a.raw:
+        RAW_OVERRIDE = os.path.abspath(a.raw)
+    if a.out:
+        OUT_ROOT = os.path.abspath(a.out)
+    sys.exit(build(offline=a.no_fetch or bool(a.raw), now=datetime.fromisoformat(a.now) if a.now else None))

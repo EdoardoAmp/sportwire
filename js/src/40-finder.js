@@ -91,6 +91,7 @@ const finder = (() => {
     if (!toks.length) {
       const seen = new Set();
       const recent = store.log().filter((e) => !seen.has(e.id) && seen.add(e.id)).slice(0, 4).map((e) => getStory(e.id)).filter(Boolean);
+      const mineS = follow.stories().filter((s) => !seen.has(s.id) && seen.add(s.id)).slice(0, 4);
       const top = allStories().filter((s) => !seen.has(s.id)).sort((a, b) => (b.score || 0) - (a.score || 0)).slice(0, 6);
       let i = 0;
       const group = (label, arr) => {
@@ -98,7 +99,7 @@ const finder = (() => {
         results.push(...arr);
         return `<p class="finder__group">${label}</p>` + arr.map((s) => hitHtml(s, i++, [])).join("");
       };
-      html = group("Le tue ultime letture", recent) + group("In apertura", top);
+      html = group("Le tue ultime letture", recent) + group("Le tue squadre", mineS) + group("In apertura", top);
       if (!NEWS.ready) html += '<p class="finder__empty">Carico le notizie…</p>';
     } else {
       const stories = allStories();
@@ -152,7 +153,9 @@ const finder = (() => {
     isOpen = false;
     el.classList.remove("is-open");
     modal.unlock();
-    if (!skipFocus && lastFocus && document.contains(lastFocus)) lastFocus.focus({ preventScroll: true });
+    if (!skipFocus && lastFocus && lastFocus !== document.body && document.contains(lastFocus)) lastFocus.focus({ preventScroll: true });
+    /* il focus non deve restare nel campo nascosto: il «/» dopo finirebbe scritto lì invece di riaprire la ricerca */
+    if (el.contains(document.activeElement)) document.activeElement.blur();
   }
   return { open: openIt, close, isOpen: () => isOpen };
 })();

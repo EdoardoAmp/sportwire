@@ -22,8 +22,8 @@
 <link rel="preload" href="fonts/archivo-latin-wdth-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/geist-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <script>document.documentElement.classList.add('js')</script>
-<link rel="stylesheet" href="css/site.css?v=e87afe55">
-<script src="js/app.js?v=9c2c625e" defer></script>
+<link rel="stylesheet" href="css/site.css?v=f0a5e372">
+<script src="js/app.js?v=faf90a39" defer></script>
 </head>
 <body data-page="home">
 <a class="skip" href="#main">Vai al contenuto</a>
@@ -58,29 +58,8 @@
   </div>
 </article>
 
+<section class="follow" data-follow hidden aria-labelledby="h-follow"></section>
 <section class="resume" data-resume hidden aria-labelledby="h-resume"></section>
-  <section class="sky" data-sky hidden aria-labelledby="h-sky">
-    <div class="sec-head">
-      <div>
-        <p class="eyebrow">Mappa delle notizie</p>
-        <h2 class="h2" id="h-sky">Il cielo di oggi</h2>
-      </div>
-      <p class="sec-head__note">Ogni punto è una notizia: più è grande, più redazioni ne parlano. Da sinistra a destra
-      scorre il tempo, le corsie sono gli sport. Un punto mostra l’anteprima: cliccalo, o toccalo di nuovo, per aprirlo.</p>
-    </div>
-    <div class="sky__frame">
-      <div class="sky__stage" data-sky-stage role="group" aria-label="Le notizie di oggi disposte per sport e orario"></div>
-      <div class="sky__peek" data-sky-peek hidden></div>
-    </div>
-    <ul class="sky__legend" aria-hidden="true">
-      <li><i class="key key--star"></i>notizia</li>
-      <li><i class="key key--multi"></i>più testate</li>
-      <li><i class="key key--live"></i>in diretta</li>
-      <li><i class="key key--read"></i>già letta</li>
-      <li><i class="key key--line"></i>collegate a quella scelta</li>
-    </ul>
-  </section>
-
   <div class="front">
     <section class="front__main" aria-labelledby="h-top">
       <div class="sec-head">
@@ -123,11 +102,11 @@
         <p class="meta"><span class="meta__src">Sky Sport</span><time datetime="2026-09-30T03:00:00+02:00" data-rel>03:00</time><span class="meta__more" title="Ne scrivono anche: ANSA">+1 testata</span></p>
       </div>
     </article>
-<article class="card" data-hit data-id="bc558856" data-k="nazionali" data-c="calcio">
+<article class="card" data-hit data-id="bc558856" data-k="calcio" data-c="calcio">
       <div class="card__media media"><img src="https://sport.sky.it/assets/images/edefe2a0017dad7e1fc7e10d1fbbd0f39efd334d/skysport/it/calcio/nations-league/video/2026/09/29/1128020_1790715172637_thumb_494.0000001_1790715342233.jpg" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onload="this.classList.add('is-loaded')" onerror="this.parentNode.classList.add('no-img');this.remove()"></div>
       <div class="card__body">
-        <p class="kicker">Calcio<span class="kicker__sub">Nazionali</span></p>
-        <h3 class="card__title"><a class="stretch" href="https://sport.sky.it/calcio/nations-league/2026/09/29/nations-league-risultati-29-settembre-diretta-gol" data-story="bc558856" rel="noopener">Nations League, i risultati di martedì: vincono Inghilterra e Svizzera</a></h3>
+        <p class="kicker">Calcio</p>
+        <h3 class="card__title"><a class="stretch" href="https://sport.sky.it/calcio/nations-league/video/2026/09/29/repubblica-ceca-inghilterra-gol-highlights-1128020" data-story="bc558856" rel="noopener">Repubblica Ceca-Inghilterra 0-2: gol e highlights</a></h3>
         <p class="brief brief--own ">L&#x27;Inghilterra di Tuchel si riscatta a Praga: 2-0 alla Repubblica Ceca in Nations League dopo il ko interno con la Spagna. Gordon sblocca alla fine del primo tempo, con i cechi in dieci dal 23&#x27; per l&#x27;espulsione di Sulc, e Kane firma il raddoppio nella ripresa.</p>
         <p class="meta"><span class="meta__src">Sky Sport</span><time datetime="2026-09-30T00:55:41+02:00" data-rel>00:55</time><span class="meta__more" title="Ne scrivono anche: ANSA">+1 testata</span></p>
       </div>
@@ -245,8 +224,31 @@
         </div>
       </li>
       </ol>
+      
     </aside>
   </div>
+  <section class="sky" data-sky hidden aria-labelledby="h-sky">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">Mappa delle notizie</p>
+        <h2 class="h2" id="h-sky">Il cielo di oggi</h2>
+      </div>
+      <p class="sec-head__note">Ogni punto è una notizia: più è grande, più redazioni ne parlano. Da sinistra a destra
+      scorre il tempo, le corsie sono gli sport. Un punto mostra l’anteprima: cliccalo, o toccalo di nuovo, per aprirlo.</p>
+    </div>
+    <div class="sky__frame">
+      <div class="sky__stage" data-sky-stage role="group" aria-label="Le notizie di oggi disposte per sport e orario"></div>
+      <div class="sky__peek" data-sky-peek hidden></div>
+    </div>
+    <ul class="sky__legend" aria-hidden="true">
+      <li><i class="key key--star"></i>notizia</li>
+      <li><i class="key key--multi"></i>più testate</li>
+      <li><i class="key key--live"></i>in diretta</li>
+      <li><i class="key key--read"></i>già letta</li>
+      <li><i class="key key--line"></i>collegate a quella scelta</li>
+    </ul>
+  </section>
+
   <div class="blocks">
     <section class="block" aria-labelledby="h-calcio">
       <div class="block__head">
@@ -425,14 +427,6 @@
           <p class="meta"><span class="meta__src">Sky Sport</span><time datetime="2026-09-30T11:20:00+02:00" data-rel>11:20</time></p>
         </div>
       </li>
-      <li class="row" data-hit data-id="21516964" data-k="wnba" data-c="basket">
-        <div class="row__body">
-          <p class="kicker">WNBA</p>
-          <h3 class="row__title"><a class="stretch" href="https://sport.sky.it/nba/video/2026/09/30/playoff-wnba-indiana-las-vegas-gara-2-99-89-1128045" data-story="21516964" rel="noopener">Playoff WNBA, Indiana-Las Vegas gara-2 99-89</a></h3>
-          
-          <p class="meta"><span class="meta__src">Sky Sport</span><time datetime="2026-09-30T10:55:11+02:00" data-rel>10:55</time><span class="meta__video">Video</span></p>
-        </div>
-      </li>
       <li class="row" data-hit data-id="b00f9201" data-k="wnba" data-c="basket">
         <div class="row__body">
           <p class="kicker">WNBA</p>
@@ -447,6 +441,14 @@
           <h3 class="row__title"><a class="stretch" href="https://sport.sky.it/basket/video/2026/09/30/venezia-francoforte-highlights-eurocup-1128037" data-story="11c5c598" rel="noopener">Venezia-Francoforte 104-72: highlights Eurocup</a></h3>
           <p class="brief brief--own ">Comincia l&#x27;Eurocup, 32 squadre e sei italiane al via: Trento conquista i primi due punti passando 73-76 sul campo del Neptunas Klaipeda, mentre Venezia travolge in casa la Francoforte.</p>
           <p class="meta"><span class="meta__src">Sky Sport</span><time datetime="2026-09-30T10:09:15+02:00" data-rel>10:09</time></p>
+        </div>
+      </li>
+      <li class="row" data-hit data-id="799b2b8c" data-k="basket" data-c="basket">
+        <div class="row__body">
+          <p class="kicker">Basket</p>
+          <h3 class="row__title"><a class="stretch" href="https://www.gazzetta.it/Basket/SerieA/30-09-2026/basket-i-fratelli-attard-tre-arbitri-in-serie-a-esordio-di-luca-la-chiave-divertirsi.shtml" data-story="799b2b8c" rel="noopener">Incredibile Attard, tre fratelli arbitri di basket. In A arriva anche Luca: «E pure papà...»</a></h3>
+          <p class="brief brief--own ">Tre fratelli Attard di Priolo Gargallo, in provincia di Siracusa, arbitrano in Serie A di basket: Beniamino Manuel, arbitro dell&#x27;anno LBA, Marco, esordiente un anno fa, e il gemello Luca, promosso dalla A2 e al debutto sabato al Taliercio in Venezia-Cantù.</p>
+          <p class="meta"><span class="meta__src">Gazzetta</span><time datetime="2026-09-30T08:57:54+02:00" data-rel>08:57</time></p>
         </div>
       </li>
         </ul>
@@ -567,7 +569,7 @@
       <div><p class="foot__label">Questa edizione</p>
       <p class="foot__meta">188 notizie · ultime 36 ore<br>
       <span class="stamp"><span class="pulse" aria-hidden="true"></span>aggiornata alle
-      <time datetime="2026-09-30T12:37:32.209272+02:00" data-stamp>12:37</time></span><br>
+      <time datetime="2026-09-30T12:38:08.998754+02:00" data-stamp>12:38</time></span><br>
       Mercoledì 30 settembre 2026</p></div>
     </div>
   </div>

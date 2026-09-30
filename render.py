@@ -12,7 +12,7 @@ import html
 import math
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import Tuple
+from typing import Optional, Tuple
 from zoneinfo import ZoneInfo
 
 TZ = ZoneInfo("Europe/Rome")
@@ -245,7 +245,21 @@ def sky_html(ctx: Ctx) -> str:
 """
 
 
-def home_body(ctx: Ctx, hero: dict, top: list, live: list, blocks: list) -> str:
+def clips_html(clips: list, ctx: Ctx) -> str:
+    """I video dello stesso periodo del registro, raccolti in una riga che si apre (senza JavaScript: <details>)."""
+    if not clips:
+        return ""
+    items = "".join(
+        f'<li data-hit {attrs(s)}><a href="{esc(s["link"])}" data-story="{esc(s["id"])}" rel="noopener">{esc(s["title"])}</a>'
+        f'<span class="clips__src">{esc(s["src_name"])} · {esc(dt(s).strftime("%H:%M"))}</span></li>' for s in clips)
+    n = len(clips)
+    return f"""<details class="clips">
+        <summary><span class="clips__icon" aria-hidden="true">▶</span>{n} video di highlights e clip <span class="clips__hint">mostra</span></summary>
+        <ul class="clips__list">{items}</ul>
+      </details>"""
+
+
+def home_body(ctx: Ctx, hero: dict, top: list, live: list, blocks: list, clips: Optional[list] = None) -> str:
     blocks_html = []
     for k, lead, rest in blocks:
         title = dict(ctx.sections)[k]
@@ -266,8 +280,8 @@ def home_body(ctx: Ctx, hero: dict, top: list, live: list, blocks: list) -> str:
     return f"""<p class="brief-line"><strong>{ctx.n_stories} notizie</strong> nelle ultime {ctx.window} ore da {ctx.n_sources} redazioni ·
   {ctx.n_multi} raccontate da più testate · <span class="brief-line__own">{ctx.n_own} riassunte da Sportwire</span></p>
 {lead_html(hero, ctx)}
+<section class="follow" data-follow hidden aria-labelledby="h-follow"></section>
 <section class="resume" data-resume hidden aria-labelledby="h-resume"></section>
-{sky_html(ctx)}
   <div class="front">
     <section class="front__main" aria-labelledby="h-top">
       <div class="sec-head">
@@ -284,8 +298,10 @@ def home_body(ctx: Ctx, hero: dict, top: list, live: list, blocks: list) -> str:
       <ol class="logbook">
       {chr(10).join(log_html(s, ctx) for s in live)}
       </ol>
+      {clips_html(clips or [], ctx)}
     </aside>
   </div>
+{sky_html(ctx)}
   <div class="blocks">
 {chr(10).join(blocks_html)}
   </div>

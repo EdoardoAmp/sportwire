@@ -120,7 +120,7 @@ const reader = (() => {
      «in arrivo» solo se il cron la riscriverà davvero; per dirette e video si dice perché non c'è. */
   const NOTE = {
     own: "Riassunto scritto da Sportwire leggendo le testate che ne parlano. Per i dettagli c’è l’articolo originale.",
-    wait: "Il riassunto di Sportwire è in coda: si scrivono ogni ora, prima le notizie in prima pagina. Intanto c’è il sommario della testata.",
+    wait: "Il riassunto di Sportwire è in coda: si scrivono due volte l’ora, prima le notizie in prima pagina. Intanto c’è il sommario della testata.",
     skip: "Per questa notizia basta il sommario della testata: l’articolo non aggiunge altro da riassumere.",
     live: "È una diretta: cambia di minuto in minuto, quindi non si riassume finché non è finita. Seguila sulla testata.",
     video: "È un video: si guarda sulla testata.",
@@ -147,6 +147,7 @@ const reader = (() => {
         <a class="btn btn--primary" href="${esc(s.link)}" target="_blank" rel="noopener" data-visit>${watch ? "Guarda" : s.live ? "Segui" : "Leggi"} su ${esc(s.source || "la testata")} ${ICON_OUT}</a>
         <button type="button" class="btn btn--quiet" data-listen data-text="${s.brief || s.summary ? "1" : ""}" aria-pressed="false" hidden>${ICON_PLAY}<span>Ascolta</span></button>
       </div>
+      ${follow.chips(s)}
       ${chrono(s)}${related(s)}
     </div>`;
     scroller.scrollTop = 0;

@@ -1,0 +1,37 @@
+/* Le tue squadre: invito, scelta, notizie di chi segui (tutto in localStorage) */
+.follow { margin-top: clamp(2rem, 5vw, 3.5rem); padding: clamp(1rem, 2.4vw, 1.5rem); border-radius: var(--r-3); background: var(--paper-1);
+  box-shadow: inset 0 0 0 1px oklch(0.80 0.155 68 / .16); }
+.follow__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: .4rem 1.25rem; }
+.follow__title { font: 800 1.5rem/1 var(--f-display); font-stretch: 78%; }
+.follow__title::before { content: "★"; margin-right: .4em; color: var(--accent); font-size: .78em; vertical-align: .08em; }
+.follow__note { flex: 1 1 20rem; color: var(--ink-3); font: 500 .76rem/1.5 var(--f-mono); letter-spacing: .03em; }
+.follow__note b { color: var(--accent); font-weight: 600; }
+.follow__link { display: inline-flex; align-items: center; min-height: 44px; padding: 0 .35rem; border-radius: var(--r-pill); background: none;
+  color: var(--ink-2); font: 500 .76rem/1 var(--f-mono); letter-spacing: .06em; transition: color var(--t-fast); }
+.follow__link:hover { color: var(--accent); }
+.follow__chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.1rem; }
+.chip--follow[aria-pressed="true"], .chip--mine[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
+.chip__star { margin-right: .45em; color: var(--accent); font-size: .92em; }
+:is(.chip--follow, .chip--mine)[aria-pressed="true"] .chip__star { color: inherit; }
+.follow__add { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .9rem; }
+.follow__input { flex: 1 1 9rem; min-width: 0; min-height: 46px; padding: 0 1.15rem; border: 0; border-radius: var(--r-pill); background: var(--paper-2);
+  color: var(--ink); font: 500 .95rem/1 var(--f-text); }
+.follow__input::placeholder { color: var(--ink-3); }
+.follow__input::-webkit-calendar-picker-indicator { display: none !important; }   /* datalist: niente freccia da menu a tendina */
+.follow__input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.follow__foot { display: flex; justify-content: flex-end; margin-top: 1rem; }
+.follow__list { display: grid; gap: .5rem; margin-top: 1rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); }
+.follow__item { position: relative; display: flex; flex-direction: column; gap: .35rem; padding: .85rem 1rem; border-radius: var(--r-2);
+  background: var(--paper-2); transition: background var(--t-fast), transform var(--t-fast) var(--ease-out); }
+.follow__item:hover { background: var(--paper-3); }
+.follow__item:active { transform: scale(.985); }
+.follow__t { font: 700 1rem/1.22 var(--f-display); font-stretch: 88%; color: var(--ink); text-wrap: balance; }
+.meta__own { color: var(--accent); }
+
+/* ★ accanto all'occhiello delle notizie di chi segui, in tutte le pagine */
+.is-mine .kicker::before { content: "★"; margin-right: .55em; color: var(--accent); letter-spacing: 0; }
+.follow .is-mine .kicker::before { content: none; }
+
+/* nel dossier: segui chi compare nella notizia */
+.follow-chips { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
+.follow-chips__label { margin-right: .25rem; font: 500 .72rem/1 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }

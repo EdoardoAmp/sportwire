@@ -8,19 +8,21 @@ Nessun account, nessun cookie, nessun tracker: la cronologia vive solo nel `loca
 Non ripubblica articoli: mostra titoli, sommari, miniature e un riassunto originale di 1-2 frasi; ogni notizia rimanda
 all'articolo sul sito della testata.
 
-## Le tre cose
+## Le quattro cose
 
 | | Come funziona |
 |---|---|
 | **Le notizie sono il sito** | Ogni storia si apre in un *dossier* dentro la pagina (`#/s/<id>`, indirizzo condivisibile): foto, «in breve», ora per ora delle testate che la raccontano, storie collegate. Frecce, `j`/`k` o uno swipe sul telefono per scorrere, `Esc` per chiudere. La foto della scheda «vola» nel dossier (View Transitions API, solo dove il browser la offre e il movimento non è ridotto). **Ascolta** legge titolo e breve con la voce italiana del dispositivo. |
 | **La tua cronologia** | `cronologia.html`: cosa hai letto, giorno per giorno, con statistiche, la mappa delle ultime 12 settimane, ricerca, esporta (JSON) e cancella. «Riprendi da qui» in home. Solo `localStorage`. |
-| **«In breve»** | 1-2 frasi riscritte dall'agente (Hermes) con DeepSeek V4.1 Flash via OpenRouter, mai da un modello locale (niente Spark/Ollama); il modello serve solo a scrivere. `briefs.py` prepara il lavoro, **rifiuta le copie** (8 parole di fila uguali alla fonte) e pubblica. Dove non c'è un breve compare il sommario della testata, dichiarato come tale. |
+| **Le tue squadre** | Scegli chi segui (squadre, piloti, atleti, o un nome scritto a mano): le sue notizie salgono in cima alla prima pagina con una ★, nelle sezioni c'è il filtro «Le mie», nel dossier si segue con un tocco. Solo `localStorage`, come la cronologia. |
+| **«In breve»** | 1-2 frasi riscritte dall'agente (Hermes) con DeepSeek V4.1 Flash via OpenRouter, mai da un modello locale (niente Spark/Ollama); il modello serve solo a scrivere. Ogni breve arriva con le **prove**: le frasi delle fonti che lo sostengono, copiate alla lettera. `briefs.py` controlla che le prove ci siano davvero e che ogni nome, luogo e cifra del breve stia in una di loro; rifiuta anche le copie (8 parole di fila uguali alla fonte). Dove non c'è un breve compare il sommario della testata, dichiarato come tale. |
 
 ## Uso
 
 ```bash
 python3 build.py                 # scarica i feed e rigenera tutte le pagine
 python3 build.py --no-fetch      # ricostruisce dai dati salvati (data/raw.json)
+python3 build.py --raw altro.json --now 2026-09-30T04:08:00+02:00 --out /tmp/prova   # prove: un'altra ora, altrove
 python3 -m pytest -q tests       # test senza rete né browser
 python3 -m http.server 8787      # in un altro terminale…
 python3 qa.py                    # …QA nel browser (Playwright + Chrome): layout, contrasto, tap, funzioni
@@ -31,15 +33,17 @@ python3 qa.py                    # …QA nel browser (Playwright + Chrome): layo
 ```bash
 python3 briefs.py status         # quante storie hanno il breve, quante aspettano
 python3 briefs.py prepare        # → state/work.txt (testi da leggere) e state/work.json
-# l'agente scrive state/answers.json: {"<id>": "testo" | null, ...}
-python3 briefs.py apply state/answers.json    # controlla (lunghezza, tono, copie) e unisce in data/briefs.json
+# l'agente scrive state/answers.json: {"<id>": {"testo": "…", "prove": ["frase copiata dalla fonte", …]} | null, ...}
+python3 briefs.py apply state/answers.json    # controlla prove, nomi, cifre, copie, lunghezza; unisce in data/briefs.json
+                                              # (state/audit.jsonl tiene le prove di ogni breve accettato)
 python3 briefs.py publish        # ramo `briefs` + refresh del sito
 ```
 
-`briefs.py gate` è lo script del cron di Hermes (`sportwire-in-breve`, ogni ora al minuto :35, modello bloccato su
-`deepseek/deepseek-v4.1-flash` via OpenRouter): se non c'è niente di importante da scrivere stampa
+`briefs.py gate` è lo script del cron di Hermes (`sportwire-in-breve`, due volte l'ora ai minuti :05 e :35, 24 storie
+a giro, modello bloccato su `deepseek/deepseek-v4.1-flash` via OpenRouter): se non c'è niente da scrivere stampa
 `{"wakeAgent": false}` e l'agente non viene nemmeno svegliato. Il modello non è mai fidato: `apply` ricontrolla
-ogni breve contro le fonti (copie, cifre, lunghezza) qualunque cosa abbia scritto. Il ramo `briefs` lo scrive solo `publish`,
+ogni breve contro le fonti (prove, nomi, cifre, copie, lunghezza) qualunque cosa abbia scritto. `briefs.py status`
+misura anche l'attesa: minuti tra l'uscita di una notizia e il suo breve. Il ramo `briefs` lo scrive solo `publish`,
 `main` lo scrive solo il workflow: non ci sono conflitti.
 
 ## File

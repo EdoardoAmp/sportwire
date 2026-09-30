@@ -27,6 +27,7 @@ import shutil
 import subprocess
 import sys
 import time
+import unicodedata
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional, Tuple
@@ -55,8 +56,10 @@ BRANCH = "briefs"
 RULES = """COME SI SCRIVE UN «IN BREVE» (leggi prima di scrivere)
 1. Italiano, 1–2 frasi, 150–260 caratteri (spazi compresi; oltre 280 apply rifiuta), presente, tono asciutto da agenzia. Prima il fatto (chi, cosa, dove, quanto,
    quando), poi la conseguenza o il dato che ne cambia la lettura.
-2. Solo ciò che sta nei testi qui sotto. Nomi, cifre e risultati come nelle fonti (apply rifiuta i numeri che le fonti non hanno). Se le testate divergono lo dici
-   («per la Gazzetta… per Sky…») o togli il dato.
+2. Solo ciò che sta nei testi qui sotto: niente dettagli presi dalla memoria, anche se veri (lo stadio, la città, il nome del
+   torneo). Nomi, cifre e risultati come nelle fonti. Se le testate divergono lo dici («per la Gazzetta… per Sky…») o togli il dato.
+   PROVE: per ogni breve copia alla lettera da 1 a 6 frasi dei testi qui sotto che lo sostengono. Ogni nome proprio, squadra,
+   luogo e cifra del breve deve stare in una delle prove; apply lo controlla e rifiuta il breve se manca.
 3. Parole tue: mai 8 parole di fila identiche alla fonte (apply lo controlla e rifiuta). Citazioni: al massimo 5 parole.
 4. Niente enfasi, esclamazioni, «ecco», «clamoroso», domande retoriche, emoji. Niente «secondo quanto riportato» senza
    dire da chi. Probabili formazioni e pronostici restano tali («probabile», «in dubbio»).
@@ -165,7 +168,8 @@ def gather(s: Dict[str, Any]) -> Dict[str, Any]:
 
 def render_work(items: List[Dict[str, Any]], kinds: Dict[str, str]) -> str:
     out = [RULES, "", f"CARTELLA DI LAVORO: {ROOT}  (scrivi e lancia tutto qui, con questi percorsi assoluti)",
-           f"Rispondi scrivendo {STATE}/answers.json: {{\"<id>\": \"testo in breve\" | null, …}} per TUTTE le storie qui sotto.",
+           f"Rispondi scrivendo {STATE}/answers.json per TUTTE le storie qui sotto, in questo formato:",
+           '  {"<id>": {"testo": "il breve", "prove": ["frase copiata dal testo", "altra frase copiata"]}, "<id2>": null, …}',
            f"Poi:  cd {ROOT} && /usr/bin/python3 briefs.py apply {STATE}/answers.json", "=" * 78]
     for k, w in enumerate(items, 1):
         thin = "  ⚠ TESTO SCARSO: scrivi solo se titolo e sommari bastano, altrimenti null" if w["chars"] < 350 else ""
@@ -248,7 +252,165 @@ def shared_run(brief: str, source: str) -> str:
     return ""
 
 
-def check(text: str, work: Optional[Dict[str, Any]]) -> str:
+# ---------------------------------------------------------------- nomi e luoghi
+# Il controllo sulle cifre non vede i nomi: «venerdì a Parigi» passava anche se Parigi nelle fonti non c'era.
+# Ogni nome proprio del breve (parola con la maiuscola dentro la frase, sigla) deve comparire nelle fonti di QUELLA
+# storia. La prima parola di una frase si controlla solo se non è una parola comune.
+OUTLETS = {"gazzetta", "corriere", "sport", "tuttosport", "sky", "ansa", "oa", "sportwire", "rai", "dazn", "bbc",
+           "marca", "equipe", "as", "reuters"}                  # attribuzioni: «per Tuttosport», «scrive la Bbc»
+# Nomi che le fonti scrivono in un altro modo: se c'è uno qualunque della riga, vanno bene tutti.
+ALIASES = [
+    {"usa", "stati uniti", "statunitense", "statunitensi", "americano", "americana", "americani"},
+    {"juventus", "juve", "bianconeri", "bianconero"}, {"inter", "nerazzurri", "nerazzurro"},
+    {"milan", "rossoneri", "rossonero"}, {"napoli", "partenopei", "azzurri del napoli"},
+    {"roma", "giallorossi", "giallorosso"}, {"lazio", "biancocelesti"}, {"fiorentina", "viola"},
+    {"sampdoria", "samp", "blucerchiati", "blucerchiato"}, {"torino", "granata"},
+    {"italia", "nazionale", "azzurri", "azzurre", "italiana", "italiano", "italiani"},
+    {"nazionale", "nazionali", "ct", "convocati", "convocazioni"},
+    {"federciclismo", "fci", "federazione ciclistica"}, {"figc", "federcalcio"}, {"uefa"}, {"fifa"},
+    {"premier", "premier league"}, {"liga", "laliga"},
+    {"nations", "nations league"}, {"champions", "champions league"}, {"europa league"}, {"conference", "conference league"},
+    {"serie b", "cadetteria", "della b", "in b", "la b"},
+    {"regno unito", "inghilterra", "inglese", "inglesi"}, {"argentina", "albiceleste", "argentino", "argentini"},
+]
+CONNECTIVES = set("""dopo prima anche ancora intanto invece però quindi mentre oggi ieri domani secondo questo questa
+questi queste quello quella quelli quelle altro altra altri altre ogni tutto tutta tutti tutte nessun nessuno niente
+solo appena infine inoltre così come dove quando perché nella nelle negli nel dalla dalle dagli dal alla alle agli al
+della delle degli del sulla sulle sugli sul sono resta restano arriva arrivano serve servono nessuna senza verso contro
+durante fino oltre entro circa quasi forse sempre spesso mai già più meno molto poco troppo tanto per con tra fra
+il lo la i gli le un uno una di a da in su e ed o ma che non se si ci ne c è era sarà stato stata ha hanno previsti
+previste previsto prevista circola circolano cita citano ricorda ricordano spiega spiegano parla parlano racconta
+raccontano conferma confermano annuncia annunciano emergenza nessuna nessuno bene male sì no""".split())
+_NAME_RX = re.compile(r"[^\W\d_]+(?:['’][^\W\d_]+)?")
+
+
+def fold(w: str) -> str:
+    return unicodedata.normalize("NFKD", w.lower()).encode("ascii", "ignore").decode()
+
+
+def root(w: str) -> str:
+    """Radice grezza per confrontare le forme: Milano/Milan, Clubs/Club, Nicolò/Nicolo."""
+    f = fold(w)
+    return f[:-1] if len(f) > 4 and f[-1] in "aeiouys" else f
+
+
+def common_words(news: Dict[str, Any]) -> set:
+    """Parole che nei titoli e nei sommari del giorno compaiono anche in minuscolo: sono parole comuni, non nomi."""
+    out = {fold(w) for w in CONNECTIVES}
+    for s in news.get("stories", []):
+        for txt in [s.get("title", ""), s.get("summary", "")] + [i.get("title", "") for i in s.get("items", [])]:
+            out.update(fold(w) for w in _NAME_RX.findall(txt) if w[:1].islower())
+    return out
+
+
+def _bag(text: str) -> set:
+    return {fold(w) for w in re.findall(r"[^\W\d_]+", text)}
+
+
+def _known(word: str, bag: set) -> bool:
+    """La parola c'è nel testo, anche in un'altra forma: Milano/Milan, sloveno/Slovenia, interista/Inter, Clubs/Club,
+    Nicolò/Nicolo. Stessa radice (5+ lettere) con desinenze corte; «intervista» invece non vale come «Inter»."""
+    f = fold(word)
+    if f in bag:
+        return True
+    for x in bag:
+        n = 0
+        for a, b in zip(f, x):
+            if a != b:
+                break
+            n += 1
+        tail = max(len(f), len(x)) - n
+        if (n >= 5 and len(f) - n <= 4 and len(x) - n <= 4) or (n >= 4 and tail <= 1):
+            return True
+    return False
+
+
+def proper_names(text: str, common: set) -> List[str]:
+    """Nomi propri e sigle del breve, nell'ordine in cui compaiono."""
+    out: List[str] = []
+    for m in re.finditer(r"[^\W\d_]+", text):
+        w = m.group(0)
+        if not w[:1].isupper():
+            continue
+        before = text[:m.start()].rstrip()
+        starts = not before or before[-1] in ".!?:;«“\"(" or before.endswith("...")
+        if starts and fold(w) in common:
+            continue                                         # «Intanto», «Emergenza»: parola comune a inizio frase
+        if len(w) < 3 and not w.isupper():
+            continue
+        out.append(w)
+    return out
+
+
+def _allowed(source: str, extra_ok: Optional[set]) -> set:
+    low = " " + " ".join(fold(w) for w in re.findall(r"[^\W\d_]+", source)) + " "
+    ok = OUTLETS | (extra_ok or set())
+    for group in ALIASES:
+        if any(f" {a} " in low for a in group):
+            ok |= {w for a in group for w in a.split()}
+    return ok
+
+
+def names_missing(text: str, source: str, common: set, extra_ok: Optional[set] = None) -> List[str]:
+    """Nomi del breve che nelle fonti non ci sono in nessuna forma."""
+    bag, ok = _bag(source), _allowed(source, extra_ok)
+    miss: List[str] = []
+    for w in proper_names(text, common):
+        if fold(w) in ok or _known(w, bag) or w in miss:
+            continue
+        miss.append(w)
+    return miss
+
+
+# ---------------------------------------------------------------- prove
+# Ogni breve arriva con le frasi delle fonti che lo sostengono, copiate alla lettera. apply controlla che le frasi ci
+# siano davvero e che ogni nome e ogni cifra del breve stia in una di loro: un dettaglio aggiunto a memoria («venerdì a
+# Parigi», «il Masters di Shanghai» quando la fonte dice solo Shanghai) resta senza prova e il breve torna indietro.
+PROOF_MAX, PROOFS_MAX = 420, 6
+REQUIRE_PROOFS = True
+
+
+def flat(t: str) -> str:
+    """Solo parole e cifre, senza accenti né punteggiatura: la prova si confronta parola per parola."""
+    return " " + " ".join(fold(w) for w in re.findall(r"\w+", t)) + " "
+
+
+def proof_error(text: str, proofs: Any, src: str, common: set, extra_ok: Optional[set] = None) -> str:
+    if not isinstance(proofs, list) or not proofs or not all(isinstance(p, str) for p in proofs):
+        return 'mancano le prove: scrivi {"testo": "…", "prove": ["frase copiata dalla fonte", …]}'
+    if len(proofs) > PROOFS_MAX:
+        return f"troppe prove ({len(proofs)}): al massimo {PROOFS_MAX} frasi"
+    whole = flat(src)
+    for p in proofs:
+        q = flat(p)
+        if len(q.split()) < 4:
+            return f"prova troppo corta: «{p[:40]}» (copia la frase intera, almeno 4 parole)"
+        if len(p) > PROOF_MAX:
+            return f"prova troppo lunga: «{p[:40]}…» (una frase, non un paragrafo)"
+        if q not in whole:
+            return f"questa prova non è nelle fonti, copiala alla lettera: «{p[:70]}»"
+    ev = " ".join(proofs)
+    have = numbers(ev)
+    for n in numbers(text):
+        if len(n) >= 2 and not any(n in h for h in have):
+            return (f"la cifra «{n}» non sta in nessuna prova: aggiungi la frase che la contiene"
+                    if any(n in h for h in numbers(src)) else f"il numero «{n}» non compare in nessuna fonte")
+    bag, ok = _bag(ev), _allowed(src, extra_ok)
+    src_bag = _bag(src)
+    for w in proper_names(text, common):
+        f = fold(w)
+        if f in ok or _known(w, bag):
+            continue
+        if f in common and _known(w, src_bag):
+            continue                                        # parola comune con la maiuscola (Nazionale, Giochi…)
+        if _known(w, src_bag):
+            return f"«{w}» è nelle fonti ma in nessuna prova: aggiungi la frase che lo contiene"
+        return f"«{w}» non compare in nessuna fonte: nomi, squadre e luoghi solo come nelle fonti"
+    return ""
+
+
+def check(text: str, work: Optional[Dict[str, Any]], vocab: Optional[set] = None, proofs: Any = None,
+          need_proofs: bool = False) -> str:
     t = text.strip()
     if not MIN_CH <= len(t) <= MAX_CH:
         return f"lunghezza {len(t)} (ammesso {MIN_CH}–{MAX_CH})"
@@ -272,6 +434,16 @@ def check(text: str, work: Optional[Dict[str, Any]]) -> str:
         bad = invented_number(t, src)
         if bad:
             return f"il numero «{bad}» non compare in nessuna fonte: controlla cifre, punteggi e date"
+        kick = {fold(w) for w in _NAME_RX.findall(f"{work.get('kicker', '')} {work.get('cat', '')}")}
+        common = vocab if vocab is not None else {fold(w) for w in CONNECTIVES}
+        miss = names_missing(t, src, common, kick)
+        if miss:
+            return (f"«{', '.join(miss[:3])}» non compare in nessuna fonte: nomi, squadre e luoghi solo come nelle fonti "
+                    f"(se è un'attribuzione a una testata, scrivila come nelle fonti)")
+        if need_proofs or proofs is not None:
+            err = proof_error(t, proofs, src, common, kick)
+            if err:
+                return err
     return ""
 
 
@@ -301,11 +473,17 @@ def apply(path: str) -> int:
     briefs = load(BRIEFS, {})
     ok = skipped = 0
     bad: List[Tuple[str, str]] = []
-    for sid, text in answers.items():
+    vocab = common_words(news)
+    audit: List[Dict[str, Any]] = []
+    for sid, ans in answers.items():
         s = by_id.get(sid)
         if s is None:
             bad.append((sid, "non è più in news.json"))
             continue
+        text, proofs = ans, None
+        if isinstance(ans, dict):
+            text = ans.get("testo", ans.get("text"))
+            proofs = ans.get("prove", ans.get("proofs"))
         if text is None or (isinstance(text, str) and not text.strip()):
             briefs[sid] = {"b": "", "at": now(), "n": n_sources(s), "skip": True, "v": SKIP_VER}
             skipped += 1
@@ -322,14 +500,20 @@ def apply(path: str) -> int:
             except Exception as exc:                    # noqa: BLE001
                 bad.append((sid, f"non riesco a scaricare le fonti per controllarlo ({type(exc).__name__})"))
                 continue
-        err = check(text, w)
+        err = check(text, w, vocab, proofs, need_proofs=REQUIRE_PROOFS)
         if err:
             bad.append((sid, err))
             continue
         briefs[sid] = {"b": text.strip(), "at": now(), "n": n_sources(s)}
+        audit.append({"at": briefs[sid]["at"], "id": sid, "b": text.strip(), "p": proofs or []})
         ok += 1
     prune(briefs, by_id)
     save(BRIEFS, briefs)
+    if audit:                                   # solo in locale: con quali frasi è stato giustificato ogni breve
+        log = os.path.join(STATE, "audit.jsonl")
+        old = open(log, encoding="utf-8").read().splitlines()[-3000:] if os.path.exists(log) else []
+        with open(log, "w", encoding="utf-8") as f:
+            f.write("\n".join(old + [json.dumps(a, ensure_ascii=False) for a in audit]) + "\n")
     print(f"scritti {ok} · saltati (null) {skipped} · rifiutati {len(bad)} · in archivio {len(briefs)}")
     for sid, why in bad:
         print(f"  ✗ {sid}: {why}")
@@ -462,6 +646,22 @@ def wake(todo: List[Tuple[str, Dict[str, Any]]]) -> bool:
     return sum(1 for _, s in todo if s.get("on_home")) >= WAKE_HOME or len(todo) >= WAKE_TOTAL
 
 
+def lag_minutes(s: Dict[str, Any], b: Dict[str, Any]) -> Optional[float]:
+    """Minuti tra la prima uscita della notizia e il suo «in breve»."""
+    try:
+        t0 = datetime.fromisoformat(s.get("first_ts") or s["ts"])
+        t1 = datetime.fromisoformat(b["at"])
+    except (KeyError, ValueError, TypeError):
+        return None
+    m = (t1 - t0).total_seconds() / 60
+    return m if m >= 0 else None
+
+
+def _pct(xs: List[float], q: float) -> float:
+    xs = sorted(xs)
+    return xs[min(len(xs) - 1, int(q * len(xs)))] if xs else 0.0
+
+
 def status() -> int:
     news, briefs = load(NEWS, {"stories": []}), load(BRIEFS, {})
     S = news["stories"]
@@ -471,6 +671,18 @@ def status() -> int:
     home = [s for s in S if s.get("on_home")]
     print(f"{len(S)} storie · {own} con «in breve» ({sum(1 for s in home if (briefs.get(s['id']) or {}).get('b'))}/{len(home)} in home)"
           f" · {skip} saltate · {len(todo)} in coda")
+    lags = [m for s in S for m in [lag_minutes(s, briefs.get(s["id"]) or {})] if (briefs.get(s["id"]) or {}).get("b") and m is not None]
+    home_lags = [m for s in home for m in [lag_minutes(s, briefs.get(s["id"]) or {})] if (briefs.get(s["id"]) or {}).get("b") and m is not None]
+    if lags:
+        print(f"attesa del breve dall'uscita della notizia: mediana {_pct(lags, .5):.0f} min · 90% entro {_pct(lags, .9):.0f} min"
+              + (f" · prima pagina: mediana {_pct(home_lags, .5):.0f} min" if home_lags else ""))
+    try:
+        gen = datetime.fromisoformat(news["generated"])
+        ages = [(gen - datetime.fromisoformat(s.get("first_ts") or s["ts"])).total_seconds() / 60 for _, s in todo]
+        if ages:
+            print(f"in coda da: mediana {_pct(ages, .5):.0f} min · la più vecchia {max(ages):.0f} min")
+    except (KeyError, ValueError, TypeError):
+        pass
     return 0
 
 

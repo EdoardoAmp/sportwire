@@ -131,7 +131,7 @@ def test_check_brief(text, ok):
     assert (briefs.check(text, SRC_WORK) == "") is ok
 
 
-NUM_WORK = {"title": "Trento vince in Lituania", "summary": "", "extra": [],
+NUM_WORK = {"title": "Trento vince in Lituania", "summary": "", "extra": [], "kicker": "Eurocup",
             "texts": [{"source": "X", "text": "La Dolomiti Energia ha battuto il Neptunas 73-76 con 22 punti di Olivari, il 24esimo successo "
                                               "europeo della stagione, e la stagione 2026/2027 è appena cominciata."}]}
 
@@ -145,6 +145,55 @@ NUM_WORK = {"title": "Trento vince in Lituania", "summary": "", "extra": [],
 ])
 def test_check_numbers_must_come_from_the_source(text, ok):
     assert (briefs.check(text, NUM_WORK) == "") is ok
+
+
+# ------------------------------------------------------------------ nomi e prove
+NAME_WORK = {"title": "Musetti salta Tokyo", "summary": "Frattura all'anulare destro", "extra": [], "kicker": "Atp",
+             "texts": [{"source": "Gazzetta", "text": "Lorenzo Musetti ha annunciato sui social la frattura all'anulare della "
+                        "mano destra, rimediata nell'ultimo allenamento. Il carrarino salta il torneo di Tokyo e proverà a "
+                        "recuperare per giocare a Shanghai. L'ex interista Darmian si allena con il Bologna."}]}
+VOCAB = {"il", "la", "per", "dopo", "intanto"}
+
+
+@pytest.mark.parametrize("text,bad", [
+    ("Lorenzo Musetti salta Tokyo per una frattura all'anulare destro presa in allenamento: il carrarino punta a Shanghai.", ""),
+    ("Lorenzo Musetti salta Tokyo per una frattura all'anulare destro: il carrarino punta al Masters di Shanghai.", "Masters"),
+    ("Lorenzo Musetti salta Tokyo per una frattura all'anulare destro: venerdì il carrarino vola a Parigi per curarsi.", "Parigi"),
+    ("Intanto Lorenzo Musetti salta Tokyo per una frattura all'anulare: la Gazzetta dice che punta a Shanghai.", ""),   # testata
+    ("Darmian, ex Inter, si allena con il Bologna; Lorenzo Musetti salta Tokyo per la frattura all'anulare destro.", ""),  # interista
+])
+def test_check_rejects_names_that_are_not_in_the_sources(text, bad):
+    err = briefs.check(text, NAME_WORK, VOCAB)
+    assert (bad in err and err != "") if bad else err == ""
+
+
+def test_known_matches_forms_but_not_lookalikes():
+    bag = briefs._bag("l'ex interista si allena, lo sloveno Lovric, European Football Club, Nicolo")
+    assert briefs._known("Inter", bag) and briefs._known("Slovenia", bag) and briefs._known("Clubs", bag)
+    assert briefs._known("Nicolò", bag)
+    assert not briefs._known("Inter", briefs._bag("una lunga intervista"))
+    assert not briefs._known("Parigi", bag)
+
+
+def test_aliases_accept_the_usual_other_names():
+    src = "Depositato presso un tribunale della Florida (Usa) un esposto. I bianconeri si allenano."
+    assert briefs.names_missing("Esposto negli Stati Uniti contro la Juventus, depositato in Florida.", src, VOCAB) == []
+
+
+def test_proofs_must_be_copied_and_cover_names_and_numbers():
+    src = " ".join([NAME_WORK["title"], NAME_WORK["summary"], NAME_WORK["texts"][0]["text"]])
+    text = "Lorenzo Musetti salta Tokyo per una frattura all'anulare destro presa in allenamento: il carrarino punta a Shanghai."
+    p1 = "Lorenzo Musetti ha annunciato sui social la frattura all'anulare della mano destra"
+    p2 = "Il carrarino salta il torneo di Tokyo e proverà a recuperare per giocare a Shanghai."
+    assert briefs.proof_error(text, [p1, p2], src, VOCAB) == ""
+    assert "nessuna prova" in briefs.proof_error(text, [p1], src, VOCAB)                  # Tokyo e Shanghai senza prova
+    p1b = "Il carrarino salta il torneo di Tokyo e proverà"
+    assert "Shanghai" in briefs.proof_error(text, [p1, p1b], src, VOCAB)
+    assert "alla lettera" in briefs.proof_error(text, [p1, "Musetti giocherà a Shanghai la settimana prossima"], src, VOCAB)
+    assert "corta" in briefs.proof_error(text, ["Musetti", p2], src, VOCAB)
+    assert "prove" in briefs.proof_error(text, [], src, VOCAB)
+    # virgolette, apostrofi e accenti diversi non contano: conta che le parole siano quelle
+    assert briefs.proof_error(text, [p1.replace("'", "’"), p2.upper()], src, VOCAB) == ""
 
 
 def test_numbers_ignore_separators():
@@ -294,6 +343,33 @@ def test_cluster_never_merges_two_different_matches():
     assert len(build.cluster([dict(a), dict(b), dict(c)])) >= 2
 
 
+def test_fixture_reads_compound_names():
+    assert build.fixture("Nations League: Repubblica-Ceca-Inghilterra 0-2") == "cechia|inghilterra"
+    assert build.fixture("Repubblica Ceca-Inghilterra 0-2: gol e highlights") == "cechia|inghilterra"
+    assert build.fixture("San Marino-Albania 0-3: gol e highlights") == "sanmarino|albania"
+    assert build.fixture("Real Madrid-Barcellona 2-1") == build.fixture("Real-Barcellona, le pagelle")
+
+
+def test_roundup_joins_its_match_and_never_titles_a_story():
+    # I titoli veri della sera di Nations League che avevano prodotto Spagna-Croazia due volte in prima pagina.
+    spa = [item("Spagna show: poker alla Croazia con doppietta di Yamal", "cds", 300),
+           item("Super Yamal trascina la Spagna in Nations League: 4-1 alla Croazia. Il solito Kane guida l'Inghilterra", "gazzetta", 290),
+           item("Nations League: Spagna-Croazia 4-1", "ansa", 280),
+           item("Spagna-Croazia 4-1: gol e highlights", "sky", 270),
+           item("Spagna-Croazia 4-1: video, gol e highlights", "sky", 260)]
+    cze = [item("Nations League: Repubblica-Ceca-Inghilterra 0-2", "ansa", 250),
+           item("Repubblica Ceca-Inghilterra 0-2: gol e highlights", "sky", 240)]
+    oa = item("Calcio, poker della Spagna alla Croazia in Nations League. Inghilterra sbanca a Praga", "oa", 200)
+    oa["image"] = "https://oa.it/foto.jpg"                                # la foto migliore: prima lo faceva diventare titolo
+    rnd = item("Nations League, i risultati di martedì: vincono Inghilterra e Svizzera", "sky", 190)
+    stories = build.cluster([dict(i) for i in spa + cze + [oa, rnd]])
+    where = {i["title"]: s for s in stories for i in s["items"]}
+    assert where[oa["title"]] is where[spa[2]["title"]]                    # l'articolo di OA sta con Spagna-Croazia
+    assert where[cze[0]["title"]] is where[cze[1]["title"]]                # la Repubblica Ceca è una storia sola
+    assert where[cze[0]["title"]] is not where[spa[0]["title"]]
+    assert all(s["title"] not in (oa["title"], rnd["title"]) for s in stories if len(s["items"]) > 1)
+
+
 def test_live_badge_goes_away_when_the_event_is_over():
     now = datetime.now().astimezone()
     ago = lambda h: (now - timedelta(hours=h)).isoformat()                  # noqa: E731
@@ -353,6 +429,24 @@ def test_render_escapes_hostile_feed_content():
     assert "&lt;script&gt;" in html_
 
 
+def test_render_clips_collects_videos_and_escapes():
+    ctx = render.Ctx(now=datetime.now().astimezone(), site_url="https://x/", window=36, n_stories=1, n_sources=1, n_multi=0,
+                     sections=[("calcio", "Calcio")], sources=[], sec_counts={"calcio": 1}, ver={"css": "a", "js": "b"}, theme_color="#000")
+    st = dict(evil_story(), video=True)
+    out = render.clips_html([st, dict(st, id="def67890")], ctx)
+    assert out.startswith("<details") and "2 video" in out and "<script>" not in out
+    assert render.clips_html([], ctx) == ""
+
+
+def test_home_body_puts_the_map_after_the_front_page_news():
+    ctx = render.Ctx(now=datetime.now().astimezone(), site_url="https://x/", window=36, n_stories=1, n_sources=1, n_multi=0,
+                     sections=[("calcio", "Calcio")], sources=[], sec_counts={"calcio": 1}, ver={"css": "a", "js": "b"}, theme_color="#000")
+    st = evil_story()
+    body = render.home_body(ctx, st, [st], [st], [], [dict(st, video=True)])
+    assert body.index('data-follow') < body.index('id="h-top"') < body.index('data-sky') < body.index('class="blocks"')
+    assert body.index('class="clips"') < body.index('data-sky')
+
+
 # ------------------------------------------------------------------ dati pubblicati
 NEWS = os.path.join(ROOT, "data", "news.json")
 
@@ -369,6 +463,9 @@ def test_published_news_json_is_consistent():
         b = s.get("brief") or ""
         assert not any(x in b for x in ("<", ">", "http", "\n")), f"brief con markup o link in {s['id']}"
         assert len(b) <= briefs.MAX_CH, f"brief troppo lungo in {s['id']}"
+        assert s.get("brief_state") in ("own", "wait", "skip", "live", "video"), f"brief_state strano in {s['id']}"
+    home = [s for s in d["stories"] if s["on_home"]]
+    assert sum(1 for s in home if s["video"]) <= 6, "troppi video in prima pagina"   # i video stanno nella riga «N video»
 
 
 # ------------------------------------------------------------------ pagina senza tracker
@@ -428,8 +525,13 @@ def test_apply_fetches_sources_when_the_story_has_no_prepared_work(tmp_path, mon
     assert briefs.apply(str(ans)) == 1                                  # copia: rifiutata anche senza work.json
     assert "aaaaaaaa" not in json.loads((tmp_path / "b.json").read_text(encoding="utf-8"))
     ans.write_text(json.dumps({"aaaaaaaa": good}), encoding="utf-8")
+    assert briefs.apply(str(ans)) == 1                                  # senza prove: rifiutato
+    proof = "contro la Francia servirà una prova di maturità completa da parte di tutti"
+    ans.write_text(json.dumps({"aaaaaaaa": {"testo": good, "prove": [proof]}}), encoding="utf-8")
     assert briefs.apply(str(ans)) == 0
     assert json.loads((tmp_path / "b.json").read_text(encoding="utf-8"))["aaaaaaaa"]["b"] == good
+    log = [json.loads(x) for x in (tmp_path / "audit.jsonl").read_text(encoding="utf-8").splitlines()]
+    assert log[-1]["id"] == "aaaaaaaa" and log[-1]["p"] == [proof]      # con quali frasi è stato giustificato
 
 
 def test_prepare_clears_every_answers_file_of_the_previous_round(tmp_path, monkeypatch):
