@@ -186,7 +186,8 @@ def test_proofs_must_be_copied_and_cover_names_and_numbers():
     p1 = "Lorenzo Musetti ha annunciato sui social la frattura all'anulare della mano destra"
     p2 = "Il carrarino salta il torneo di Tokyo e proverà a recuperare per giocare a Shanghai."
     assert briefs.proof_error(text, [p1, p2], src, VOCAB) == ""
-    assert "nessuna prova" in briefs.proof_error(text, [p1], src, VOCAB)                  # Tokyo e Shanghai senza prova
+    both = briefs.proof_error(text, [p1], src, VOCAB)
+    assert "nessuna prova" in both and "Tokyo" in both and "Shanghai" in both          # tutti insieme, non uno alla volta
     p1b = "Il carrarino salta il torneo di Tokyo e proverà"
     assert "Shanghai" in briefs.proof_error(text, [p1, p1b], src, VOCAB)
     assert "alla lettera" in briefs.proof_error(text, [p1, "Musetti giocherà a Shanghai la settimana prossima"], src, VOCAB)

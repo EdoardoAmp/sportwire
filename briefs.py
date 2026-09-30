@@ -389,12 +389,14 @@ def proof_error(text: str, proofs: Any, src: str, common: set, extra_ok: Optiona
             return f"prova troppo lunga: «{p[:40]}…» (una frase, non un paragrafo)"
         if q not in whole:
             return f"questa prova non è nelle fonti, copiala alla lettera: «{p[:70]}»"
+    # Tutti i problemi insieme, non uno alla volta: il modello li corregge in una sola ripresa invece di tre.
     ev = " ".join(proofs)
-    have = numbers(ev)
+    have, src_nums = numbers(ev), numbers(src)
+    invented: List[str] = []
+    lacking: List[str] = []
     for n in numbers(text):
         if len(n) >= 2 and not any(n in h for h in have):
-            return (f"la cifra «{n}» non sta in nessuna prova: aggiungi la frase che la contiene"
-                    if any(n in h for h in numbers(src)) else f"il numero «{n}» non compare in nessuna fonte")
+            (lacking if any(n in h for h in src_nums) else invented).append(n)
     bag, ok = _bag(ev), _allowed(src, extra_ok)
     src_bag = _bag(src)
     for w in proper_names(text, common):
@@ -403,9 +405,14 @@ def proof_error(text: str, proofs: Any, src: str, common: set, extra_ok: Optiona
             continue
         if f in common and _known(w, src_bag):
             continue                                        # parola comune con la maiuscola (Nazionale, Giochi…)
-        if _known(w, src_bag):
-            return f"«{w}» è nelle fonti ma in nessuna prova: aggiungi la frase che lo contiene"
-        return f"«{w}» non compare in nessuna fonte: nomi, squadre e luoghi solo come nelle fonti"
+        (lacking if _known(w, src_bag) else invented).append(w)
+    q = lambda xs: ", ".join(f"«{x}»" for x in dict.fromkeys(xs))       # noqa: E731
+    if invented:
+        return f"{q(invented)}: non {'compare' if len(set(invented)) == 1 else 'compaiono'} in nessuna fonte, toglili dal testo"
+    if lacking:
+        one = len(set(lacking)) == 1
+        return (f"{q(lacking)}: {'è' if one else 'sono'} nelle fonti ma in nessuna prova. Aggiungi le frasi che "
+                f"{'lo' if one else 'li'} contengono, copiate alla lettera")
     return ""
 
 
