@@ -77,6 +77,7 @@
   --star:      oklch(0.96 0.020 85);
   --scrim:     oklch(0.10 0.020 268 / 0.82);
   --veil:      oklch(1 0 0 / 0.05);
+  --accent-line: oklch(0.80 0.155 68 / 0.22);   /* filo ambra attorno ai riquadri che contano (in breve, suggerimento) */
 
   --f-display: 'Archivo Variable', 'Arial Narrow', Impact, system-ui, sans-serif;
   --f-text:    'Geist Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -144,6 +145,7 @@ ul, ol { padding: 0; list-style: none; }
 .btn--quiet { background: var(--paper-3); color: var(--ink); }
 .btn--quiet:hover { background: oklch(0.34 0.032 268); }
 .btn--quiet[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
+.btn:disabled { background: var(--paper-2); color: var(--ink-3); box-shadow: none; cursor: not-allowed; transform: none; }
 
 .chip { display: inline-flex; align-items: center; min-height: 44px; padding: 0 1.05rem; border-radius: var(--r-pill); background: var(--paper-2); color: var(--ink-2); font: 500 .88rem/1 var(--f-text); white-space: nowrap; transition: background var(--t-fast), color var(--t-fast), transform var(--t-fast) var(--ease-out); }
 .chip:hover { background: var(--paper-3); color: var(--ink); }
@@ -629,6 +631,14 @@ main.wrap { padding-top: calc(var(--bar-h) + 14px + clamp(.5rem, 2vw, 1.5rem)); 
 /* nel dossier: segui chi compare nella notizia */
 .follow-chips { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
 .follow-chips__label { margin-right: .25rem; font: 500 .72rem/1 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
+
+/* suggerimento dalla cronologia, dentro «Riprendi da qui» */
+.hint { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem 1.25rem; margin-top: 1rem;
+  padding: .9rem 1rem; border-radius: var(--r-2); background: var(--paper-2); box-shadow: inset 0 0 0 1px var(--accent-line); }
+.hint__text { flex: 1 1 22rem; color: var(--ink-2); font-size: .95rem; line-height: 1.45; }
+.hint__text b { color: var(--ink); font-weight: 600; }
+.hint__actions { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .75rem; }
+.hint--done { box-shadow: none; }
 
 /* ingresso: solo dissolvenza (genere atmospheric: niente slide, niente rimbalzi) */
 .js .reveal { opacity: 0; transition: opacity .7s var(--ease); }

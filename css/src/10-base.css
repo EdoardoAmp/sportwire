@@ -28,6 +28,7 @@ ul, ol { padding: 0; list-style: none; }
 .btn--quiet { background: var(--paper-3); color: var(--ink); }
 .btn--quiet:hover { background: oklch(0.34 0.032 268); }
 .btn--quiet[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
+.btn:disabled { background: var(--paper-2); color: var(--ink-3); box-shadow: none; cursor: not-allowed; transform: none; }
 
 .chip { display: inline-flex; align-items: center; min-height: 44px; padding: 0 1.05rem; border-radius: var(--r-pill); background: var(--paper-2); color: var(--ink-2); font: 500 .88rem/1 var(--f-text); white-space: nowrap; transition: background var(--t-fast), color var(--t-fast), transform var(--t-fast) var(--ease-out); }
 .chip:hover { background: var(--paper-3); color: var(--ink); }

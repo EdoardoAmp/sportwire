@@ -337,6 +337,51 @@ def function_checks(browser) -> int:
             check(pg.evaluate("document.querySelectorAll('.star').length") == n_stories, "", f"{tag}cielo: tornando a tutta l'edizione mancano stelle", out)
         # i clic sulle stelle hanno aperto (e registrato) notizie: le squadre qui sotto ripartono da localStorage vuoto
 
+        # suggerimento dalla cronologia: 6 notizie sull'Inter aperte negli ultimi giorni → «Segui Inter · Non ora»
+        seed = """(n) => { const now = Date.now(); const log = [];
+            for (let i = 0; i < n; i++) log.push({ id: 'aa00000' + i, t: now - (i + 1) * 36e5 * 5, p: '', ti: 'Inter, notizia di prova numero ' + i,
+              s: 'Gazzetta', c: 'calcio', k: 'Serie A', l: 'https://esempio.invalid/' + i, i: '', b: '', v: 'd' });
+            localStorage.setItem('sw:cronologia:v1', JSON.stringify({ v: 1, log, seen: now }));
+            localStorage.setItem('sw:squadre:v1', JSON.stringify({ v: 1, list: [], later: now })); }"""
+        hint_btn = pg.evaluate("() => { const b = document.querySelector('[data-hint-follow]'); return b && b.textContent; }")
+        pg.evaluate("sessionStorage.clear(); localStorage.clear()")
+        pg.evaluate(seed, 6)
+        pg.goto(BASE + "/index.html", wait_until="networkidle")
+        pg.wait_for_timeout(600)
+        hint_btn = pg.evaluate("() => { const b = document.querySelector('[data-hint-follow]'); return b && b.textContent.trim(); }")
+        check(hint_btn == "Segui Inter", "", f"{tag}suggerimento: atteso «Segui Inter», trovato {hint_btn!r}", out)
+        if hint_btn:
+            pg.evaluate("document.querySelector('[data-hint-follow]').scrollIntoView({block: 'center', behavior: 'instant'})")
+            pg.click("[data-hint-follow]")
+            pg.wait_for_timeout(300)
+            st = pg.evaluate("""() => ({ list: (JSON.parse(localStorage.getItem('sw:squadre:v1') || '{}').list || []),
+                done: !!document.querySelector('.hint--done [data-hint-undo]'), focus: document.activeElement && document.activeElement.hasAttribute('data-hint-undo') })""")
+            check(st["list"] == ["Inter"] and st["done"] and st["focus"], "", f"{tag}suggerimento: «Segui» non ha seguito Inter {st}", out)
+            pg.click("[data-hint-undo]")
+            pg.wait_for_timeout(300)
+            st = pg.evaluate("() => ({ list: (JSON.parse(localStorage.getItem('sw:squadre:v1') || '{}').list || []), hint: !!document.querySelector('.hint') })")
+            check(st["list"] == [] and not st["hint"], "", f"{tag}suggerimento: «Annulla» non ha tolto Inter {st}", out)
+            pg.reload(wait_until="networkidle")                       # stessa sessione: Inter non si ripropone
+            pg.wait_for_timeout(500)
+            check(not pg.evaluate("!!document.querySelector('[data-hint-follow]')"), "", f"{tag}suggerimento: riproposto nella stessa sessione", out)
+            pg.evaluate("sessionStorage.clear()")                      # nuova sessione: torna, e «Non ora» lo spegne per 14 giorni
+            pg.reload(wait_until="networkidle")
+            pg.wait_for_timeout(500)
+            pg.evaluate("document.querySelector('[data-hint-no]').scrollIntoView({block: 'center', behavior: 'instant'})")
+            pg.click("[data-hint-no]")
+            pg.wait_for_timeout(300)
+            no = pg.evaluate("(JSON.parse(localStorage.getItem('sw:suggerimenti:v1') || '{}').no || {})")
+            pg.evaluate("sessionStorage.clear()")
+            pg.reload(wait_until="networkidle")
+            pg.wait_for_timeout(500)
+            check("Inter" in no and not pg.evaluate("!!document.querySelector('[data-hint-follow]')"), "", f"{tag}suggerimento: «Non ora» non resta ({no})", out)
+        pg.evaluate("sessionStorage.clear(); localStorage.clear()")
+        pg.evaluate(seed, 4)                                           # 4 letture: sotto la soglia, niente suggerimento
+        pg.goto(BASE + "/index.html", wait_until="networkidle")
+        pg.wait_for_timeout(500)
+        check(not pg.evaluate("!!document.querySelector('[data-hint-follow]')"), "", f"{tag}suggerimento: compare con sole 4 letture", out)
+        pg.evaluate("sessionStorage.clear(); localStorage.clear()")
+
         # le tue squadre: dal profilo vuoto alla scelta, poi le notizie in cima (tutto in localStorage)
         pg.evaluate("localStorage.clear()")
         pg.goto(BASE + "/index.html", wait_until="networkidle")

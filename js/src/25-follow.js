@@ -41,9 +41,9 @@ const follow = (() => {
     } catch { /* dati rovinati: si riparte */ }
     return { v: 1, list: [], later: 0 };
   }
-  let s = read(), editing = false;
+  let s = read(), editing = false, saved = true;
   const emit = () => document.dispatchEvent(new CustomEvent("sw:follow"));
-  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch { /* quota o navigazione privata: resta in memoria */ } emit(); };
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(s)); saved = true; } catch { saved = false; /* quota o navigazione privata: resta in memoria */ } emit(); };
   addEventListener("storage", (e) => { if (e.key === KEY) { s = read(); emit(); } });
 
   const list = () => s.list.map((label) => ({ label, terms: termsOf(label) }));
@@ -68,6 +68,47 @@ const follow = (() => {
     const out = CATALOG.map(([label]) => label).filter((label) => hits(st, termsOf(label)));
     s.list.forEach((l) => { if (!out.some((x) => norm(x) === norm(l)) && hits(st, termsOf(l))) out.push(l); });
     return out.slice(0, 4);
+  }
+
+  /* — Suggerimento dalla cronologia: «Hai aperto N notizie su <nome>». Solo locale, zero rete. Si riconosce chi compare
+       in una notizia letta con lo STESSO confronto delle squadre seguite (hits + termsOf: parole intere, senza accenti,
+       con le esclusioni come «Coppa Italia»), sul titolo e sull'occhiello che la cronologia conserva. Un suggerimento
+       alla volta, al più una volta per sessione per ciascun nome; «Non ora» vale 14 giorni per quel nome. — */
+  const HKEY = "sw:suggerimenti:v1", SEEN = "sw:suggerimenti:visti", HINT_MIN = 5, HINT_DAYS = 7, HINT_QUIET = 14 * 864e5;
+  const readNo = () => { try { const j = JSON.parse(localStorage.getItem(HKEY) || "null"); return j && j.v === 1 && j.no && typeof j.no === "object" ? j.no : {}; } catch { return {}; } };
+  const writeNo = (no) => { try { localStorage.setItem(HKEY, JSON.stringify({ v: 1, no })); return true; } catch { return false; } };
+  const seenNow = () => { try { return new Set(JSON.parse(sessionStorage.getItem(SEEN) || "[]")); } catch { return new Set(); } };
+  const markSeen = (label) => { try { const x = seenNow(); x.add(label); sessionStorage.setItem(SEEN, JSON.stringify([...x])); } catch { /* ok */ } };
+  let hint = null;                                  // { label, n, state: "ask" | "done" | "gone" }: deciso una volta per pagina
+  function opened7() {
+    const cut = Date.now() - HINT_DAYS * 864e5, ids = new Set();
+    return store.log().filter((e) => e.t > cut && !ids.has(e.id) && ids.add(e.id)).map((e) => ({ title: e.ti || "", kicker: e.k || "", items: [] }));
+  }
+  function pickHint() {
+    if (hint) return;
+    if (!s.list.length && (!s.later || Date.now() - s.later > 7 * 864e5)) return;   // c'è già l'invito a scegliere
+    const read7 = opened7();
+    if (read7.length < HINT_MIN) return;
+    const no = readNo(), seen = seenNow(), now = Date.now();
+    let best = null;
+    for (const [label] of CATALOG) {
+      if (has(label) || seen.has(label) || (no[label] && now - no[label] < HINT_QUIET)) continue;
+      const t = termsOf(label), n = read7.filter((st) => hits(st, t)).length;
+      if (n >= HINT_MIN && (!best || n > best.n)) best = { label, n };
+    }
+    if (best) { hint = { ...best, state: "ask" }; markSeen(best.label); }
+  }
+  function hintHtml() {
+    pickHint();
+    if (!hint || hint.state === "gone") return "";
+    const who = esc(hint.label);
+    if (hint.state === "done") {
+      return `<div class="hint hint--done" role="status"><p class="hint__text">${saved
+        ? `Ora segui ${who}: le sue notizie sono in «Le tue squadre», qui sopra.`
+        : `Segui ${who} solo per questa visita: il browser non ha salvato la scelta.`}</p><button type="button" class="follow__link" data-hint-undo>Annulla</button></div>`;
+    }
+    return `<div class="hint" data-hint="${who}"><p class="hint__text">Hai aperto <b>${hint.n} notizie</b> su ${who} negli ultimi ${HINT_DAYS} giorni.</p>
+      <div class="hint__actions"><button type="button" class="btn btn--primary" data-hint-follow>Segui ${who}</button><button type="button" class="follow__link" data-hint-no>Non ora</button></div></div>`;
   }
 
   const toggleBtn = (label, extra = "") => `<button type="button" class="chip chip--follow" data-follow-toggle="${esc(label)}" aria-pressed="${has(label)}"><span class="chip__star" aria-hidden="true">${has(label) ? "★" : "☆"}</span>${esc(label)}${extra}</button>`;
@@ -157,6 +198,27 @@ const follow = (() => {
     if (e.target.closest("[data-follow-edit]")) { editing = true; paintHome(); motion.box($("[data-follow]")); const c = $("[data-follow] .chip"); if (c) c.focus(); return; }
     if (e.target.closest("[data-follow-done]")) { editing = false; paintHome(); motion.box($("[data-follow]")); const b = $("[data-follow] .follow__link, [data-follow] a"); if (b) b.focus(); return; }
     if (e.target.closest("[data-follow-later]")) { s.later = Date.now(); save(); return; }
+    if (hint && e.target.closest("[data-hint-follow]")) {
+      if (!has(hint.label)) toggle(hint.label);
+      hint.state = "done";
+      history_.resume();
+      const u = $("[data-hint-undo]"); if (u) u.focus();
+      return;
+    }
+    if (hint && e.target.closest("[data-hint-no]")) {
+      const no = readNo(); no[hint.label] = Date.now(); writeNo(no);
+      hint.state = "gone";
+      history_.resume();
+      const l = $(".resume__link"); if (l) l.focus();
+      return;
+    }
+    if (hint && e.target.closest("[data-hint-undo]")) {
+      if (has(hint.label)) toggle(hint.label);
+      hint.state = "gone";
+      history_.resume();
+      const l = $(".resume__link"); if (l) l.focus();
+      return;
+    }
     if (e.target.closest("[data-follow-all]")) { const ids = stories().map((x) => x.id); if (ids.length) reader.open(ids[0], ids); return; }
     const a = e.target.closest("[data-follow] a[data-story]");
     if (a && !(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button)) { e.preventDefault(); reader.open(a.dataset.story, stories().map((x) => x.id)); }
@@ -172,5 +234,5 @@ const follow = (() => {
     inp.value = "";
   });
 
-  return { chips, stories, mine: (st) => mine(st), paint, count: () => s.list.length };
+  return { chips, stories, mine: (st) => mine(st), paint, count: () => s.list.length, hint: hintHtml };
 })();

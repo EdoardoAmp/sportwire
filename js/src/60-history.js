@@ -38,6 +38,7 @@ const history_ = (() => {
         const href = live ? `#/s/${e.id}` : e.l;
         return `<a class="resume__item" href="${esc(href)}" ${live ? `data-goto="${esc(e.id)}"` : 'target="_blank" rel="noopener"'}><span class="kicker">${esc(secName(e.c))}</span><strong>${esc(e.ti)}</strong><span class="meta"><span class="meta__src">${esc(e.s)}</span><span>letta ${esc(whenLabel(e.t))}</span></span></a>`;
       }).join("")}</div>` : ""}
+      ${follow.hint()}
       <a class="resume__link" href="cronologia.html">Tutta la cronologia →</a>`;
     box.hidden = false;
   }
@@ -160,5 +161,6 @@ const history_ = (() => {
     });
   }
 
+  document.addEventListener("sw:follow", () => resume());   // seguire o smettere cambia il suggerimento in «Riprendi da qui»
   return { paintMarks, paintCount, resume, page, bindPage };
 })();
