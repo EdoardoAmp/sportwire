@@ -20,14 +20,16 @@ ul, ol { padding: 0; list-style: none; }
 .eyebrow { display: flex; align-items: center; gap: .6em; font: 500 .72rem/1.2 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
 .h2 { margin-top: .5rem; font: 800 clamp(1.7rem, 1.1rem + 2vw, 2.7rem)/1.02 var(--f-display); font-stretch: 78%; letter-spacing: -.012em; text-wrap: balance; }
 
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: .55em; min-height: 46px; padding: 0 1.35rem; border-radius: var(--r-pill); font: 600 .95rem/1 var(--f-text); white-space: nowrap; transition: background var(--t-fast), box-shadow var(--t-mid), color var(--t-fast); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: .55em; min-height: 46px; padding: 0 1.35rem; border-radius: var(--r-pill); font: 600 .95rem/1 var(--f-text); white-space: nowrap; transition: background var(--t-fast), box-shadow var(--t-mid), color var(--t-fast), transform var(--t-fast) var(--ease-out); }
+/* pressione: il controllo cede sotto il dito (solo transform, 140ms) */
+:is(.btn, .chip, .tool, .hit):active { transform: scale(.96); transition-duration: 60ms; }
 .btn--primary { background: var(--accent); color: var(--on-accent); }
 .btn--primary:hover { background: var(--accent-hi); box-shadow: var(--shadow-glow); }
 .btn--quiet { background: var(--paper-3); color: var(--ink); }
 .btn--quiet:hover { background: oklch(0.34 0.032 268); }
 .btn--quiet[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
 
-.chip { display: inline-flex; align-items: center; min-height: 44px; padding: 0 1.05rem; border-radius: var(--r-pill); background: var(--paper-2); color: var(--ink-2); font: 500 .88rem/1 var(--f-text); white-space: nowrap; transition: background var(--t-fast), color var(--t-fast); }
+.chip { display: inline-flex; align-items: center; min-height: 44px; padding: 0 1.05rem; border-radius: var(--r-pill); background: var(--paper-2); color: var(--ink-2); font: 500 .88rem/1 var(--f-text); white-space: nowrap; transition: background var(--t-fast), color var(--t-fast), transform var(--t-fast) var(--ease-out); }
 .chip:hover { background: var(--paper-3); color: var(--ink); }
 .chip[aria-pressed="true"] { background: var(--ink); color: var(--void); }
 .chip__n { margin-left: .55em; font: 500 .74rem/1 var(--f-mono); opacity: .7; }
@@ -49,6 +51,7 @@ ul, ol { padding: 0; list-style: none; }
 
 .brief { margin-top: .5rem; color: var(--ink-2); font-size: .95rem; line-height: 1.5; text-wrap: pretty; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .brief--own::before { content: ""; display: inline-block; width: .62em; height: .62em; margin-right: .5em; background: var(--accent); clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); vertical-align: .04em; }
+.spark { display: inline-block; flex: none; color: var(--accent); }
 
 .media { position: relative; overflow: hidden; background: var(--paper-3); }
 .media img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .5s var(--ease); }

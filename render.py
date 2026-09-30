@@ -34,6 +34,7 @@ class Ctx:
     sec_counts: dict
     ver: dict                # {"css": hash, "js": hash}
     theme_color: str
+    n_own: int = 0           # storie con il riassunto di Sportwire
 
 
 # ================================================================ piccoli pezzi
@@ -168,11 +169,11 @@ def lead_html(st: dict, ctx: Ctx) -> str:
   <div class="lead__text">
     <p class="eyebrow"><span class="pulse" aria-hidden="true"></span>In apertura<span class="eyebrow__more"> · {n} testat{"a" if n == 1 else "e"}</span></p>
     {kicker_html(st, True)}
-    <h2 class="lead__title">{title_link(st)}</h2>
+    <h2 class="lead__title{' lead__title--long' if len(st['title']) > 78 else ''}">{title_link(st)}</h2>
     {brief_html(st, "lead__brief")}
     {meta_html(st, ctx)}
     <div class="lead__actions">
-      <a class="btn btn--primary" href="{esc(st['link'])}" data-story="{esc(st['id'])}" rel="noopener">Leggi in breve</a>
+      <a class="btn btn--primary" href="{esc(st['link'])}" data-story="{esc(st['id'])}" rel="noopener">{"Leggi in breve" if st["brief"] else "Apri la notizia"}</a>
       <a class="btn btn--quiet" href="{esc(st['link'])}" rel="noopener" data-out="{esc(st['id'])}">{esc(st['src_name'])} {ICONS['out']}</a>
     </div>
     {coverage}
@@ -226,8 +227,8 @@ def sky_html(ctx: Ctx) -> str:
         <p class="eyebrow">Mappa delle notizie</p>
         <h2 class="h2" id="h-sky">Il cielo di oggi</h2>
       </div>
-      <p class="sec-head__note">Ogni punto è una notizia: più è grande, più redazioni ne parlano. L’asse è il tempo,
-      le corsie sono gli sport. Toccane una per leggerla in breve.</p>
+      <p class="sec-head__note">Ogni punto è una notizia: più è grande, più redazioni ne parlano. Da sinistra a destra
+      scorre il tempo, le corsie sono gli sport. Un punto mostra l’anteprima: cliccalo, o toccalo di nuovo, per aprirlo.</p>
     </div>
     <div class="sky__frame">
       <div class="sky__stage" data-sky-stage role="group" aria-label="Le notizie di oggi disposte per sport e orario"></div>
@@ -263,7 +264,7 @@ def home_body(ctx: Ctx, hero: dict, top: list, live: list, blocks: list) -> str:
       </div>
     </section>""")
     return f"""<p class="brief-line"><strong>{ctx.n_stories} notizie</strong> nelle ultime {ctx.window} ore da {ctx.n_sources} redazioni ·
-  {ctx.n_multi} raccontate da più testate.</p>
+  {ctx.n_multi} raccontate da più testate · <span class="brief-line__own">{ctx.n_own} riassunte da Sportwire</span></p>
 {lead_html(hero, ctx)}
 <section class="resume" data-resume hidden aria-labelledby="h-resume"></section>
 {sky_html(ctx)}
@@ -342,7 +343,7 @@ def page(ctx: Ctx, *, rel: str, title: str, description: str, body: str, active:
     cur = ' aria-current="page"'
     links = "".join(
         f'<a href="{k}.html"{cur if k == active else ""}>{esc(t)}</a>' for k, t in ctx.sections)
-    home_link = f'<a href="index.html"{cur if active == "index" else ""}>Cielo</a>'
+    home_link = f'<a href="index.html"{cur if active == "index" else ""}>Oggi</a>'
     src_links = "".join(f'<li><a href="{esc(h)}" rel="noopener">{esc(n)}</a></li>' for _k, n, h in ctx.sources)
     hist_cur = cur if active == "cronologia" else ""
     return f"""<!doctype html>

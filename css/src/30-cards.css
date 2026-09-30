@@ -1,11 +1,15 @@
 /* apertura, schede, righe, registro, blocchi */
 .brief-line { margin-bottom: .5rem; font: 500 .74rem/1.5 var(--f-mono); letter-spacing: .04em; color: var(--ink-3); }
 .brief-line strong { color: var(--ink); font-weight: 600; }
+.brief-line__own { color: var(--accent); white-space: nowrap; }
+.brief-line__own::before { content: "✦ "; }
 
 /* — apertura: un pianeta con una luna per testata — */
 .lead { position: relative; padding: clamp(.75rem, 2vw, 1.5rem) 0 clamp(1rem, 2vw, 2rem); }
 .lead::after { content: ""; display: block; clear: both; }
 .lead__title { margin: .55rem 0 1rem; font: 800 clamp(2.4rem, 1.1rem + 5vw, 5.4rem)/.96 var(--f-display); font-stretch: 72%; letter-spacing: -.022em; text-wrap: balance; }
+/* titoli lunghi (oltre ~78 caratteri): un corpo più basso, così breve e pulsanti restano sopra la piega */
+.lead__title--long { font-size: clamp(2.1rem, 1rem + 3.6vw, 4.1rem); line-height: .98; }
 .lead__brief { max-width: 54ch; margin-top: 0; color: var(--ink); font-size: clamp(1.05rem, .95rem + .5vw, 1.32rem); line-height: 1.5; -webkit-line-clamp: 5; }
 .lead .meta { margin-top: 1rem; }
 .lead__actions { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.5rem; position: relative; z-index: 2; }
@@ -41,6 +45,9 @@
 .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 290px), 1fr)); gap: 1rem; }
 .card { position: relative; display: flex; flex-direction: column; overflow: hidden; border-radius: var(--r-3); background: var(--paper-2); transition: background var(--t-mid), box-shadow var(--t-mid), transform var(--t-mid) var(--ease); }
 .card:hover { background: var(--paper-3); box-shadow: var(--shadow-glow); transform: translateY(-2px); }
+.card:active { transform: translateY(0) scale(.99); transition-duration: 80ms; }
+.card__media img { transition: opacity .5s var(--ease), transform var(--t-long) var(--ease-out); }
+.card:hover .card__media img.is-loaded { transform: scale(1.03); }
 .card__media { aspect-ratio: 16 / 10; }
 .card__body { display: flex; flex-direction: column; gap: .35rem; padding: 1rem 1.15rem 1.2rem; flex: 1; }
 .card__title { margin-top: .15rem; font: 700 1.3rem/1.13 var(--f-display); font-stretch: 84%; letter-spacing: -.005em; text-wrap: balance; }
@@ -54,6 +61,12 @@
 .row__body { display: flex; flex-direction: column; gap: .3rem; min-width: 0; }
 .row__title { font: 700 1.08rem/1.2 var(--f-display); font-stretch: 88%; text-wrap: balance; }
 .row .brief { -webkit-line-clamp: 2; font-size: .9rem; margin-top: .1rem; }
+.card .brief--own { -webkit-line-clamp: 6; color: var(--ink); }
+.row .brief--own { -webkit-line-clamp: 4; color: var(--ink); }
+@media (max-width: 640px) {
+  .card .brief--own, .lead__brief.brief--own { -webkit-line-clamp: 9; }
+  .row .brief--own { -webkit-line-clamp: 6; }
+}
 .row .meta { margin-top: .25rem; }
 .row__media { width: 112px; aspect-ratio: 4 / 3; border-radius: 10px; }
 .rows--grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 470px), 1fr)); }

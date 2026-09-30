@@ -5,7 +5,7 @@
 @keyframes appear { from { opacity: 0; } }
 .js .sky__canvas .star--live { animation: appear .8s var(--ease) both, pulse 2.4s ease-out 1s infinite; }
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
+  html, .chips, .pill__links { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
   .js .reveal { opacity: 1; }
 }
@@ -18,6 +18,7 @@
 /* All'apertura la dissolvenza la fa la transizione di vista (root vecchio → root nuovo, 200ms): il dossier non ha la sua,
    altrimenti le due si sommano e la pagina traspare attraverso il pannello. */
 .vt-open .reader, .vt-open .reader__photo img { transition: none; }
+.vt-open .reader__sheet { transform: none; transition: none; }
 .vt-open .reader__photo img { opacity: 1; }
 ::view-transition-old(story-photo), ::view-transition-new(story-photo) { width: 100%; height: 100%; object-fit: cover; overflow: clip; }
 

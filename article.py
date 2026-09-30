@@ -35,10 +35,23 @@ def _host_lock(host: str) -> threading.Lock:
         return _hostlock.setdefault(host, threading.Lock())
 
 
+class _Redirect(urllib.request.HTTPRedirectHandler):
+    """Segue anche il 308, che urllib gestisce solo da Python 3.11: Corriere dello Sport e Tuttosport lo usano per
+    togliere la «/» finale dai link dei feed, e senza questo da 3.9 non si leggeva nessun loro articolo."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return super().redirect_request(req, fp, 307 if code == 308 else code, msg, headers, newurl)
+
+    http_error_308 = urllib.request.HTTPRedirectHandler.http_error_302
+
+
+_OPENER = urllib.request.build_opener(_Redirect)
+
+
 def _open(url: str, accept: str = "text/html,application/xhtml+xml"):
     req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": accept,
                                                "Accept-Language": "it-IT,it;q=0.9", "Accept-Encoding": "identity"})
-    return urllib.request.urlopen(req, timeout=TIMEOUT)
+    return _OPENER.open(req, timeout=TIMEOUT)
 
 
 def allowed(url: str) -> bool:
@@ -189,7 +202,9 @@ def _walk(o):
 def _clean(text: str) -> str:
     text = htmllib.unescape(text)
     text = re.sub(r"<[^>]+>", " ", text)
-    return re.sub(r"[ \t\u00a0]+", " ", text).strip()
+    text = re.sub(r"\\([\"'/])", r"\1", text)          # articleBody con virgolette escapate due volte (CdS, Tuttosport)
+    text = re.sub(r"[ \t\u00a0]+", " ", text)
+    return re.sub(r" +([.,;:!?)])", r"\1", text).strip()  # «Nations League .» → «Nations League.»
 
 
 def extract(page: str) -> Dict[str, str]:

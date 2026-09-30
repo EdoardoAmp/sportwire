@@ -32,6 +32,15 @@ main.wrap { padding-top: calc(var(--bar-h) + 14px + clamp(.5rem, 2vw, 1.5rem)); 
 .page-head .eyebrow { margin-bottom: .9rem; }
 .page-meta { margin: 1rem 0 1.5rem; font: 500 .8rem/1.4 var(--f-mono); letter-spacing: .04em; color: var(--ink-3); }
 .chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.75rem; }
+/* telefono: i filtri stanno su una riga che scorre, invece di tre righe che spingono giù le notizie */
+@media (max-width: 640px) {
+  .chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; scroll-behavior: smooth; overscroll-behavior-x: contain;
+    margin-inline: calc(-1 * var(--gut)); padding-inline: var(--gut); scroll-padding-inline: var(--gut);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 var(--gut), #000 calc(100% - var(--gut)), transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 var(--gut), #000 calc(100% - var(--gut)), transparent); }
+  .chips::-webkit-scrollbar { display: none; }
+  .chip { flex: none; }
+}
 
 .foot { margin-top: clamp(4rem, 9vw, 8rem); padding: clamp(2.5rem, 6vw, 5rem) 0 calc(2rem + env(safe-area-inset-bottom)); background: linear-gradient(180deg, transparent, oklch(0.125 0.022 268 / .92) 42%); }
 .foot__statement { max-width: 17ch; font: 800 clamp(2.2rem, 1rem + 5vw, 5rem)/.98 var(--f-display); font-stretch: 72%; letter-spacing: -.02em; text-wrap: balance; }
@@ -54,7 +63,12 @@ main.wrap { padding-top: calc(var(--bar-h) + 14px + clamp(.5rem, 2vw, 1.5rem)); 
   .pill { width: 100%; }
   .brand { padding: 0 .5rem; }
   .brand__name { display: none; }
-  .pill__links { flex: 1 1 auto; overflow-x: auto; scrollbar-width: none; -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 26px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 26px), transparent); padding-right: 20px; }
+  .pill__links { flex: 1 1 auto; overflow-x: auto; scrollbar-width: none; scroll-behavior: smooth; overscroll-behavior-x: contain; padding-right: 20px;
+    --fade-l: 0px; --fade-r: 34px;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 var(--fade-l), #000 calc(100% - var(--fade-r)), transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 var(--fade-l), #000 calc(100% - var(--fade-r)), transparent); }
+  .pill__links.at-start { --fade-l: 0px; } .pill__links:not(.at-start) { --fade-l: 26px; }
+  .pill__links.at-end { --fade-r: 0px; }
   .pill__links::-webkit-scrollbar { display: none; }
   .pill__links a { padding: 0 .85rem; }
   .pill__tools { margin-left: 0; }

@@ -28,12 +28,28 @@
       if (!btn) return;
       const f = btn.dataset.filter;
       $$(".chip", chips).forEach((c) => c.setAttribute("aria-pressed", String(c === btn)));
+      if (chips.scrollWidth > chips.clientWidth) chips.scrollTo({ left: btn.offsetLeft - chips.clientWidth / 2 + btn.offsetWidth / 2, behavior: reduce ? "auto" : "smooth" });
       withVT(() => {
         let shown = 0;
         items.forEach((n) => { const on = f === "*" || n.dataset.k === f; n.hidden = !on; if (on) shown++; });
         if (empty) empty.hidden = shown > 0;
       });
     });
+  }
+
+  /* 3b. barra delle sezioni su telefono: scorre in orizzontale. La sezione aperta si vede sempre, e le sfumature
+     sui bordi compaiono solo dove c'è altro da scoprire. */
+  const links = $(".pill__links");
+  if (links) {
+    const edges = () => {
+      links.classList.toggle("at-start", links.scrollLeft < 4);
+      links.classList.toggle("at-end", links.scrollLeft + links.clientWidth >= links.scrollWidth - 4);
+    };
+    const cur = $('[aria-current="page"]', links);
+    if (cur && links.scrollWidth > links.clientWidth) links.scrollTo({ left: cur.offsetLeft - links.clientWidth / 2 + cur.offsetWidth / 2, behavior: "instant" });
+    edges();
+    links.addEventListener("scroll", edges, { passive: true });
+    addEventListener("resize", edges, { passive: true });
   }
 
   /* 4. le notizie si aprono dentro Sportwire; l'articolo originale resta a un tocco (e viene registrato) */

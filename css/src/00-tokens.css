@@ -31,8 +31,11 @@
   --shadow-1:    0 1px 2px oklch(0.05 0.02 268 / .55), 0 12px 30px -14px oklch(0.05 0.02 268 / .8);
   --shadow-glow: 0 14px 44px -14px oklch(0.75 0.16 65 / .5);
   --ease: cubic-bezier(.2, .7, .2, 1);
+  --ease-out: cubic-bezier(.16, 1, .3, 1);      /* entra e rallenta */
+  --ease-in: cubic-bezier(.7, 0, .84, 0);       /* esce accelerando */
   --t-fast: 140ms;
   --t-mid: 260ms;
+  --t-long: 420ms;
 
   --wrap: 1240px;
   --gut: clamp(16px, 4vw, 40px);

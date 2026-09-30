@@ -5,7 +5,11 @@
 .reader__scrim, .finder__scrim { position: absolute; inset: 0; background: var(--scrim); }
 
 .reader { display: flex; justify-content: flex-end; }
-.reader__sheet { position: relative; display: flex; flex-direction: column; width: min(100%, 700px); height: 100%; background: var(--paper-1); box-shadow: -40px 0 90px -30px oklch(0.03 0.02 268 / .9); outline: none; }
+.reader__sheet { position: relative; display: flex; flex-direction: column; width: min(100%, 700px); height: 100%; background: var(--paper-1); box-shadow: -40px 0 90px -30px oklch(0.03 0.02 268 / .9); outline: none;
+  transform: translateX(28px); transition: transform calc(var(--t-long) * .75) var(--ease-in); }
+.reader.is-open .reader__sheet { transform: none; transition: transform var(--t-long) var(--ease-out); }
+.finder__box { transform: translateY(-10px) scale(.985); transition: transform calc(var(--t-mid) * .75) var(--ease-in); }
+.finder.is-open .finder__box { transform: none; transition: transform var(--t-mid) var(--ease-out); }
 .reader__top { display: flex; align-items: center; justify-content: space-between; gap: .5rem; padding: max(10px, env(safe-area-inset-top)) 10px 10px 14px; flex: none; }
 .reader__pos { font: 500 .72rem/1 var(--f-mono); letter-spacing: .08em; color: var(--ink-3); }
 .reader__nav { display: flex; align-items: center; gap: 2px; }
@@ -17,7 +21,10 @@
 .reader__body { display: flex; flex-direction: column; gap: 1.1rem; padding: 1.4rem clamp(1.1rem, 4vw, 2rem) 0; }
 .reader__title { font: 800 clamp(2rem, 1.2rem + 3vw, 3.1rem)/.98 var(--f-display); font-stretch: 72%; letter-spacing: -.02em; text-wrap: balance; }
 .reader__box { padding: 1.15rem 1.25rem 1.25rem; border-radius: var(--r-2); background: var(--paper-2); }
-.reader__box .eyebrow { margin-bottom: .6rem; color: var(--accent); }
+.reader__box .eyebrow { margin-bottom: .6rem; color: var(--accent); gap: .5em; }
+.reader__box--own { background: linear-gradient(160deg, oklch(0.80 0.155 68 / .10), transparent 55%), var(--paper-2); box-shadow: inset 0 0 0 1px oklch(0.80 0.155 68 / .22); }
+.reader__box--live .eyebrow { color: var(--hot); }
+.reader__box:not(.reader__box--own) .eyebrow { color: var(--ink-3); }
 .reader__brief { color: var(--ink); font-size: 1.16rem; line-height: 1.55; text-wrap: pretty; }
 .reader__brief--src { color: var(--ink-2); font-size: 1.02rem; }
 .reader__note { margin-top: .8rem; font: 500 .72rem/1.45 var(--f-mono); letter-spacing: .03em; color: var(--ink-3); }

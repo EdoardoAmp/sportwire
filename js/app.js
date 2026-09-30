@@ -20,6 +20,7 @@ const ICON_PREV = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="
 const ICON_PLAY = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg>';
 const ICON_STOP = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="6.5" y="6.5" width="11" height="11" rx="2.2" fill="currentColor"/></svg>';
 const ICON_NEXT = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M9.5 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const ICON_SPARK = '<svg class="spark" viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" focusable="false"><path d="M12 2.5l2.3 7.2 7.2 2.3-7.2 2.3L12 21.5l-2.3-7.2L2.5 12l7.2-2.3z" fill="currentColor"/></svg>';
 
 const relTime = (iso) => {
   const d = new Date(iso);
@@ -335,7 +336,7 @@ const reader = (() => {
   function paintListen() {
     const b = scroller && $("[data-listen]", scroller);
     if (!b) return;
-    b.hidden = !voice();
+    b.hidden = !voice() || !b.dataset.text;
     b.setAttribute("aria-pressed", String(speaking));
     b.innerHTML = `${speaking ? ICON_STOP : ICON_PLAY}<span>${speaking ? "Ferma" : "Ascolta"}</span>`;
   }
@@ -378,23 +379,36 @@ const reader = (() => {
       `<a href="${hashFor(r.id)}" data-goto="${esc(r.id)}"><strong>${esc(r.title)}</strong><span class="meta"><span class="meta__src">${esc(r.source)}</span><time datetime="${esc(r.ts)}">${esc(relTime(r.ts))}</time></span></a>`).join("")}</div></section>`;
   }
 
-  function render(s) {
+  /* Cosa dire del riassunto, a seconda dello stato che calcola build.py (brief_state). Le promesse devono essere vere:
+     «in arrivo» solo se il cron la riscriverà davvero; per dirette e video si dice perché non c'è. */
+  const NOTE = {
+    own: "Riassunto scritto da Sportwire leggendo le testate che ne parlano. Per i dettagli c’è l’articolo originale.",
+    wait: "Il riassunto di Sportwire è in coda: si scrivono ogni ora, prima le notizie in prima pagina. Intanto c’è il sommario della testata.",
+    skip: "Per questa notizia basta il sommario della testata: l’articolo non aggiunge altro da riassumere.",
+    live: "È una diretta: cambia di minuto in minuto, quindi non si riassume finché non è finita. Seguila sulla testata.",
+    video: "È un video: si guarda sulla testata.",
+  };
+  function box(s) {
     const own = !!s.brief;
+    const state = own ? "own" : (s.brief_state || "wait");
     const text = s.brief || s.summary || "";
+    const label = own ? "In breve · Sportwire" : state === "live" ? "Diretta · dalla testata" : state === "video" ? "Video · dalla testata" : "Dalla testata";
+    const note = NOTE[state] || NOTE.wait;
+    if (!text) return `<div class="reader__box reader__box--${state}"><p class="eyebrow">${label}</p><p class="reader__note">${note}</p></div>`;
+    return `<div class="reader__box reader__box--${state}"><p class="eyebrow">${own ? ICON_SPARK : ""}${label}</p><p class="reader__brief${own ? "" : " reader__brief--src"}">${esc(text)}</p><p class="reader__note">${note}</p></div>`;
+  }
+
+  function render(s) {
     const others = (s.sources || []).filter((x) => x !== s.source);
-    const box = text
-      ? `<div class="reader__box"><p class="eyebrow">${own ? "In breve · riscritta da Sportwire" : "Dalla testata"}</p><p class="reader__brief${own ? "" : " reader__brief--src"}">${esc(text)}</p><p class="reader__note">${own
-        ? "Riscrittura di Sportwire a partire da ciò che pubblicano le testate: per i dettagli c’è l’articolo originale."
-        : "Per ora c’è il sommario della testata: la riscrittura in breve arriva al prossimo aggiornamento."}</p></div>`
-      : "";
+    const watch = s.video || s.brief_state === "video";
     scroller.innerHTML = `${photo(s)}<div class="reader__body">
       <div><p class="kicker">${esc(secName(s.section))}${s.kicker && s.kicker !== secName(s.section) ? `<span class="kicker__sub">${esc(s.kicker)}</span>` : ""}${s.live ? '<span class="badge badge--live">Diretta</span>' : ""}</p>
       <h2 class="reader__title" id="rd-title">${esc(s.title)}</h2></div>
       <p class="meta"><span class="meta__src">${esc(s.source)}</span><time datetime="${esc(s.ts)}">${esc(relTime(s.ts))}</time>${others.length ? `<span class="meta__more">+${others.length} ${others.length === 1 ? "testata" : "testate"}: ${esc(others.join(", "))}</span>` : ""}</p>
-      ${box}
+      ${box(s)}
       <div class="reader__actions">
-        <a class="btn btn--primary" href="${esc(s.link)}" target="_blank" rel="noopener" data-visit>Leggi su ${esc(s.source || "la testata")} ${ICON_OUT}</a>
-        <button type="button" class="btn btn--quiet" data-listen aria-pressed="false" hidden>${ICON_PLAY}<span>Ascolta</span></button>
+        <a class="btn btn--primary" href="${esc(s.link)}" target="_blank" rel="noopener" data-visit>${watch ? "Guarda" : s.live ? "Segui" : "Leggi"} su ${esc(s.source || "la testata")} ${ICON_OUT}</a>
+        <button type="button" class="btn btn--quiet" data-listen data-text="${s.brief || s.summary ? "1" : ""}" aria-pressed="false" hidden>${ICON_PLAY}<span>Ascolta</span></button>
       </div>
       ${chrono(s)}${related(s)}
     </div>`;
@@ -850,7 +864,7 @@ const sky = (() => {
       <h3 class="sky__peek-title">${esc(s.title)}</h3>
       ${text ? `<p class="brief${own ? " brief--own" : ""}">${esc(text)}</p>` : ""}
       <p class="meta"><span class="meta__src">${esc(s.source)}</span><time datetime="${esc(s.ts)}">${esc(relTime(s.ts))}</time>${s.sources.length > 1 ? `<span class="meta__more">+${s.sources.length - 1} ${s.sources.length === 2 ? "testata" : "testate"}</span>` : ""}</p></div>
-      <button type="button" class="btn btn--primary" data-peek-open="${esc(s.id)}">Leggi in breve</button>`;
+      <button type="button" class="btn btn--primary" data-peek-open="${esc(s.id)}">${own ? "Leggi in breve" : "Apri la notizia"}</button>`;
   }
 
   function select(r, byKey) {
@@ -886,34 +900,46 @@ const sky = (() => {
 
     if (!root.dataset.bound) {
       root.dataset.bound = "1";
-      stage.addEventListener("pointerover", (e) => {
-        const b = e.target.closest(".star");
-        if (!b || e.pointerType !== "mouse") return;
-        const r = rec(b.dataset.sid);
-        if (r) { hovered = r; focusOn(r, true); showPeek(r.s); }
-      });
-      stage.addEventListener("pointerout", (e) => {
-        if (e.pointerType !== "mouse" || !e.target.closest(".star")) return;
-        hovered = null;
-        focusOn(selected, false); if (selected) showPeek(selected.s);
-      });
-      /* col dito le stelle (6–8px) sono bersagli minuscoli e nelle nubi si accavallano: vince la più vicina al tocco */
-      let lastPT = "mouse";
-      stage.addEventListener("pointerdown", (e) => { lastPT = e.pointerType || "mouse"; }, true);
-      const nearestStar = (x, y, radius) => {
+      /* Le stelle sono puntini di 6–22px e nelle nubi stanno a pochi pixel l'una dall'altra: il bersaglio non è l'elemento
+         sotto il puntatore (le aree di tocco si accavallano e vinceva la vicina) ma la stella col centro più vicino. */
+      const nearest = (cx, cy, radius) => {
+        const cr = canvas.getBoundingClientRect();
+        if (cx < frame.getBoundingClientRect().left + labW()) return null;      // sotto i nomi delle corsie
+        const x = cx - cr.left, y = cy - cr.top;
         let best = null, bd = radius;
-        for (const r of stars) {
-          const q = r.el.getBoundingClientRect();
-          const d = Math.hypot(q.left + q.width / 2 - x, q.top + q.height / 2 - y);
-          if (d < bd) { bd = d; best = r; }
-        }
+        for (const r of stars) { const d = Math.hypot(r.x - x, r.y - y); if (d < bd) { bd = d; best = r; } }
         return best;
       };
+      const unhover = () => {
+        stage.classList.remove("is-pointing");
+        if (!hovered) return;
+        hovered = null;
+        focusOn(selected, false); if (selected) showPeek(selected.s);
+      };
+      let raf = 0, pt = null;
+      stage.addEventListener("pointermove", (e) => {
+        if (e.pointerType !== "mouse") return;
+        pt = [e.clientX, e.clientY];
+        if (raf) return;
+        raf = requestAnimationFrame(() => {
+          raf = 0;
+          const r = nearest(pt[0], pt[1], 18);
+          if (!r) { unhover(); return; }
+          stage.classList.add("is-pointing");
+          if (r !== hovered) { hovered = r; focusOn(r, true); showPeek(r.s); }
+        });
+      });
+      stage.addEventListener("pointerleave", (e) => { if (e.pointerType === "mouse") unhover(); });
+      let lastPT = "mouse";
+      stage.addEventListener("pointerdown", (e) => { lastPT = e.pointerType || "mouse"; }, true);
       stage.addEventListener("click", (e) => {
-        let r = null;
-        if (lastPT !== "mouse" && e.detail > 0) r = nearestStar(e.clientX, e.clientY, 26);
-        if (!r) { const b = e.target.closest(".star"); r = b && rec(b.dataset.sid); }
-        if (r) select(r, false);
+        const b = e.target.closest(".star");
+        if (e.detail === 0) { const r = b && rec(b.dataset.sid); if (r) select(r, false); return; }   // da tastiera
+        const mouse = lastPT === "mouse";
+        const r = nearest(e.clientX, e.clientY, mouse ? 18 : 26);
+        if (!r) return;
+        if (mouse || r === selected) { select(r, false); reader.open(r.s.id, laneIds(r.lane)); }
+        else select(r, false);
       });
       stage.addEventListener("focusin", (e) => {
         const b = e.target.closest(".star");
@@ -1139,12 +1165,28 @@ const history_ = (() => {
       if (!btn) return;
       const f = btn.dataset.filter;
       $$(".chip", chips).forEach((c) => c.setAttribute("aria-pressed", String(c === btn)));
+      if (chips.scrollWidth > chips.clientWidth) chips.scrollTo({ left: btn.offsetLeft - chips.clientWidth / 2 + btn.offsetWidth / 2, behavior: reduce ? "auto" : "smooth" });
       withVT(() => {
         let shown = 0;
         items.forEach((n) => { const on = f === "*" || n.dataset.k === f; n.hidden = !on; if (on) shown++; });
         if (empty) empty.hidden = shown > 0;
       });
     });
+  }
+
+  /* 3b. barra delle sezioni su telefono: scorre in orizzontale. La sezione aperta si vede sempre, e le sfumature
+     sui bordi compaiono solo dove c'è altro da scoprire. */
+  const links = $(".pill__links");
+  if (links) {
+    const edges = () => {
+      links.classList.toggle("at-start", links.scrollLeft < 4);
+      links.classList.toggle("at-end", links.scrollLeft + links.clientWidth >= links.scrollWidth - 4);
+    };
+    const cur = $('[aria-current="page"]', links);
+    if (cur && links.scrollWidth > links.clientWidth) links.scrollTo({ left: cur.offsetLeft - links.clientWidth / 2 + cur.offsetWidth / 2, behavior: "instant" });
+    edges();
+    links.addEventListener("scroll", edges, { passive: true });
+    addEventListener("resize", edges, { passive: true });
   }
 
   /* 4. le notizie si aprono dentro Sportwire; l'articolo originale resta a un tocco (e viene registrato) */

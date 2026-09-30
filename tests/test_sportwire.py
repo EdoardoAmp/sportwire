@@ -63,6 +63,46 @@ def test_extract_never_raises_on_garbage():
         assert isinstance(article.extract(junk), dict)
 
 
+def test_clean_drops_escaped_quotes_and_space_before_punctuation():
+    assert article._clean('ha detto \\"colpevole\\" ieri , poi è partito .') == 'ha detto "colpevole" ieri, poi è partito.'
+
+
+def test_fetch_follows_308_redirects():
+    """Corriere dello Sport e Tuttosport rispondono 308 per togliere la «/» finale: urllib di Python 3.9 non lo segue."""
+    import http.server
+    import threading
+
+    body = ("<html><body><article>" + "<p>" + "Testo vero dell'articolo con abbastanza parole. " * 6 + "</p>" * 1
+            + "</article></body></html>").encode()
+
+    class H(http.server.BaseHTTPRequestHandler):
+        def do_GET(self):  # noqa: N802
+            if self.path == "/pezzo/":
+                self.send_response(308)
+                self.send_header("Location", "/pezzo")
+                self.end_headers()
+            elif self.path == "/pezzo":
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.end_headers()
+                self.wfile.write(body)
+            else:
+                self.send_response(404)
+                self.end_headers()
+
+        def log_message(self, *a):
+            pass
+
+    srv = http.server.ThreadingHTTPServer(("127.0.0.1", 0), H)
+    threading.Thread(target=srv.serve_forever, daemon=True).start()
+    try:
+        article._robots.clear()
+        page = article.fetch(f"http://127.0.0.1:{srv.server_address[1]}/pezzo/")
+        assert page is not None and "Testo vero" in page
+    finally:
+        srv.shutdown()
+
+
 def test_robots_blocked_or_unreachable_means_do_not_fetch(monkeypatch):
     def deny(url, accept=""):
         raise OSError("giù")
@@ -160,16 +200,25 @@ def story(i, **kw):
     return s
 
 
-def test_pending_skips_live_and_orders_home_first():
-    news = {"stories": [story(1), story(2, on_home=True), story(3, live=True), story(4, on_home=True, score=9)]}
+def test_pending_skips_live_and_video_and_orders_home_first():
+    news = {"stories": [story(1), story(2, on_home=True), story(3, live=True), story(4, on_home=True, score=9),
+                        story(5, video=True)]}
     kinds = [(k, s["id"]) for k, s in briefs.pending(news, {})]
     assert [i for _, i in kinds] == ["s4", "s2", "s1"]
 
 
 def test_pending_retries_skipped_story_when_more_outlets_cover_it():
     news = {"stories": [story(1, sources=["Gazzetta", "Sky Sport"]), story(2)]}
-    done = {"s1": {"b": "", "skip": True, "n": 1, "at": now_iso()}, "s2": {"b": "", "skip": True, "n": 1, "at": now_iso()}}
+    v = briefs.SKIP_VER
+    done = {"s1": {"b": "", "skip": True, "n": 1, "at": now_iso(), "v": v}, "s2": {"b": "", "skip": True, "n": 1, "at": now_iso(), "v": v}}
     assert [s["id"] for _, s in briefs.pending(news, done)] == ["s1"]
+
+
+def test_pending_retries_old_skips_once_when_sources_are_read_better():
+    news = {"stories": [story(1), story(2)]}
+    done = {"s1": {"b": "", "skip": True, "n": 1, "at": now_iso()},                          # «null» di prima del fix
+            "s2": {"b": "", "skip": True, "n": 1, "at": now_iso(), "v": briefs.SKIP_VER}}    # «null» già con le fonti nuove
+    assert [(k, s["id"]) for k, s in briefs.pending(news, done)] == [("riprova", "s1")]
 
 
 def test_pending_rewrites_when_the_picture_changes_a_lot():
@@ -188,10 +237,10 @@ def test_wake_gate_sleeps_for_quiet_queues_and_wakes_for_real_work(capsys, monke
     monkeypatch.setattr(briefs, "gather", lambda s: {"id": s["id"], "cat": "calcio", "kicker": "", "title": s["id"], "summary": "",
                                                      "outlets": ["Gazzetta"], "video": False, "texts": [], "extra": [], "chars": 0})
 
-    news.write_text(json.dumps({"stories": [story(1, on_home=True), story(2), story(3)]}))
+    news.write_text(json.dumps({"stories": [story(1), story(2), story(3, video=True), story(4, live=True)]}))
     assert briefs.gate(20) == 0
     out = capsys.readouterr().out.strip().splitlines()
-    assert json.loads(out[-1]) == {"wakeAgent": False}                    # una sola in prima pagina: si aspetta
+    assert json.loads(out[-1]) == {"wakeAgent": False}                    # due storie fuori pagina (+ video e diretta): si aspetta
 
     news.write_text(json.dumps({"stories": [story(i, on_home=True) for i in range(briefs.WAKE_HOME)]}))
     assert briefs.gate(20) == 0
@@ -222,6 +271,52 @@ def test_story_id_is_stable_when_more_articles_join():
     b = item("Pogacar salta gli Europei di ciclismo, lo dice il suo staff", "gazzetta", 10, link="https://gazzetta.it/dopo")
     both = build.cluster([dict(b), dict(a)])
     assert len(both) == 1 and both[0]["id"] == first                        # la storia si chiama come il suo primo articolo
+
+
+def test_two_stories_bridged_by_an_older_article_become_one():
+    # Il raggruppamento va dal più recente: a e b si somigliano poco e aprono due storie; c, uscito prima di entrambi,
+    # somiglia a tutte e due. Prima finiva nella prima trovata e le due storie gemelle restavano separate.
+    a = item("Canestro sulla sirena e derby deciso: festa milano", "gazzetta", 100, link="https://g.it/a")
+    b = item("Virtus fermata allo scadere: milano vince il derby", "sky", 200, link="https://sky.it/b")
+    c = item("Milano batte la virtus nel derby allo scadere: canestro sulla sirena", "cds", 300, link="https://cds.it/c")
+    for i in (a, b, c):
+        i["cat"], i["kicker"] = "basket", "Eurolega"
+    assert len(build.cluster([dict(a), dict(b)])) == 2                     # da sole non si somigliano abbastanza
+    both = build.cluster([dict(a), dict(b), dict(c)])
+    assert len(both) == 1 and len(both[0]["items"]) == 3
+    assert both[0]["id"] == build.item_id("https://cds.it/c")              # la storia unita si chiama come il primo articolo
+
+
+def test_cluster_never_merges_two_different_matches():
+    a = item("Inter-Cagliari 2-0, decide Lautaro nel finale", "gazzetta", 300, link="https://g.it/1")
+    b = item("Milan-Lazio 1-1, pari nel finale a San Siro", "gazzetta", 200, link="https://g.it/2")
+    c = item("Serie A, finale di serata: Inter-Cagliari e Milan-Lazio nel finale", "sky", 100, link="https://sky.it/3")
+    assert len(build.cluster([dict(a), dict(b), dict(c)])) >= 2
+
+
+def test_live_badge_goes_away_when_the_event_is_over():
+    now = datetime.now().astimezone()
+    ago = lambda h: (now - timedelta(hours=h)).isoformat()                  # noqa: E731
+    fresh = {"items": [{"ts": ago(1), "live": True, "title": "Inter-Milan in diretta"}]}
+    old = {"items": [{"ts": ago(5), "live": True, "title": "Inter-Milan in diretta"}]}
+    over = {"items": [{"ts": ago(2), "live": True, "title": "Inter-Milan in diretta"},
+                      {"ts": ago(1), "live": False, "title": "Inter-Milan 2-1: gli highlights"}]}
+    assert build.still_live(fresh, now) is True
+    assert build.still_live(old, now) is False
+    assert build.still_live(over, now) is False
+
+
+def test_brief_survives_when_its_story_changes_name_and_state_tells_the_truth():
+    st = {"id": "nuovo", "items": [{"id": "nuovo"}, {"id": "vecchio"}], "live": False, "video": False,
+          "sources": ["gazzetta", "sky"]}
+    old = {"b": "Milano vince il derby sulla sirena.", "at": now_iso(hours=2), "n": 1}
+    assert build.brief_of(st, {"vecchio": old})["b"] == old["b"]
+    st["brief"] = ""
+    assert build.brief_state(st, {}) == "wait"                              # riassunto in arrivo
+    assert build.brief_state(st, {"nuovo": {"b": "", "skip": True, "n": 2, "v": briefs.SKIP_VER}}) == "skip"
+    assert build.brief_state(dict(st, video=True), {}) == "video"
+    assert build.brief_state(dict(st, live=True), {}) == "live"
+    assert build.brief_state(dict(st, brief="x"), {}) == "own"
 
 
 # ------------------------------------------------------------------ pulizia dei titoli

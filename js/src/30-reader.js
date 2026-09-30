@@ -73,7 +73,7 @@ const reader = (() => {
   function paintListen() {
     const b = scroller && $("[data-listen]", scroller);
     if (!b) return;
-    b.hidden = !voice();
+    b.hidden = !voice() || !b.dataset.text;
     b.setAttribute("aria-pressed", String(speaking));
     b.innerHTML = `${speaking ? ICON_STOP : ICON_PLAY}<span>${speaking ? "Ferma" : "Ascolta"}</span>`;
   }
@@ -116,23 +116,36 @@ const reader = (() => {
       `<a href="${hashFor(r.id)}" data-goto="${esc(r.id)}"><strong>${esc(r.title)}</strong><span class="meta"><span class="meta__src">${esc(r.source)}</span><time datetime="${esc(r.ts)}">${esc(relTime(r.ts))}</time></span></a>`).join("")}</div></section>`;
   }
 
-  function render(s) {
+  /* Cosa dire del riassunto, a seconda dello stato che calcola build.py (brief_state). Le promesse devono essere vere:
+     «in arrivo» solo se il cron la riscriverà davvero; per dirette e video si dice perché non c'è. */
+  const NOTE = {
+    own: "Riassunto scritto da Sportwire leggendo le testate che ne parlano. Per i dettagli c’è l’articolo originale.",
+    wait: "Il riassunto di Sportwire è in coda: si scrivono ogni ora, prima le notizie in prima pagina. Intanto c’è il sommario della testata.",
+    skip: "Per questa notizia basta il sommario della testata: l’articolo non aggiunge altro da riassumere.",
+    live: "È una diretta: cambia di minuto in minuto, quindi non si riassume finché non è finita. Seguila sulla testata.",
+    video: "È un video: si guarda sulla testata.",
+  };
+  function box(s) {
     const own = !!s.brief;
+    const state = own ? "own" : (s.brief_state || "wait");
     const text = s.brief || s.summary || "";
+    const label = own ? "In breve · Sportwire" : state === "live" ? "Diretta · dalla testata" : state === "video" ? "Video · dalla testata" : "Dalla testata";
+    const note = NOTE[state] || NOTE.wait;
+    if (!text) return `<div class="reader__box reader__box--${state}"><p class="eyebrow">${label}</p><p class="reader__note">${note}</p></div>`;
+    return `<div class="reader__box reader__box--${state}"><p class="eyebrow">${own ? ICON_SPARK : ""}${label}</p><p class="reader__brief${own ? "" : " reader__brief--src"}">${esc(text)}</p><p class="reader__note">${note}</p></div>`;
+  }
+
+  function render(s) {
     const others = (s.sources || []).filter((x) => x !== s.source);
-    const box = text
-      ? `<div class="reader__box"><p class="eyebrow">${own ? "In breve · riscritta da Sportwire" : "Dalla testata"}</p><p class="reader__brief${own ? "" : " reader__brief--src"}">${esc(text)}</p><p class="reader__note">${own
-        ? "Riscrittura di Sportwire a partire da ciò che pubblicano le testate: per i dettagli c’è l’articolo originale."
-        : "Per ora c’è il sommario della testata: la riscrittura in breve arriva al prossimo aggiornamento."}</p></div>`
-      : "";
+    const watch = s.video || s.brief_state === "video";
     scroller.innerHTML = `${photo(s)}<div class="reader__body">
       <div><p class="kicker">${esc(secName(s.section))}${s.kicker && s.kicker !== secName(s.section) ? `<span class="kicker__sub">${esc(s.kicker)}</span>` : ""}${s.live ? '<span class="badge badge--live">Diretta</span>' : ""}</p>
       <h2 class="reader__title" id="rd-title">${esc(s.title)}</h2></div>
       <p class="meta"><span class="meta__src">${esc(s.source)}</span><time datetime="${esc(s.ts)}">${esc(relTime(s.ts))}</time>${others.length ? `<span class="meta__more">+${others.length} ${others.length === 1 ? "testata" : "testate"}: ${esc(others.join(", "))}</span>` : ""}</p>
-      ${box}
+      ${box(s)}
       <div class="reader__actions">
-        <a class="btn btn--primary" href="${esc(s.link)}" target="_blank" rel="noopener" data-visit>Leggi su ${esc(s.source || "la testata")} ${ICON_OUT}</a>
-        <button type="button" class="btn btn--quiet" data-listen aria-pressed="false" hidden>${ICON_PLAY}<span>Ascolta</span></button>
+        <a class="btn btn--primary" href="${esc(s.link)}" target="_blank" rel="noopener" data-visit>${watch ? "Guarda" : s.live ? "Segui" : "Leggi"} su ${esc(s.source || "la testata")} ${ICON_OUT}</a>
+        <button type="button" class="btn btn--quiet" data-listen data-text="${s.brief || s.summary ? "1" : ""}" aria-pressed="false" hidden>${ICON_PLAY}<span>Ascolta</span></button>
       </div>
       ${chrono(s)}${related(s)}
     </div>`;

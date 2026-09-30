@@ -175,7 +175,7 @@ const sky = (() => {
       <h3 class="sky__peek-title">${esc(s.title)}</h3>
       ${text ? `<p class="brief${own ? " brief--own" : ""}">${esc(text)}</p>` : ""}
       <p class="meta"><span class="meta__src">${esc(s.source)}</span><time datetime="${esc(s.ts)}">${esc(relTime(s.ts))}</time>${s.sources.length > 1 ? `<span class="meta__more">+${s.sources.length - 1} ${s.sources.length === 2 ? "testata" : "testate"}</span>` : ""}</p></div>
-      <button type="button" class="btn btn--primary" data-peek-open="${esc(s.id)}">Leggi in breve</button>`;
+      <button type="button" class="btn btn--primary" data-peek-open="${esc(s.id)}">${own ? "Leggi in breve" : "Apri la notizia"}</button>`;
   }
 
   function select(r, byKey) {
@@ -211,34 +211,46 @@ const sky = (() => {
 
     if (!root.dataset.bound) {
       root.dataset.bound = "1";
-      stage.addEventListener("pointerover", (e) => {
-        const b = e.target.closest(".star");
-        if (!b || e.pointerType !== "mouse") return;
-        const r = rec(b.dataset.sid);
-        if (r) { hovered = r; focusOn(r, true); showPeek(r.s); }
-      });
-      stage.addEventListener("pointerout", (e) => {
-        if (e.pointerType !== "mouse" || !e.target.closest(".star")) return;
-        hovered = null;
-        focusOn(selected, false); if (selected) showPeek(selected.s);
-      });
-      /* col dito le stelle (6–8px) sono bersagli minuscoli e nelle nubi si accavallano: vince la più vicina al tocco */
-      let lastPT = "mouse";
-      stage.addEventListener("pointerdown", (e) => { lastPT = e.pointerType || "mouse"; }, true);
-      const nearestStar = (x, y, radius) => {
+      /* Le stelle sono puntini di 6–22px e nelle nubi stanno a pochi pixel l'una dall'altra: il bersaglio non è l'elemento
+         sotto il puntatore (le aree di tocco si accavallano e vinceva la vicina) ma la stella col centro più vicino. */
+      const nearest = (cx, cy, radius) => {
+        const cr = canvas.getBoundingClientRect();
+        if (cx < frame.getBoundingClientRect().left + labW()) return null;      // sotto i nomi delle corsie
+        const x = cx - cr.left, y = cy - cr.top;
         let best = null, bd = radius;
-        for (const r of stars) {
-          const q = r.el.getBoundingClientRect();
-          const d = Math.hypot(q.left + q.width / 2 - x, q.top + q.height / 2 - y);
-          if (d < bd) { bd = d; best = r; }
-        }
+        for (const r of stars) { const d = Math.hypot(r.x - x, r.y - y); if (d < bd) { bd = d; best = r; } }
         return best;
       };
+      const unhover = () => {
+        stage.classList.remove("is-pointing");
+        if (!hovered) return;
+        hovered = null;
+        focusOn(selected, false); if (selected) showPeek(selected.s);
+      };
+      let raf = 0, pt = null;
+      stage.addEventListener("pointermove", (e) => {
+        if (e.pointerType !== "mouse") return;
+        pt = [e.clientX, e.clientY];
+        if (raf) return;
+        raf = requestAnimationFrame(() => {
+          raf = 0;
+          const r = nearest(pt[0], pt[1], 18);
+          if (!r) { unhover(); return; }
+          stage.classList.add("is-pointing");
+          if (r !== hovered) { hovered = r; focusOn(r, true); showPeek(r.s); }
+        });
+      });
+      stage.addEventListener("pointerleave", (e) => { if (e.pointerType === "mouse") unhover(); });
+      let lastPT = "mouse";
+      stage.addEventListener("pointerdown", (e) => { lastPT = e.pointerType || "mouse"; }, true);
       stage.addEventListener("click", (e) => {
-        let r = null;
-        if (lastPT !== "mouse" && e.detail > 0) r = nearestStar(e.clientX, e.clientY, 26);
-        if (!r) { const b = e.target.closest(".star"); r = b && rec(b.dataset.sid); }
-        if (r) select(r, false);
+        const b = e.target.closest(".star");
+        if (e.detail === 0) { const r = b && rec(b.dataset.sid); if (r) select(r, false); return; }   // da tastiera
+        const mouse = lastPT === "mouse";
+        const r = nearest(e.clientX, e.clientY, mouse ? 18 : 26);
+        if (!r) return;
+        if (mouse || r === selected) { select(r, false); reader.open(r.s.id, laneIds(r.lane)); }
+        else select(r, false);
       });
       stage.addEventListener("focusin", (e) => {
         const b = e.target.closest(".star");

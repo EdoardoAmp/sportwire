@@ -259,6 +259,59 @@ def function_checks(browser) -> int:
                     pg.wait_for_timeout(250)
                     got = pg.evaluate("(document.querySelector('.star.is-on') || {}).dataset && document.querySelector('.star.is-on').dataset.sid")
                     check(got == spot["id"], "", f"{tag}tocco a 15px da una stella isolata: selezionata {got!r}, attesa {spot['id']!r}", out)
+                    # secondo tocco sulla stessa stella: apre la notizia
+                    pg.touchscreen.tap(xy[0] + 12, xy[1] + 9)
+                    pg.wait_for_timeout(500)
+                    opened = pg.evaluate("location.hash")
+                    check(opened == f"#/s/{spot['id']}", "", f"{tag}secondo tocco sulla stella: aperto {opened!r}", out)
+                    pg.keyboard.press("Escape")
+                    pg.wait_for_timeout(500)
+        else:
+            # col mouse ogni stella dev'essere raggiungibile, anche nelle nubi fitte: il bersaglio è il centro più vicino
+            pg.evaluate("document.querySelector('[data-sky]').scrollIntoView({block: 'start', behavior: 'instant'})")
+            pg.wait_for_timeout(700)
+            miss = pg.evaluate("""() => {
+              const st = document.querySelector('[data-sky-stage]'); const lab = document.querySelector('.sky__labels').getBoundingClientRect().right;
+              const sr = st.getBoundingClientRect(); let tried = 0, wrong = 0;
+              for (const s of document.querySelectorAll('.star')) {
+                const q = s.getBoundingClientRect(), x = q.left + q.width / 2, y = q.top + q.height / 2;
+                if (x < lab + 4 || x > sr.right - 4 || y < 0 || y > innerHeight) continue;
+                tried++;
+                const t = document.elementFromPoint(x, y);
+                if (!t || !st.contains(t)) wrong++;
+              }
+              return [tried, wrong];
+            }""")
+            check(miss[1] == 0, "", f"{tag}cielo: {miss[1]} stelle su {miss[0]} coperte da altro", out)
+            dense = pg.evaluate("""() => {
+              const S = [...document.querySelectorAll('.star')].map((e) => { const q = e.getBoundingClientRect(); return { id: e.dataset.sid, x: q.left + q.width / 2, y: q.top + q.height / 2 }; });
+              const lab = document.querySelector('.sky__labels').getBoundingClientRect().right, R = document.querySelector('[data-sky-stage]').getBoundingClientRect().right;
+              return S.filter((a) => a.x > lab + 6 && a.x < R - 6 && a.y > 70 && a.y < innerHeight - 10
+                && S.some((b) => b.id !== a.id && Math.hypot(a.x - b.x, a.y - b.y) < 16)).slice(0, 6);
+            }""")
+            centre = "(id) => { const q = document.querySelector('.star[data-sid=\"' + id + '\"]').getBoundingClientRect(); return [q.left + q.width / 2, q.top + q.height / 2]; }"
+            bad = []
+            for d in dense:
+                x, y = pg.evaluate(centre, d["id"])                     # posizione di adesso, non di prima
+                pg.mouse.move(x, y)
+                pg.wait_for_timeout(150)
+                got = pg.evaluate("(document.querySelector('.star.is-on') || {dataset: {}}).dataset.sid")
+                if got != d["id"]:
+                    bad.append((d["id"], got))
+            check(not bad, "", f"{tag}cielo: nella nube il mouse sul centro sceglie un'altra stella {bad[:3]}", out)
+            if dense:
+                x, y = pg.evaluate(centre, dense[0]["id"])
+                pg.mouse.click(x, y)
+                pg.wait_for_timeout(500)
+                opened = pg.evaluate("location.hash")
+                check(opened == f"#/s/{dense[0]['id']}", "", f"{tag}clic su una stella: aperto {opened!r}", out)
+                pg.keyboard.press("Escape")
+                pg.wait_for_timeout(500)
+            pg.mouse.move(5, 5)
+            # il clic sulla stella ha aperto (e registrato) una notizia: si riparte puliti per i controlli sulla cronologia
+            pg.evaluate("localStorage.clear()")
+            pg.goto(BASE + "/index.html", wait_until="networkidle")
+            pg.wait_for_timeout(500)
 
         # dossier dal click su una notizia
         link = pg.query_selector("a[data-story]:visible")
@@ -289,6 +342,7 @@ def function_checks(browser) -> int:
         pg.wait_for_timeout(800)
         check(pg.evaluate("!!document.querySelector('.reader.is-open')"), "", f"{tag}deep link #/s/{first} non apre il dossier", out)
         pg.keyboard.press("Escape")
+        pg.wait_for_timeout(500)                                            # la chiusura torna indietro nella cronologia
 
         # ricerca
         pg.goto(BASE + "/index.html", wait_until="networkidle")

@@ -17,8 +17,8 @@
 .sky__lines line { stroke: var(--accent); stroke-opacity: .7; stroke-width: 1px; stroke-dasharray: 3 4; vector-effect: non-scaling-stroke; }
 
 .star { --d: 8px; position: absolute; z-index: 2; width: var(--d); height: var(--d); margin: calc(var(--d) / -2) 0 0 calc(var(--d) / -2); padding: 0; border-radius: 50%; background: var(--star); opacity: .92; transition: transform var(--t-fast) var(--ease), box-shadow var(--t-fast), opacity var(--t-mid), background var(--t-fast); }
-.star::before { content: ""; position: absolute; inset: -12px; border-radius: 50%; }
-.star:hover, .star:focus-visible, .star.is-on { z-index: 5; transform: scale(1.55); box-shadow: 0 0 0 4px oklch(0.96 0.02 85 / .16), 0 0 26px 2px oklch(0.96 0.02 85 / .45); opacity: 1; }
+.sky__stage.is-pointing { cursor: pointer; }
+.star:focus-visible, .star.is-on { z-index: 5; transform: scale(1.55); box-shadow: 0 0 0 4px oklch(0.96 0.02 85 / .16), 0 0 26px 2px oklch(0.96 0.02 85 / .45); opacity: 1; }
 .star:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 .star--multi { background: var(--accent); box-shadow: 0 0 16px -1px oklch(0.80 0.155 68 / .75); }
 .star--live { background: var(--hot); animation: pulse 2.4s ease-out infinite; }

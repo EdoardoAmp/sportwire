@@ -33,6 +33,7 @@ from email.utils import parsedate_to_datetime
 from urllib.parse import urlparse
 from zoneinfo import ZoneInfo
 
+import briefs as BR
 import render as R
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -465,6 +466,35 @@ def same_story(a: dict, b: dict) -> bool:
 
 RARE_NAMES: set[str] = set()
 COMMON_NAME_STEMS: set[str] = set()
+MAX_STORY = 16
+
+
+def fixtures(st: dict) -> set[str]:
+    return {i["fx"] for i in st["items"] if i["fx"]}
+
+
+def rivals(fx_a: set[str], fx_b: set[str]) -> bool:
+    """Partite diverse: nessuna squadra in comune («Inter-Cagliari» e «Milan-Lazio»). «Olimpia Milano-Virtus Bologna»
+    e «Milano-Bologna» invece hanno una squadra in comune: è lo stesso incontro scritto in due modi."""
+    teams = lambda fx: {t for f in fx for t in f.split("|")}          # noqa: E731
+    return bool(fx_a and fx_b and not teams(fx_a) & teams(fx_b))
+
+LIVE_FOR = timedelta(hours=4)
+OVER_RX = re.compile(r"\b(highlights|pagelle|voti|tabellino|il film del|risultato finale)\b", re.I)
+
+
+def still_live(st: dict, now: datetime) -> bool:
+    """«Diretta» solo finché la diretta è fresca: al più 4 ore dall'ultimo articolo in diretta, e nessun highlights o
+    pagelle arrivati dopo. A evento finito la storia torna normale e si può riassumere (il derby Milano-Virtus restava
+    «in diretta» con l'87-85 finale già nel titolo)."""
+    lives = [datetime.fromisoformat(i["ts"]) for i in st["items"] if i.get("live")]
+    if not lives:
+        return False
+    last = max(lives)
+    if now - last > LIVE_FOR:
+        return False
+    return not any(OVER_RX.search(i["title"]) and datetime.fromisoformat(i["ts"]) > last
+                   for i in st["items"] if not i.get("live"))
 
 
 def cluster(items: list[dict]) -> list[dict]:
@@ -482,12 +512,20 @@ def cluster(items: list[dict]) -> list[dict]:
     COMMON_NAME_STEMS.update(stem(n) for n, c in df.items() if c > 4)
     stories: list[dict] = []
     for it in items:
-        for st in stories:
-            if st["cat"] == it["cat"] and any(same_story(it, o) for o in st["items"]):
-                st["items"].append(it)
-                break
-        else:
+        hits = [st for st in stories if st["cat"] == it["cat"] and not rivals({it["fx"]} - {""}, fixtures(st))
+                and any(same_story(it, o) for o in st["items"])]
+        if not hits:
             stories.append({"items": [it], "cat": it["cat"]})
+            continue
+        home = hits[0]
+        home["items"].append(it)
+        # L'articolo lega due storie già aperte (arrivate da testate che si sono accorte tardi di parlare della stessa
+        # cosa): diventano una. Mai due partite diverse e mai storie enormi, perché un titolo generico non unisca tutto.
+        for st in hits[1:]:
+            if rivals(fixtures(home), fixtures(st)) or len(home["items"]) + len(st["items"]) > MAX_STORY:
+                continue
+            home["items"] += st["items"]
+            stories.remove(st)
     for st in stories:
         its = st["items"]
         # rappresentante: foto migliore, poi sommario, poi il più recente
@@ -688,6 +726,28 @@ def brief_ok(b: object) -> bool:
             and not any(x in b for x in ("<", ">", "http", "\n")))
 
 
+def brief_of(st: dict, briefs: dict) -> dict:
+    """Il breve della storia. Se la storia ha cambiato nome fondendosi con una più vecchia, vale quello scritto per uno
+    dei suoi articoli (il più recente): resta finché il cron non la riscrive intera, invece di sparire."""
+    b = briefs.get(st["id"]) or {}
+    if b.get("b"):
+        return b
+    olds = [briefs[i["id"]] for i in st["items"] if i["id"] != st["id"] and (briefs.get(i["id"]) or {}).get("b")]
+    return max(olds, key=lambda x: str(x.get("at", ""))) if olds else b
+
+
+def brief_state(st: dict, briefs: dict) -> str:
+    """Per il lettore: own (riassunto di Sportwire) · wait (in arrivo) · skip (basta il sommario della testata) ·
+    live (diretta in corso) · video."""
+    if st["brief"]:
+        return "own"
+    if st["live"]:
+        return "live"
+    if st["video"]:
+        return "video"
+    return "wait" if BR.need(st, briefs.get(st["id"])) else "skip"
+
+
 def load_briefs() -> dict:
     """data/briefs.json: {id_storia: {"b": testo breve, "at": iso, "n": testate al momento}}.
     Le voci rovinate si scartano una per una: il sito esce lo stesso, con il sommario della testata."""
@@ -750,6 +810,8 @@ def build(offline: bool = False) -> int:
         it["cat"], it["kicker"] = classify(it)
         it["src_name"] = SRC_NAME[it["src"]]
     stories = cluster(fresh)
+    for st in stories:
+        st["live"] = still_live(st, now)
     rank(stories, now)
     bad = 0 if offline else validate_images(stories)     # --no-fetch: niente rete, nemmeno per le immagini
     ids = [s["id"] for s in stories]
@@ -758,9 +820,10 @@ def build(offline: bool = False) -> int:
         return 1
     briefs = load_briefs()
     for st in stories:
-        b = briefs.get(st["id"]) or {}
+        b = brief_of(st, briefs)
         st["brief"] = b.get("b", "")
         st["brief_at"] = b.get("at", "")
+        st["brief_state"] = brief_state(st, briefs)
         st["src_name"] = SRC_NAME[st["src"]]
         st["src_names"] = [SRC_NAME[x] for x in st["sources"]]
         st["sec_title"] = SEC_TITLE[st["cat"]]
@@ -802,6 +865,7 @@ def build(offline: bool = False) -> int:
     ctx = R.Ctx(now=now, site_url=SITE_URL, window=window, n_stories=len(stories),
                 n_sources=len({s for st in stories for s in st["sources"]}),
                 n_multi=sum(1 for s in stories if len(s["sources"]) > 1),
+                n_own=sum(1 for s in stories if s["brief"]),
                 sections=SECTIONS, sources=[(k, n, home) for k, n, _u, home, _q in SOURCES],
                 sec_counts=dict(sec_counts), ver=ver, theme_color=THEME_COLOR)
 
@@ -836,7 +900,7 @@ def build(offline: bool = False) -> int:
         "stories": [{
             "id": s["id"], "title": s["title"], "link": s["link"], "source": s["src_name"], "section": s["cat"],
             "kicker": s["kicker"], "ts": s["ts"], "first_ts": s["first_ts"], "image": s["image"],
-            "summary": s["summary"], "brief": s["brief"], "brief_at": s["brief_at"],
+            "summary": s["summary"], "brief": s["brief"], "brief_at": s["brief_at"], "brief_state": s["brief_state"],
             "video": s["video"], "live": s["live"], "score": round(s["score"], 2), "heat": s["heat"],
             "sources": [SRC_NAME[x] for x in s["sources"]], "on_home": id(s) in home_ids,
             "related": s["related"],

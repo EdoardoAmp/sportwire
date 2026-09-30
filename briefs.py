@@ -47,7 +47,9 @@ RUN = 8                         # 8 parole di fila uguali alla fonte = copiato
 ANCHOR = 3                      # almeno 3 parole «piene» in comune con la fonte = parla davvero di quella storia
 KEEP_DAYS = 4                   # un breve di una storia uscita dalla finestra si tiene ancora qualche giorno
 TEXT_CH, ENOUGH, MAX_PAGES = 950, 1100, 2
-WAKE_HOME, WAKE_TOTAL = 2, 6    # l'agente si sveglia se aspettano ≥2 storie della prima pagina, o ≥6 storie importanti
+WAKE_HOME, WAKE_TOTAL = 1, 4    # l'agente si sveglia se aspetta anche una sola storia della prima pagina, o ≥4 storie
+SKIP_VER = 2                    # alza di uno quando migliora la lettura delle fonti: i «null» scritti prima si riprovano una volta
+#   v2: article.py segue i redirect 308 (prima di Corriere dello Sport e Tuttosport non si leggeva niente)
 BRANCH = "briefs"
 
 RULES = """COME SI SCRIVE UN «IN BREVE» (leggi prima di scrivere)
@@ -95,21 +97,35 @@ def important(s: Dict[str, Any]) -> bool:
     return bool(s.get("on_home")) or n_sources(s) >= 2
 
 
+def writable(s: Dict[str, Any]) -> bool:
+    """Si può riassumere: non è una diretta in corso (cambia di minuto in minuto) e non è fatta solo di video."""
+    return not s.get("live") and not s.get("video")
+
+
+def need(s: Dict[str, Any], b: Optional[Dict[str, Any]]) -> Optional[str]:
+    """Cosa serve alla storia: "nuova", "riprova", "aggiorna", oppure None (niente, o non si riassume).
+    La usa anche build.py per dire all'utente se il riassunto è in arrivo o se basta il sommario della testata."""
+    if not writable(s):
+        return None
+    if b is None:
+        return "nuova"
+    if b.get("skip"):
+        if n_sources(s) > b.get("n", 0) or b.get("v", 1) < SKIP_VER:
+            return "riprova"                            # ora ne parlano più testate, o adesso le fonti si leggono meglio
+        return None
+    if n_sources(s) >= b.get("n", 1) + 2:               # +2 testate: il quadro è cambiato, si riscrive
+        return "aggiorna"
+    return None
+
+
 def pending(news: Dict[str, Any], briefs: Dict[str, Any], only_important: bool = False) -> List[Tuple[str, Dict[str, Any]]]:
     out: List[Tuple[str, Dict[str, Any]]] = []
     for s in news.get("stories", []):
-        if s.get("live"):
-            continue                                    # una diretta cambia di minuto in minuto: non si riscrive
         if only_important and not important(s):
             continue
-        b = briefs.get(s["id"])
-        if b is None:
-            out.append(("nuova", s))
-        elif b.get("skip"):
-            if n_sources(s) > b.get("n", 0):            # saltata, ma ora se ne parla in più testate: si riprova
-                out.append(("riprova", s))
-        elif n_sources(s) >= b.get("n", 1) + 2:         # +2 testate: il quadro è cambiato, si riscrive
-            out.append(("aggiorna", s))
+        kind = need(s, briefs.get(s["id"]))
+        if kind:
+            out.append((kind, s))
     order = {"nuova": 0, "riprova": 1, "aggiorna": 2}
     out.sort(key=lambda ks: (order[ks[0]], 0 if ks[1].get("on_home") else 1, -(ks[1].get("score") or 0)))
     return out
@@ -291,7 +307,7 @@ def apply(path: str) -> int:
             bad.append((sid, "non è più in news.json"))
             continue
         if text is None or (isinstance(text, str) and not text.strip()):
-            briefs[sid] = {"b": "", "at": now(), "n": n_sources(s), "skip": True}
+            briefs[sid] = {"b": "", "at": now(), "n": n_sources(s), "skip": True, "v": SKIP_VER}
             skipped += 1
             continue
         if not isinstance(text, str):
@@ -429,13 +445,13 @@ def gate(limit: int) -> int:
     """Per il cron: stampa il lavoro da fare (regole + storie + testi) oppure, se non vale la pena, la riga
     {"wakeAgent": false}, che fa saltare del tutto la chiamata al modello."""
     news, briefs = load(NEWS, {}), load(BRIEFS, {})
-    todo = pending(news, briefs, only_important=True)
+    todo = pending(news, briefs)
     if not wake(todo):
-        print(f"niente da scrivere: {len(todo)} storie importanti in coda, "
+        print(f"niente da scrivere: {len(todo)} storie in coda, "
               f"{sum(1 for _, s in todo if s.get('on_home'))} in prima pagina. L'agente resta a dormire.")
         print(json.dumps({"wakeAgent": False}))
         return 0
-    prepare(limit, only_important=True)
+    prepare(limit)
     with open(WORK_TXT, encoding="utf-8") as f:
         print(f.read())
     return 0
