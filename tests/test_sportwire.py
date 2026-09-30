@@ -524,6 +524,26 @@ def test_render_escapes_hostile_feed_content():
     assert "&lt;script&gt;" in html_
 
 
+def test_pages_use_the_static_brand_card_never_a_publisher_photo():
+    """og:image = scheda del sito (og/*.png, < 200 KB, 1200×630), mai una foto di un editore in hotlink."""
+    import re
+    from PIL import Image
+    pages = [f for f in os.listdir(ROOT) if f.endswith(".html")]
+    assert pages
+    site = build.SITE_URL
+    for f in pages:
+        html_ = _read(f)
+        imgs = re.findall(r'<meta property="og:image" content="([^"]+)"', html_)
+        assert len(imgs) == 1, f
+        assert imgs[0].startswith(site + "og/") and imgs[0].endswith(".png"), (f, imgs[0])
+        assert re.search(r'<meta name="twitter:image" content="' + re.escape(imgs[0]) + '"', html_), f
+    assert render.og_card("cronologia.html") == "og/cronologia.png" and render.og_card("calcio.html") == "og/index.png"
+    for name in ("index.png", "cronologia.png"):
+        path = os.path.join(ROOT, "og", name)
+        assert os.path.getsize(path) < 200_000, name
+        assert Image.open(path).size == (1200, 630), name
+
+
 def test_render_clips_collects_videos_and_escapes():
     ctx = render.Ctx(now=datetime.now().astimezone(), site_url="https://x/", window=36, n_stories=1, n_sources=1, n_multi=0,
                      sections=[("calcio", "Calcio")], sources=[], sec_counts={"calcio": 1}, ver={"css": "a", "js": "b"}, theme_color="#000")

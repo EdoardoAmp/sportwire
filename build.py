@@ -941,7 +941,7 @@ def build(offline: bool = False, now: datetime | None = None) -> int:
             f"Corriere dello Sport, Tuttosport, Sky Sport, ANSA e OA Sport, riscritte in breve.")
     write("index.html", R.page(ctx, rel="index.html", title="Sportwire · il cielo dello sport di oggi",
                                description=desc, body=R.home_body(ctx, hero, top, live, blocks, clips),
-                               active="index", og_image=hero["image"]))
+                               active="index"))
 
     for k in SEC_ORDER:
         sec = sorted([s for s in stories if s["cat"] == k], key=lambda s: s["ts"], reverse=True)
@@ -952,12 +952,11 @@ def build(offline: bool = False, now: datetime | None = None) -> int:
         lead = feats[0] if feats else sec[0]
         write(f"{k}.html", R.page(ctx, rel=f"{k}.html", title=f"{SEC_TITLE[k]} · Sportwire",
                                   description=f"{SEC_TITLE[k]}: {lead['title']} e le altre notizie di oggi.",
-                                  body=R.section_body(ctx, k, sec, feats, rest), active=k,
-                                  og_image=lead["image"]))
+                                  body=R.section_body(ctx, k, sec, feats, rest), active=k))
 
     write("cronologia.html", R.page(ctx, rel="cronologia.html", title="Cronologia · Sportwire",
                                     description="Il diario di bordo delle notizie che hai aperto, solo su questo dispositivo.",
-                                    body=R.history_body(ctx), active="cronologia", og_image=hero["image"],
+                                    body=R.history_body(ctx), active="cronologia",
                                     noindex=True))
 
     home_ids = {id(s) for s in [hero] + top + live + [x for _k, a, b in blocks for x in a + b]}   # i video raccolti no

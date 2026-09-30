@@ -340,8 +340,19 @@ def history_body(ctx: Ctx) -> str:
 """
 
 
+# Anteprima quando si condivide un link: una scheda statica del sito (og/, generata da make_icons.py), mai la foto di
+# un editore in hotlink. La cronologia ha la sua; prima pagina e sezioni usano quella del marchio.
+OG_CARDS = {"cronologia.html": "og/cronologia.png"}
+OG_DEFAULT = "og/index.png"
+OG_SIZE = (1200, 630)
+
+
+def og_card(rel: str) -> str:
+    return OG_CARDS.get(rel, OG_DEFAULT)
+
+
 def page(ctx: Ctx, *, rel: str, title: str, description: str, body: str, active: str,
-         og_image: str = "", noindex: bool = False) -> str:
+         noindex: bool = False) -> str:
     is_home = rel == "index.html"
     is_hist = rel == "cronologia.html"
     h1 = {"index.html": "Sportwire · il cielo dello sport di oggi",
@@ -354,7 +365,11 @@ def page(ctx: Ctx, *, rel: str, title: str, description: str, body: str, active:
                    '<p class="page-sub">Le notizie che hai aperto, in ordine di tempo. Vive solo su questo dispositivo: '
                    'nessun account, nessun server.</p></div>')
     url = ctx.site_url + ("" if is_home else rel)
-    og = f'<meta property="og:image" content="{esc(og_image)}">' if og_image else ""
+    card = ctx.site_url + og_card(rel)
+    og = (f'<meta property="og:image" content="{esc(card)}">\n'
+          f'<meta property="og:image:width" content="{OG_SIZE[0]}">\n<meta property="og:image:height" content="{OG_SIZE[1]}">\n'
+          f'<meta property="og:image:alt" content="Sportwire, il cielo dello sport di oggi">\n'
+          f'<meta name="twitter:image" content="{esc(card)}">')
     robots = '<meta name="robots" content="noindex">\n' if noindex else ""
     cur = ' aria-current="page"'
     links = "".join(

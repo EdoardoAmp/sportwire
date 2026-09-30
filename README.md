@@ -55,6 +55,7 @@ misura anche l'attesa: minuti tra l'uscita di una notizia e il suo breve. Il ram
 | `article.py`, `briefs.py` | testo degli articoli (rispetta robots.txt) e pipeline degli «in breve» |
 | `css/src/*.css`, `js/src/*.js` | sorgenti numerati; `build.py` li unisce in `css/site.css` e `js/app.js` (con `?v=` nell'URL) |
 | `sw.js`, `manifest.webmanifest`, `icons/` | app installabile, pagine e dati offline (rete prima, cache poi) |
+| `og/`, `make_icons.py` | schede di anteprima 1200×630 per i link condivisi (prima pagina e sezioni: `og/index.png`, cronologia: `og/cronologia.png`), disegnate con il marchio e i font del sito. Nessuna pagina usa la foto di un editore come anteprima. `python3 make_icons.py` rifà solo ciò che manca, `--force` tutto |
 | `fonts/` | Archivo, Geist, Geist Mono self-hosted: il browser non contatta nessun terzo per i caratteri |
 | `js/src/04-motion.js` | [Motion](https://motion.dev) 13.4.6 (MIT, 18 KB, 7 KB compressi): le animazioni. Solo `animate` (versione mini, sulla Web Animations API del browser), `spring`, `stagger` e `inView`, impacchettati con esbuild da `vendor/motion` senza modifiche, con le due licenze per intero. `js/src/08-motion-ui.js` li usa: ingresso delle pagine a cascata, dossier con una molla, stelle che si accendono, filtri. Con «riduci movimento» restano solo dissolvenze brevi |
 | `css/src/01-springs.css` | le molle di Motion come curve CSS native (`linear()`), generate da `vendor/motion/build.mjs`: passaggio del mouse e pressione |
