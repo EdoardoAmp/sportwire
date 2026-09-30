@@ -254,7 +254,77 @@ def test_pending_skips_live_and_video_and_orders_home_first():
     news = {"stories": [story(1), story(2, on_home=True), story(3, live=True), story(4, on_home=True, score=9),
                         story(5, video=True)]}
     kinds = [(k, s["id"]) for k, s in briefs.pending(news, {})]
-    assert [i for _, i in kinds] == ["s4", "s2", "s1"]
+    assert [i for _, i in kinds] == ["s4", "s2", "s1"]                    # a parità di tutto decide il punteggio
+
+
+def test_queue_priority_is_home_then_outlets_then_most_recent():
+    t = lambda h: (datetime.now().astimezone() - timedelta(hours=h)).isoformat()      # noqa: E731
+    news = {"stories": [
+        story(1, first_ts=t(1)),                                        # fuori pagina, 1 testata, recente
+        story(2, on_home=True, first_ts=t(5)),                          # prima pagina, 1 testata, vecchia
+        story(3, on_home=True, first_ts=t(2)),                          # prima pagina, 1 testata, recente
+        story(4, on_home=True, first_ts=t(9), sources=["A", "B", "C"]),  # prima pagina, 3 testate
+        story(5, first_ts=t(3), sources=["A", "B"]),                    # fuori pagina, 2 testate
+    ]}
+    assert [s["id"] for _, s in briefs.pending(news, {})] == ["s4", "s3", "s2", "s5", "s1"]
+
+
+def _tries(monkeypatch, tmp_path, data=None):
+    p = tmp_path / "tries.json"
+    if data is not None:
+        p.write_text(json.dumps(data), encoding="utf-8")
+    monkeypatch.setattr(briefs, "TRIES", str(p))
+    monkeypatch.setattr(briefs, "STATE", str(tmp_path))
+    return p
+
+
+def test_recovery_reoffers_old_nulls_once_when_the_round_has_room(monkeypatch, tmp_path):
+    _tries(monkeypatch, tmp_path)
+    gen = datetime.now().astimezone()
+    t = lambda h: (gen - timedelta(hours=h)).isoformat()                 # noqa: E731
+    news = {"generated": gen.isoformat(), "stories": [
+        story(1, first_ts=t(1)),                                        # nuova: coda normale
+        story(2, first_ts=t(20)), story(3, first_ts=t(30)),             # «null» di ieri: recupero, la più vecchia prima
+        story(4, first_ts=t(50)),                                       # «null» di 50 ore fa: fuori finestra
+        story(5, first_ts=t(10), video=True),                           # video: mai
+    ]}
+    v = briefs.SKIP_VER
+    done = {f"s{i}": {"b": "", "skip": True, "n": 1, "at": now_iso(), "v": v} for i in (2, 3, 4, 5)}
+    fresh, rec, batch = briefs.queue(news, done, 24)
+    assert [s["id"] for _, s in fresh] == ["s1"]
+    assert [(k, s["id"]) for k, s in rec] == [("recupero", "s3"), ("recupero", "s2")]
+    assert [s["id"] for _, s in batch] == ["s1", "s3", "s2"]
+    fresh, rec, batch = briefs.queue(news, done, 1)                        # giro pieno: niente recupero
+    assert [s["id"] for _, s in batch] == ["s1"]
+
+
+def test_attempts_are_capped_and_the_story_keeps_the_feed_summary(monkeypatch, tmp_path):
+    p = _tries(monkeypatch, tmp_path)
+    monkeypatch.setattr(briefs, "BRIEFS", str(tmp_path / "b.json"))
+    news = {"generated": datetime.now().astimezone().isoformat(), "stories": [story(1, first_ts=now_iso(hours=2))]}
+    briefs.note_tries(["s1"])                                             # giro 1: proposta, breve rifiutato da apply
+    assert [s["id"] for _, s in briefs.queue(news, {}, 24)[2]] == ["s1"]
+    briefs.note_tries(["s1"])                                             # giro 2: di nuovo rifiutato
+    assert briefs.queue(news, {}, 24)[2] == []                            # niente terzo giro
+    assert json.loads(p.read_text(encoding="utf-8"))["s1"]["n"] == 2
+    arch = {}
+    assert briefs.retire(news, arch) == 1 and arch["s1"]["skip"] and arch["s1"]["why"] == "tentativi"
+    st = {"id": "s1", "brief": "", "live": False, "video": False, "sources": ["Gazzetta"], "items": []}
+    assert build.brief_state(st, arch) == "held"                          # il dossier dice che è il sommario della testata
+    # chi ha già un breve accettato non ha limite: gli aggiornamenti con nuove testate continuano
+    has = {"s1": {"b": "Breve già scritto.", "n": 1, "at": now_iso()}}
+    many = {"generated": news["generated"], "stories": [story(1, sources=["A", "B", "C"])]}
+    assert [k for k, _ in briefs.queue(many, has, 24)[2]] == ["aggiorna"]
+
+
+def test_a_null_from_before_the_counter_counts_as_one_attempt(monkeypatch, tmp_path):
+    _tries(monkeypatch, tmp_path)
+    gen = datetime.now().astimezone()
+    news = {"generated": gen.isoformat(), "stories": [story(2, first_ts=(gen - timedelta(hours=3)).isoformat())]}
+    done = {"s2": {"b": "", "skip": True, "n": 1, "at": now_iso(), "v": briefs.SKIP_VER}}
+    assert [s["id"] for _, s in briefs.queue(news, done, 24)[2]] == ["s2"]  # un solo tentativo in più
+    briefs.note_tries(["s2"], done)
+    assert briefs.queue(news, done, 24)[2] == []
 
 
 def test_pending_retries_skipped_story_when_more_outlets_cover_it():
@@ -279,6 +349,7 @@ def test_pending_rewrites_when_the_picture_changes_a_lot():
 
 def test_wake_gate_sleeps_for_quiet_queues_and_wakes_for_real_work(capsys, monkeypatch, tmp_path):
     monkeypatch.setattr(briefs, "STATE", str(tmp_path))
+    monkeypatch.setattr(briefs, "TRIES", str(tmp_path / "tries.json"))    # mai lo stato vero del repo
     monkeypatch.setattr(briefs, "WORK_JSON", str(tmp_path / "w.json"))
     monkeypatch.setattr(briefs, "WORK_TXT", str(tmp_path / "w.txt"))
     monkeypatch.setattr(briefs, "BRIEFS", str(tmp_path / "b.json"))
@@ -296,6 +367,29 @@ def test_wake_gate_sleeps_for_quiet_queues_and_wakes_for_real_work(capsys, monke
     assert briefs.gate(20) == 0
     out = capsys.readouterr().out
     assert "wakeAgent" not in out and "COME SI SCRIVE" in out             # sveglia l'agente e gli passa le regole
+
+
+def test_gate_contract_with_recovery(capsys, monkeypatch, tmp_path):
+    """Niente da fare → {"wakeAgent": false}. Un recupero è lavoro vero: sveglia. Recupero esaurito → di nuovo a dormire."""
+    _tries(monkeypatch, tmp_path)
+    monkeypatch.setattr(briefs, "WORK_JSON", str(tmp_path / "w.json"))
+    monkeypatch.setattr(briefs, "WORK_TXT", str(tmp_path / "w.txt"))
+    monkeypatch.setattr(briefs, "BRIEFS", str(tmp_path / "b.json"))
+    news = tmp_path / "n.json"
+    monkeypatch.setattr(briefs, "NEWS", str(news))
+    monkeypatch.setattr(briefs, "gather", lambda s: {"id": s["id"], "cat": "calcio", "kicker": "", "title": s["id"], "summary": "",
+                                                     "outlets": ["Gazzetta"], "video": False, "texts": [], "extra": [], "chars": 0})
+    gen = datetime.now().astimezone()
+    news.write_text(json.dumps({"generated": gen.isoformat(), "stories": [story(1, first_ts=(gen - timedelta(hours=5)).isoformat())]}))
+    (tmp_path / "b.json").write_text(json.dumps({"s1": {"b": "Breve.", "n": 1, "at": now_iso()}}))
+    assert briefs.gate(24) == 0
+    assert json.loads(capsys.readouterr().out.strip().splitlines()[-1]) == {"wakeAgent": False}   # tutto scritto
+    (tmp_path / "b.json").write_text(json.dumps({"s1": {"b": "", "skip": True, "n": 1, "at": now_iso(), "v": briefs.SKIP_VER}}))
+    assert briefs.gate(24) == 0
+    out = capsys.readouterr().out
+    assert "wakeAgent" not in out and "recupero" in out                   # il «null» di 5 ore fa si riprova una volta
+    assert briefs.gate(24) == 0
+    assert json.loads(capsys.readouterr().out.strip().splitlines()[-1]) == {"wakeAgent": False}   # tentativi finiti
 
 
 # ------------------------------------------------------------------ raggruppamento delle storie
@@ -464,7 +558,7 @@ def test_published_news_json_is_consistent():
         b = s.get("brief") or ""
         assert not any(x in b for x in ("<", ">", "http", "\n")), f"brief con markup o link in {s['id']}"
         assert len(b) <= briefs.MAX_CH, f"brief troppo lungo in {s['id']}"
-        assert s.get("brief_state") in ("own", "wait", "skip", "live", "video"), f"brief_state strano in {s['id']}"
+        assert s.get("brief_state") in ("own", "wait", "skip", "held", "live", "video"), f"brief_state strano in {s['id']}"
     home = [s for s in d["stories"] if s["on_home"]]
     assert sum(1 for s in home if s["video"]) <= 6, "troppi video in prima pagina"   # i video stanno nella riga «N video»
 
@@ -566,6 +660,7 @@ def test_apply_fetches_sources_when_the_story_has_no_prepared_work(tmp_path, mon
 
 def test_prepare_clears_every_answers_file_of_the_previous_round(tmp_path, monkeypatch):
     monkeypatch.setattr(briefs, "STATE", str(tmp_path))
+    monkeypatch.setattr(briefs, "TRIES", str(tmp_path / "tries.json"))
     monkeypatch.setattr(briefs, "WORK_JSON", str(tmp_path / "w.json"))
     monkeypatch.setattr(briefs, "WORK_TXT", str(tmp_path / "w.txt"))
     monkeypatch.setattr(briefs, "BRIEFS", str(tmp_path / "b.json"))

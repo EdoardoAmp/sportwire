@@ -122,6 +122,7 @@ const reader = (() => {
     own: "Riassunto scritto da Sportwire leggendo le testate che ne parlano. Per i dettagli c’è l’articolo originale.",
     wait: "Il riassunto di Sportwire è in coda: si scrivono due volte l’ora, prima le notizie in prima pagina. Intanto c’è il sommario della testata.",
     skip: "Per questa notizia basta il sommario della testata: l’articolo non aggiunge altro da riassumere.",
+    held: "Qui resta il sommario della testata: il riassunto scritto per questa notizia non ha superato i controlli sulle fonti.",
     live: "È una diretta: cambia di minuto in minuto, quindi non si riassume finché non è finita. Seguila sulla testata.",
     video: "È un video: si guarda sulla testata.",
   };

@@ -50,6 +50,9 @@ KEEP_DAYS = 4                   # un breve di una storia uscita dalla finestra s
 TEXT_CH, ENOUGH, MAX_PAGES = 950, 1100, 2
 WAKE_HOME, WAKE_TOTAL = 1, 4    # l'agente si sveglia se aspetta anche una sola storia della prima pagina, o ≥4 storie
 SKIP_VER = 2                    # alza di uno quando migliora la lettura delle fonti: i «null» scritti prima si riprovano una volta
+RECOVER_H = 36                  # recupero: le storie delle ultime 36 ore ancora senza breve accettato…
+MAX_TRIES = 2                   # …si riprovano al massimo due volte in tutto, poi resta il sommario della testata
+TRIES = os.path.join(STATE, "tries.json")   # {id: {"n": giri in cui è stata proposta, "at": ultimo giro}}
 #   v2: article.py segue i redirect 308 (prima di Corriere dello Sport e Tuttosport non si leggeva niente)
 BRANCH = "briefs"
 
@@ -129,9 +132,106 @@ def pending(news: Dict[str, Any], briefs: Dict[str, Any], only_important: bool =
         kind = need(s, briefs.get(s["id"]))
         if kind:
             out.append((kind, s))
-    order = {"nuova": 0, "riprova": 1, "aggiorna": 2}
-    out.sort(key=lambda ks: (order[ks[0]], 0 if ks[1].get("on_home") else 1, -(ks[1].get("score") or 0)))
+    out.sort(key=lambda ks: priority(ks[1]))
     return out
+
+
+def priority(s: Dict[str, Any]) -> Tuple[int, int, str, float]:
+    """Ordine della coda: prima pagina, poi quante testate ne parlano, poi la più recente (poi il punteggio).
+    Le date ISO si confrontano come stringhe; il rovescio della stringa mette la più recente per prima."""
+    ts = s.get("first_ts") or s.get("ts") or ""
+    return (0 if s.get("on_home") else 1, -n_sources(s), "".join(chr(0x10FFFF - ord(c)) for c in ts), -(s.get("score") or 0))
+
+
+# ---------------------------------------------------------------- tentativi e recupero
+def load_tries() -> Dict[str, Any]:
+    t = load(TRIES, {})
+    return t if isinstance(t, dict) else {}
+
+
+def tries_of(sid: str, tries: Dict[str, Any], briefs: Dict[str, Any]) -> int:
+    """Giri in cui la storia è stata proposta al modello. Un «null» registrato prima che i tentativi si contassero
+    (nessuna voce in tries.json) vale uno: il limite resta di MAX_TRIES in tutto."""
+    if sid in tries and isinstance(tries[sid], dict):
+        return int(tries[sid].get("n", 0))
+    return 1 if (briefs.get(sid) or {}).get("skip") else 0
+
+
+def exhausted(s: Dict[str, Any], tries: Dict[str, Any], briefs: Dict[str, Any]) -> bool:
+    """Senza un breve accettato dopo MAX_TRIES giri: non si propone più, resta il sommario della testata.
+    Le storie che un breve ce l'hanno (aggiornamenti quando arrivano altre testate) non hanno limite."""
+    return not (briefs.get(s["id"]) or {}).get("b") and tries_of(s["id"], tries, briefs) >= MAX_TRIES
+
+
+def recovery(news: Dict[str, Any], briefs: Dict[str, Any], tries: Dict[str, Any], taken: set,
+             hours: int = RECOVER_H) -> List[Tuple[str, Dict[str, Any]]]:
+    """Recupero della coda lunga: storie delle ultime `hours` ore ancora senza un breve accettato che la coda normale
+    non ripropone (il modello aveva risposto «null»: spesso il primo lancio è un flash e l'articolo si allunga dopo) e
+    che non hanno esaurito i tentativi. Le più vecchie per prime: sono quelle che aspettano da più tempo."""
+    try:
+        gen = datetime.fromisoformat(news["generated"])
+    except (KeyError, ValueError, TypeError):
+        return []
+    out = []
+    for s in news.get("stories", []):
+        if s["id"] in taken or not writable(s) or (briefs.get(s["id"]) or {}).get("b") or exhausted(s, tries, briefs):
+            continue
+        try:
+            age_h = (gen - datetime.fromisoformat(s.get("first_ts") or s["ts"])).total_seconds() / 3600
+        except (KeyError, ValueError, TypeError):
+            continue
+        if 0 <= age_h <= hours:
+            out.append(("recupero", s))
+    out.sort(key=lambda ks: ks[1].get("first_ts") or ks[1].get("ts") or "")
+    return out
+
+
+def queue(news: Dict[str, Any], briefs: Dict[str, Any], limit: int, only_important: bool = False
+          ) -> Tuple[List[Tuple[str, Dict[str, Any]]], List[Tuple[str, Dict[str, Any]]], List[Tuple[str, Dict[str, Any]]]]:
+    """(coda normale, recupero, giro). Il giro prende la coda normale in ordine di priorità; se non basta a riempirlo,
+    aggiunge il recupero fino al limite."""
+    tries = load_tries()
+    fresh = [(k, s) for k, s in pending(news, briefs, only_important) if not exhausted(s, tries, briefs)]
+    batch = fresh[:limit]
+    rec: List[Tuple[str, Dict[str, Any]]] = []
+    if len(batch) < limit and not only_important:
+        rec = recovery(news, briefs, tries, {s["id"] for _, s in fresh})
+        batch = batch + rec[:limit - len(batch)]
+    return fresh, rec, batch
+
+
+def note_tries(ids: List[str], briefs: Optional[Dict[str, Any]] = None) -> None:
+    """Conta i giri in cui una storia è stata proposta al modello (state/tries.json, solo nel clone del cron).
+    La prima volta parte da tries_of: un «null» di prima del contatore è già un tentativo."""
+    t = load_tries()
+    arch = load(BRIEFS, {}) if briefs is None else briefs
+    stamp = now()
+    for sid in ids:
+        t[sid] = {"n": tries_of(sid, t, arch) + 1, "at": stamp}
+    cutoff = datetime.now().astimezone() - timedelta(days=KEEP_DAYS)
+    for sid in list(t):
+        try:
+            if datetime.fromisoformat(t[sid]["at"]) < cutoff:
+                del t[sid]
+        except (KeyError, TypeError, ValueError):
+            del t[sid]
+    save(TRIES, t)
+
+
+def retire(news: Dict[str, Any], briefs: Dict[str, Any]) -> int:
+    """Storie che hanno avuto i loro MAX_TRIES giri (già conclusi: si chiama all'inizio del giro dopo) e sono ancora
+    senza breve e senza «null»: nell'archivio che il sito legge diventano «skip» col motivo, così il dossier mostra il
+    sommario della testata dichiarato come tale invece di un «in arrivo» che non arriverà."""
+    tries, n = load_tries(), 0
+    for s in news.get("stories", []):
+        b = briefs.get(s["id"]) or {}
+        if b.get("b") or b.get("skip") or int((tries.get(s["id"]) or {}).get("n", 0)) < MAX_TRIES:
+            continue
+        briefs[s["id"]] = {"b": "", "at": now(), "n": n_sources(s), "skip": True, "v": SKIP_VER, "why": "tentativi"}
+        n += 1
+    if n:
+        save(BRIEFS, briefs)
+    return n
 
 
 def candidates(s: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -188,7 +288,9 @@ def render_work(items: List[Dict[str, Any]], kinds: Dict[str, str]) -> str:
 
 def prepare(limit: int, only_important: bool = False) -> int:
     news, briefs = load(NEWS, {}), load(BRIEFS, {})
-    todo = pending(news, briefs, only_important)
+    retire(news, briefs)                               # prima di scegliere: i giri precedenti sono conclusi
+    fresh, rec, batch = queue(news, briefs, limit, only_important)
+    todo = fresh + rec
     for stale in glob.glob(os.path.join(STATE, "answers*.json")):
         os.remove(stale)                                # risposte del giro scorso (anche answers2…): non si mescolano con le nuove
     if not todo:
@@ -197,7 +299,6 @@ def prepare(limit: int, only_important: bool = False) -> int:
             if os.path.exists(p):
                 os.remove(p)
         return 0
-    batch = todo[:limit]
     kinds = {s["id"]: k for k, s in batch}
     with ThreadPoolExecutor(max_workers=6) as ex:
         items = list(ex.map(lambda ks: gather(ks[1]), batch))
@@ -205,6 +306,7 @@ def prepare(limit: int, only_important: bool = False) -> int:
     save(WORK_JSON, {"made": now(), "items": items})
     with open(WORK_TXT, "w", encoding="utf-8") as f:
         f.write(render_work(items, kinds))
+    note_tries([s["id"] for _, s in batch], briefs)
     thin = sum(1 for w in items if w["chars"] < 350)
     by_kind: Dict[str, int] = {}
     for k, _ in todo:
@@ -636,7 +738,8 @@ def gate(limit: int) -> int:
     """Per il cron: stampa il lavoro da fare (regole + storie + testi) oppure, se non vale la pena, la riga
     {"wakeAgent": false}, che fa saltare del tutto la chiamata al modello."""
     news, briefs = load(NEWS, {}), load(BRIEFS, {})
-    todo = pending(news, briefs)
+    fresh, rec, batch = queue(news, briefs, limit)
+    todo = fresh + [ks for ks in rec if ks in batch]      # il recupero conta come lavoro solo se entra nel giro
     if not wake(todo):
         print(f"niente da scrivere: {len(todo)} storie in coda, "
               f"{sum(1 for _, s in todo if s.get('on_home'))} in prima pagina. L'agente resta a dormire.")
@@ -650,7 +753,8 @@ def gate(limit: int) -> int:
 
 def wake(todo: List[Tuple[str, Dict[str, Any]]]) -> bool:
     """Vale la pena svegliare l'agente? Sì se aspetta la prima pagina o se il lavoro accumulato è abbastanza."""
-    return sum(1 for _, s in todo if s.get("on_home")) >= WAKE_HOME or len(todo) >= WAKE_TOTAL
+    return (sum(1 for _, s in todo if s.get("on_home")) >= WAKE_HOME or len(todo) >= WAKE_TOTAL
+            or any(k == "recupero" for k, _ in todo))
 
 
 def lag_minutes(s: Dict[str, Any], b: Dict[str, Any]) -> Optional[float]:
@@ -674,7 +778,7 @@ def status() -> int:
     S = news["stories"]
     own = sum(1 for s in S if (briefs.get(s["id"]) or {}).get("b"))
     skip = sum(1 for s in S if (briefs.get(s["id"]) or {}).get("skip"))
-    todo = pending(news, briefs)
+    todo, _, _ = queue(news, briefs, 10**6)              # stessa definizione di prima: la coda normale
     home = [s for s in S if s.get("on_home")]
     print(f"{len(S)} storie · {own} con «in breve» ({sum(1 for s in home if (briefs.get(s['id']) or {}).get('b'))}/{len(home)} in home)"
           f" · {skip} saltate · {len(todo)} in coda")

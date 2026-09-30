@@ -797,6 +797,8 @@ def brief_state(st: dict, briefs: dict) -> str:
         return "live"
     if st["video"]:
         return "video"
+    if (briefs.get(st["id"]) or {}).get("why") == "tentativi":
+        return "held"                                      # due giri senza un breve che passasse i controlli
     return "wait" if BR.need(st, briefs.get(st["id"])) else "skip"
 
 
