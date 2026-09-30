@@ -1,9 +1,9 @@
-/* Sportwire · service worker (build 5cb1db81). Pagine e dati: rete prima, cache se offline.
+/* Sportwire · service worker (build e38eee62). Pagine e dati: rete prima, cache se offline.
    Asset con ?v= nel nome: cache prima. Le foto delle testate non si mettono in cache. */
-const BUILD = "5cb1db81";
+const BUILD = "e38eee62";
 const STATIC = "sw-static-" + BUILD;
 const PAGES = "sw-pages-v1";
-const PRECACHE = ["css/site.css?v=f0a5e372", "js/app.js?v=faf90a39", "favicon.svg", "img/stars-a.svg", "img/stars-b.svg", "fonts/archivo-latin-wdth-normal.woff2", "fonts/geist-latin-wght-normal.woff2", "fonts/geist-mono-latin-wght-normal.woff2"];
+const PRECACHE = ["css/site.css?v=73665620", "js/app.js?v=fe0c1791", "favicon.svg", "img/stars-a.svg", "img/stars-b.svg", "fonts/archivo-latin-wdth-normal.woff2", "fonts/geist-latin-wght-normal.woff2", "fonts/geist-mono-latin-wght-normal.woff2"];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(STATIC).then((c) => Promise.allSettled(PRECACHE.map((u) => c.add(u)))).then(() => self.skipWaiting()));

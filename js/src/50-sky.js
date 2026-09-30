@@ -179,9 +179,10 @@ const sky = (() => {
   }
 
   function select(r, byKey) {
+    const changed = r !== selected;
     selected = r;
     focusOn(r);
-    if (r) showPeek(r.s);
+    if (r) { showPeek(r.s); if (changed && !byKey) { motion.pop(r.el); motion.peek(peek); } }
     if (r && byKey) { stars.forEach((x) => { x.el.tabIndex = x === r ? 0 : -1; }); r.el.focus({ preventScroll: false }); }
   }
 
@@ -206,6 +207,7 @@ const sky = (() => {
     const lead = build(NEWS.data);
     root.hidden = false;
     drawn = true;
+    motion.stars(stars.slice().sort((a, b) => a.x - b.x).map((r) => r.el), stage);
     scrollToNow(lead);
     if (lead) { selected = lead; focusOn(lead, false); showPeek(lead.s); }
 

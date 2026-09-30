@@ -6,9 +6,9 @@
 
 .reader { display: flex; justify-content: flex-end; }
 .reader__sheet { position: relative; display: flex; flex-direction: column; width: min(100%, 700px); height: 100%; background: var(--paper-1); box-shadow: -40px 0 90px -30px oklch(0.03 0.02 268 / .9); outline: none;
-  transform: translateX(28px); transition: transform calc(var(--t-long) * .75) var(--ease-in); }
+  transform: translateX(28px); transition: transform calc(var(--t-long) * .6) var(--ease-out); }
 .reader.is-open .reader__sheet { transform: none; transition: transform var(--t-long) var(--ease-out); }
-.finder__box { transform: translateY(-10px) scale(.985); transition: transform calc(var(--t-mid) * .75) var(--ease-in); }
+.finder__box { transform: translateY(-10px) scale(.985); transition: transform calc(var(--t-mid) * .75) var(--ease-out); }
 .finder.is-open .finder__box { transform: none; transition: transform var(--t-mid) var(--ease-out); }
 .reader__top { display: flex; align-items: center; justify-content: space-between; gap: .5rem; padding: max(10px, env(safe-area-inset-top)) 10px 10px 14px; flex: none; }
 .reader__pos { font: 500 .72rem/1 var(--f-mono); letter-spacing: .08em; color: var(--ink-3); }

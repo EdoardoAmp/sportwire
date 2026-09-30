@@ -1,0 +1,14 @@
+{
+  "name": "sportwire-motion-bundle",
+  "private": true,
+  "description": "Ricostruisce js/src/04-motion.js e css/src/01-springs.css da Motion (motion.dev, MIT). Non serve per usare il sito.",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "dependencies": {
+    "motion": "13.4.6"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.12"
+  }
+}

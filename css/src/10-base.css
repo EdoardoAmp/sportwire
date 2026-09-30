@@ -22,7 +22,7 @@ ul, ol { padding: 0; list-style: none; }
 
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: .55em; min-height: 46px; padding: 0 1.35rem; border-radius: var(--r-pill); font: 600 .95rem/1 var(--f-text); white-space: nowrap; transition: background var(--t-fast), box-shadow var(--t-mid), color var(--t-fast), transform var(--t-fast) var(--ease-out); }
 /* pressione: il controllo cede sotto il dito (solo transform, 140ms) */
-:is(.btn, .chip, .tool, .hit):active { transform: scale(.96); transition-duration: 60ms; }
+/* pressione: vedi 90-motion.css */
 .btn--primary { background: var(--accent); color: var(--on-accent); }
 .btn--primary:hover { background: var(--accent-hi); box-shadow: var(--shadow-glow); }
 .btn--quiet { background: var(--paper-3); color: var(--ink); }

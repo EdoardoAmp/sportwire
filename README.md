@@ -56,7 +56,9 @@ misura anche l'attesa: minuti tra l'uscita di una notizia e il suo breve. Il ram
 | `css/src/*.css`, `js/src/*.js` | sorgenti numerati; `build.py` li unisce in `css/site.css` e `js/app.js` (con `?v=` nell'URL) |
 | `sw.js`, `manifest.webmanifest`, `icons/` | app installabile, pagine e dati offline (rete prima, cache poi) |
 | `fonts/` | Archivo, Geist, Geist Mono self-hosted: il browser non contatta nessun terzo per i caratteri |
-| `js/src/05-ufuzzy.js` | [uFuzzy](https://github.com/leeoniya/uFuzzy) v1.0.19 (MIT, 8,5 KB, copia non modificata con la sua licenza): la ricerca perdona i refusi. Unica libreria di terzi; un test verifica che il bundle non contatti altri domini |
+| `js/src/04-motion.js` | [Motion](https://motion.dev) 13.4.6 (MIT, 18 KB, 7 KB compressi): le animazioni. Solo `animate` (versione mini, sulla Web Animations API del browser), `spring`, `stagger` e `inView`, impacchettati con esbuild da `vendor/motion` senza modifiche, con le due licenze per intero. `js/src/08-motion-ui.js` li usa: ingresso delle pagine a cascata, dossier con una molla, stelle che si accendono, filtri. Con «riduci movimento» restano solo dissolvenze brevi |
+| `css/src/01-springs.css` | le molle di Motion come curve CSS native (`linear()`), generate da `vendor/motion/build.mjs`: passaggio del mouse e pressione |
+| `js/src/05-ufuzzy.js` | [uFuzzy](https://github.com/leeoniya/uFuzzy) v1.0.19 (MIT, 8,5 KB, copia non modificata con la sua licenza): la ricerca perdona i refusi. Un test verifica che il bundle non contatti altri domini |
 | `qa.py`, `tests/` | QA nel browser · test unitari |
 | `data/news.json` `data/briefs.json` `data/raw.json` | storie pubblicate · «in breve» · feed grezzi |
 | `make_icons.py` | rigenera le icone dell'app |

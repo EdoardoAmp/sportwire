@@ -2,9 +2,10 @@
 (() => {
   const home = document.body.dataset.page === "home";
 
-  /* 1. ingresso: solo dissolvenza, un solo observer */
+  /* 1. ingresso: con Motion l'apertura entra a cascata e le schede con una molla quando arrivano nello schermo
+        (08-motion-ui.js); senza Motion resta la dissolvenza semplice qui sotto. */
   const targets = $$(".lead, .resume, .sky, .cards > .card, .front__aside, .block, .rows--grid, .hist");
-  if (!reduce && "IntersectionObserver" in window) {
+  if (!motion.entrance() && !reduce && "IntersectionObserver" in window) {
     const io = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -6% 0px", threshold: 0 });   // soglia 0: un elemento altissimo (cronologia lunga) non potrebbe mai superare una percentuale
     targets.forEach((n) => { n.classList.add("reveal"); io.observe(n); });
   }
@@ -29,11 +30,12 @@
       const f = btn.dataset.filter;
       $$(".chip", chips).forEach((c) => c.setAttribute("aria-pressed", String(c === btn)));
       if (chips.scrollWidth > chips.clientWidth) chips.scrollTo({ left: btn.offsetLeft - chips.clientWidth / 2 + btn.offsetWidth / 2, behavior: reduce ? "auto" : "smooth" });
-      withVT(() => {
+      const apply = () => {
         let shown = 0;
         items.forEach((n) => { const on = f === "*" || (f === "__mine" ? n.classList.contains("is-mine") : n.dataset.k === f); n.hidden = !on; if (on) shown++; });
         if (empty) empty.hidden = shown > 0;
-      });
+      };
+      if (motion.on) { apply(); motion.filtered(items); } else withVT(apply);
     });
   }
 
@@ -74,7 +76,7 @@
     const typing = /^(INPUT|TEXTAREA|SELECT)$/.test((e.target.tagName || "")) || e.target.isContentEditable;
     if ((e.key === "k" && (e.metaKey || e.ctrlKey)) || (e.key === "/" && !typing && !e.metaKey && !e.ctrlKey)) {
       if (reader.isOpen()) return;
-      e.preventDefault(); finder.isOpen() ? finder.close() : finder.open();
+      e.preventDefault(); finder.isOpen() ? finder.close() : finder.open(true);
     }
   });
 
@@ -103,7 +105,7 @@
         b.innerHTML = '<span class="pulse" aria-hidden="true"></span>Nuova edizione · aggiorna';
         b.addEventListener("click", () => location.reload());
         document.body.append(b);
-        requestAnimationFrame(() => b.classList.add("is-in"));
+        requestAnimationFrame(() => { b.classList.add("is-in"); motion.fresh(b); });
       } catch { /* offline: la pagina resta valida */ }
     };
     setInterval(check, 300000);

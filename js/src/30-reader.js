@@ -48,9 +48,9 @@ const reader = (() => {
     });
     el.addEventListener("keydown", (e) => {
       if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); close(); return; }
-      if (e.key === "ArrowLeft" && !e.altKey && !e.metaKey) { e.preventDefault(); step(-1); return; }
-      if (e.key === "ArrowRight" && !e.altKey && !e.metaKey) { e.preventDefault(); step(1); return; }
-      if ((e.key === "j" || e.key === "k") && !e.altKey && !e.metaKey && !e.ctrlKey) { e.preventDefault(); step(e.key === "j" ? 1 : -1); return; }
+      if (e.key === "ArrowLeft" && !e.altKey && !e.metaKey) { e.preventDefault(); step(-1, true); return; }
+      if (e.key === "ArrowRight" && !e.altKey && !e.metaKey) { e.preventDefault(); step(1, true); return; }
+      if ((e.key === "j" || e.key === "k") && !e.altKey && !e.metaKey && !e.ctrlKey) { e.preventDefault(); step(e.key === "j" ? 1 : -1, true); return; }
       trapTab(sheet, e);
     });
     /* col dito: un colpo laterale netto passa alla notizia dopo o prima (il bordo sinistro resta al gesto «indietro» di iOS) */
@@ -199,27 +199,41 @@ const reader = (() => {
     if (first) {
       lastFocus = document.activeElement && document.activeElement !== document.body ? document.activeElement : null;
       isOpen = true;
-      const openIt = () => {
+      const openIt = (spring) => {
         if (!isOpen) return;                          // chiuso prima che la transizione partisse
+        closing++;                                    // un'uscita ancora in corso non deve più chiudere niente
+        el.classList.remove("is-leaving");
+        if (!spring) motion.reset(sheet, $(".reader__scrim", el));
         paint();
         modal.lock();
         el.classList.add("is-open");
+        if (spring) motion.sheetIn(sheet, $(".reader__scrim", el));
         sheet.focus({ preventScroll: true });
       };
-      if (fliesFrom(from)) morph(from, openIt); else openIt();
+      if (fliesFrom(from)) morph(from, () => openIt(false)); else openIt(true);
       requestAnimationFrame(() => { if (isOpen && !el.contains(document.activeElement)) sheet.focus({ preventScroll: true }); });
-    } else if (canVT) withVT(paint, "vt-step");
+    } else if (motion.on) { const d = step_dir; paint(); if (d) motion.step(scroller, d); }   // d = 0: dalla tastiera, nessuna animazione
+    else if (canVT) withVT(paint, "vt-step");
     else paint();
     document.title = `${s.title} · Sportwire`;
     store.open(s, "d");
     return true;
   }
 
+  let closing = 0;
   function hide() {
     if (!isOpen) return;
     stopListen();
     isOpen = false;
-    el.classList.remove("is-open");
+    const my = ++closing;
+    if (motion.on) {                                    // esce veloce con Motion, poi si chiude davvero
+      el.classList.add("is-leaving");
+      motion.sheetOut(sheet, $(".reader__scrim", el)).then(() => {
+        if (my !== closing || isOpen) return;
+        el.classList.remove("is-leaving", "is-open");  // prima si nasconde (subito, senza transizioni)…
+        motion.reset(sheet, $(".reader__scrim", el));  // …poi si tolgono gli stili dell'uscita
+      });
+    } else el.classList.remove("is-open");
     modal.unlock();
     current = null;
     document.title = document.body.dataset.title || document.title;
@@ -246,12 +260,15 @@ const reader = (() => {
     if (history.state && history.state.sw && parse()) history.back();
     else { clean(); hide(); }
   }
-  function step(d) {
+  let step_dir = 0;
+  function step(d, byKey) {
     if (!current) return;
     const i = list.indexOf(current.id);
     const n = list[i + d];
     if (i < 0 || !n) return;
+    step_dir = byKey ? 0 : d;                           // frecce e j/k si ripetono molto: niente animazione
     if (show(n)) history.replaceState({ sw: 1 }, "", hashFor(n));
+    step_dir = 0;
   }
 
   const sync = () => {

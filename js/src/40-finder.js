@@ -136,13 +136,14 @@ const finder = (() => {
     reader.open(id, ids.length > 1 ? ids : null);
   }
 
-  function openIt() {
+  function openIt(byKey) {
     if (isOpen) return;
     if (!el) build();
     lastFocus = document.activeElement;
     isOpen = true;
     modal.lock();
     el.classList.add("is-open");
+    if (!byKey) motion.finderIn($(".finder__box", el));
     input.value = "";
     run("");
     requestAnimationFrame(() => input.focus());

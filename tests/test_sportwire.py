@@ -484,14 +484,43 @@ def test_bundle_talks_only_to_its_own_news_json():
         assert bad not in js, bad
     css = _read("css", "site.css")
     assert "http://" not in css and "https://" not in css and "@import" not in css
-    hosts = set(re.findall(r"https?://([A-Za-z0-9.-]+)", js))
-    assert hosts <= {"github.com", "www.w3.org"}, hosts            # solo il rimando alla libreria e lo spazio dei nomi SVG
+    code = re.sub(r"(?ms)^/\*.*?\*/", "", js)                          # le intestazioni (licenze, rimandi) non contattano nessuno
+    hosts = set(re.findall(r"https?://([A-Za-z0-9.-]+)", code))
+    assert hosts <= {"www.w3.org"}, hosts                               # solo lo spazio dei nomi SVG
 
 
 def test_third_party_library_keeps_its_license_and_is_not_edited():
     src = _read("js", "src", "05-ufuzzy.js")
     assert "MIT License" in src and "Permission is hereby granted" in src and "Leon Sorokin" in src
     assert "uFuzzy" in _read("js", "app.js")
+
+
+def test_motion_is_vendored_with_both_licenses_and_rebuilds_the_same():
+    """Motion (motion.dev) nel bundle: licenze complete (Motion B.V. e Framer B.V.), versione fissata, nessuna rete."""
+    src = _read("js", "src", "04-motion.js")
+    head = src[:src.index("*/")]
+    assert head.count("Permission is hereby granted") == 2
+    assert "Motion](https://motion.dev) B.V." in head and "Framer B.V." in head
+    assert "Motion 13.4.6" in head
+    body = src[src.index("*/") + 2:]
+    for bad in ("fetch(", "XMLHttpRequest", "sendBeacon", "WebSocket", "document.cookie", "importScripts", "eval("):
+        assert bad not in body, bad
+    pkg = json.loads(_read("vendor", "motion", "package.json"))
+    assert pkg["dependencies"]["motion"] == "13.4.6"                      # versione esatta: ricostruire dà lo stesso file
+    assert "var Motion=" in _read("js", "app.js")
+
+
+def test_motion_springs_are_generated_css_with_a_fallback():
+    css = _read("css", "src", "01-springs.css")
+    for name in ("--spring:", "--spring-soft:", "--spring-quick:", "--spring-pop:"):
+        assert name in css
+    assert "linear(0," in css and "@supports not (transition-timing-function: linear(0, 1))" in css
+
+
+def test_motion_respects_reduced_motion_and_old_browsers():
+    js = _read("js", "src", "08-motion-ui.js")
+    assert "!reduce" in js and 'typeof Element.prototype.animate === "function"' in js
+    assert "catch" in js                                                    # un errore di animazione non rompe la pagina
 
 
 # ------------------------------------------------------------------ build resistente

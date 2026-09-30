@@ -89,6 +89,61 @@ function withVT(update, cls = "vt") {
   return t;
 }
 
+/* Motion 13.4.6 · https://motion.dev · animazioni del sito (molle fisiche sulla Web Animations API).
+   Solo animate (mini), spring, stagger e inView, impacchettati con esbuild da vendor/motion (npm run build):
+   il codice non è modificato. Pacchetti inclusi: motion 13.4.6, framer-motion 13.4.6, motion-dom 13.4.5, motion-utils 13.3.0.
+   Licenza MIT: i testi qui sotto per intero, come richiede la licenza.
+
+   — motion, motion-dom, motion-utils —
+
+   The MIT License (MIT)
+
+   Copyright (c) 2024 [Motion](https://motion.dev) B.V.
+
+   Permission is hereby granted, free of charge, to any person obtaining a copy
+   of this software and associated documentation files (the "Software"), to deal
+   in the Software without restriction, including without limitation the rights
+   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   copies of the Software, and to permit persons to whom the Software is
+   furnished to do so, subject to the following conditions:
+
+   The above copyright notice and this permission notice shall be included in all
+   copies or substantial portions of the Software.
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   SOFTWARE.
+
+   — framer-motion —
+
+   The MIT License (MIT)
+
+   Copyright (c) 2018 Framer B.V.
+
+   Permission is hereby granted, free of charge, to any person obtaining a copy
+   of this software and associated documentation files (the "Software"), to deal
+   in the Software without restriction, including without limitation the rights
+   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   copies of the Software, and to permit persons to whom the Software is
+   furnished to do so, subject to the following conditions:
+
+   The above copyright notice and this permission notice shall be included in all
+   copies or substantial portions of the Software.
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   SOFTWARE.
+*/
+var Motion=(()=>{var oe=Object.defineProperty;var Xe=Object.getOwnPropertyDescriptor;var Qe=Object.getOwnPropertyNames;var Ye=Object.prototype.hasOwnProperty;var et=(e,t)=>{for(var r in t)oe(e,r,{get:t[r],enumerable:!0})},tt=(e,t,r,i)=>{if(t&&typeof t=="object"||typeof t=="function")for(let o of Qe(t))!Ye.call(e,o)&&o!==r&&oe(e,o,{get:()=>t[o],enumerable:!(i=Xe(t,o))||i.enumerable});return e};var rt=e=>tt(oe({},"__esModule",{value:!0}),e);var ht={};et(ht,{animate:()=>be,inView:()=>Me,spring:()=>L,stagger:()=>Se});var F=(e,t,r)=>r>t?t:r<e?e:r;var ie=()=>{},A=()=>{};var R={};function ne(e){let t;return()=>(t===void 0&&(t=e()),t)}var D=e=>e;var V=e=>e*1e3,E=e=>e/1e3;var Ve=(e,t,r)=>(((1-3*r+3*t)*e+(3*r-6*t))*e+3*t)*e,ot=1e-7,it=12;function nt(e,t,r,i,o){let n,c,x=0;do c=t+(r-t)/2,n=Ve(c,i,o)-e,n>0?r=c:t=c;while(Math.abs(n)>ot&&++x<it);return c}function I(e,t,r,i){if(e===t&&r===i)return D;let o=n=>nt(n,0,1,e,r);return n=>n===0||n===1?n:Ve(o(n),t,i)}var q=e=>t=>t<=.5?e(2*t)/2:(2-e(2*(1-t)))/2;var j=e=>t=>1-e(1-t);var ae=I(.33,1.53,.69,.99),k=j(ae),Ee=q(k);var De=e=>e>=1?1:(e*=2)<1?.5*k(e):.5*(2-Math.pow(2,-10*(e-1)));var $=e=>1-Math.sin(Math.acos(e)),Ae=j($),Ie=q($);var Pe=I(.42,0,1,1),we=I(0,0,.58,1),Oe=I(.42,0,.58,1);var G=e=>Array.isArray(e)&&typeof e[0]=="number";var Be={linear:D,easeIn:Pe,easeInOut:Oe,easeOut:we,circIn:$,circInOut:Ie,circOut:Ae,backIn:k,backInOut:Ee,backOut:ae,anticipate:De},at=e=>typeof e=="string",se=e=>{if(G(e)){A(e.length===4,"Cubic bezier arrays must contain four numerical values.","cubic-bezier-length");let[t,r,i,o]=e;return I(t,r,i,o)}else if(at(e))return A(Be[e]!==void 0,`Invalid easing type '${e}'`,"invalid-easing-type"),Be[e];return e};var N=["setup","read","resolveKeyframes","preUpdate","update","preRender","render","postRender"];function Ce(e){let t=new Set,r=new Set,i=!1,o=!1,n=new Set,c={delta:0,timestamp:0,isProcessing:!1};function x(a){n.has(a)&&(r.add(a),e()),a(c)}let s={schedule:(a,m=!1,u=!1)=>{let g=u&&i?t:r;return m&&n.add(a),g.add(a),a},cancel:a=>{r.delete(a),n.delete(a)},process:a=>{if(c=a,i){o=!0;return}i=!0;let m=t;t=r,r=m,t.forEach(x),t.clear(),i=!1,o&&(o=!1,s.process(a))}};return s}var st=40;function Fe(e,t){let r=!1,i=!0,o={delta:0,timestamp:0,isProcessing:!1},n=()=>r=!0,c=N.reduce((T,y)=>(T[y]=Ce(n),T),{}),{setup:x,read:s,resolveKeyframes:a,preUpdate:m,update:u,preRender:d,render:g,postRender:S}=c,v=()=>{let T=R.useManualTiming,y=T?o.timestamp:performance.now();r=!1,T||(o.delta=i?1e3/60:Math.max(Math.min(y-o.timestamp,st),1)),o.timestamp=y,o.isProcessing=!0,x.process(o),s.process(o),a.process(o),m.process(o),u.process(o),d.process(o),g.process(o),S.process(o),o.isProcessing=!1,r&&t&&(i=!1,e(v))},l=()=>{r=!0,i=!0,o.isProcessing||e(v)};return{schedule:N.reduce((T,y)=>{let _=c[y];return T[y]=(w,f=!1,p=!1)=>(r||l(),_.schedule(w,f,p)),T},{}),cancel:T=>{for(let y=0;y<N.length;y++)c[N[y]].cancel(T)},state:o,steps:c}}var{schedule:ur,cancel:dr,state:O,steps:xr}=Fe(typeof requestAnimationFrame<"u"?requestAnimationFrame:D,!0);var H;function mt(){H=void 0}var me={now:()=>(H===void 0&&me.set(O.isProcessing||R.useManualTiming?O.timestamp:performance.now()),H),set:e=>{H=e,queueMicrotask(mt)}};var U=(e,t,r=10)=>{let i="",o=Math.max(Math.round(t/r),2);for(let n=0;n<o;n++)i+=Math.round(e(n/(o-1))*1e4)/1e4+", ";return`linear(${i.substring(0,i.length-2)})`};function Z(e,t=50,r=2e4,i){let o=0,n=e.next(o);for(i?.push(n.value);!n.done&&o<r;)o+=t,n=e.next(o),i?.push(n.value);return o>=r?1/0:o}function Re(e,t=100,r){let i=r({...e,keyframes:[0,t]}),o=Math.min(Z(i),2e4);return{type:"keyframes",ease:n=>i.next(o*n).value/t,duration:E(o)}}var h={stiffness:100,damping:10,mass:1,duration:800,bounce:.3,visualDuration:.3,restSpeed:{granular:.01,default:2},restDelta:{granular:.005,default:.5},minDuration:.01,maxDuration:10,minDamping:.05,maxDamping:1};function ce(e,t){return e*Math.sqrt(1-t*t)}var pt=12;function lt(e,t,r){let i=r;for(let o=1;o<pt;o++)i=i-e(i)/t(i);return i}var le=.001;function ft({duration:e=h.duration,bounce:t=h.bounce}){let r,i;ie(e<=V(h.maxDuration),"Spring duration must be 10 seconds or less","spring-duration-limit");let o=1-t;o=F(h.minDamping,h.maxDamping,o),e=F(h.minDuration,h.maxDuration,E(e)),o<1?(r=s=>{let a=s*o,m=a*e,u=ce(s,o),d=Math.exp(-m);return le-a/u*d},i=s=>{let m=s*o*e,u=o*o*s*s*e,d=Math.exp(-m),g=ce(s*s,o);return(-r(s)+le>0?-1:1)*-u*d/g}):(r=s=>{let a=Math.exp(-s*e),m=s*e+1;return-le+a*m},i=s=>{let a=Math.exp(-s*e),m=-s*(e*e);return a*m});let n=5/e,c=lt(r,i,n),x=c*c;return{stiffness:x,damping:o*2*Math.sqrt(x),duration:V(e)}}var ue=(e,t)=>(t?e>=0:e>0)&&e<1/0;function fe(e,t){if(ue(e,t))return e}function ct(e){let t=fe(e.stiffness),r=fe(e.damping,!0),i=fe(e.mass),o={...e,stiffness:t??h.stiffness,damping:r??h.damping,mass:i??h.mass,isResolvedFromDuration:!1,isTimeDefined:(t??r??i)===void 0&&(e.duration!==void 0||e.bounce!==void 0)};if(o.isTimeDefined){if(e.visualDuration){let n=2*Math.PI/(e.visualDuration*1.2);o.stiffness=n*n,o.damping=2*F(.05,1,1-(e.bounce||0))*Math.sqrt(o.stiffness)}else Object.assign(o,ft(o)),o.isResolvedFromDuration=!0;(!ue(o.stiffness)||!ue(o.damping,!0))&&(o.stiffness=h.stiffness,o.damping=h.damping)}return o}function L(e=h.visualDuration,t=h.bounce){let r=typeof e!="object"?{visualDuration:e,keyframes:[0,1],bounce:t}:e,i=r.keyframes[0],o=r.keyframes[r.keyframes.length-1],n={done:!1,value:i},{stiffness:c,damping:x,mass:s,duration:a,isResolvedFromDuration:m,isTimeDefined:u}=ct({...r}),d=f=>u?0:-E(f),g=x/(2*Math.sqrt(c*s)),S=E(Math.sqrt(c/s)),v=g*S,l={target:o,delta:o-i,velocity:d(r.velocity||0)||0,restSpeed:0,restDelta:0},re=()=>{let f=Math.abs(l.delta)<5;l.restSpeed=r.restSpeed||(f?h.restSpeed.granular:h.restSpeed.default),l.restDelta=r.restDelta||(f?h.restDelta.granular:h.restDelta.default)};re();let B,T,y;if(g<1){let f=ce(S,g),p={A:0,sinC:0,cosC:0,t:-1,env:0,sin:0,cos:0};y=()=>{p.A=(l.velocity+v*l.delta)/f,p.sinC=v*p.A+l.delta*f,p.cosC=v*l.delta-p.A*f};let M=b=>{b!==p.t&&(p.t=b,p.env=Math.exp(-v*b),p.sin=Math.sin(f*b),p.cos=Math.cos(f*b))};B=b=>(M(b),l.target-p.env*(p.A*p.sin+l.delta*p.cos)),T=b=>(M(b),p.env*(p.sinC*p.sin+p.cosC*p.cos))}else if(g===1){B=p=>l.target-Math.exp(-S*p)*(l.delta+(l.velocity+S*l.delta)*p);let f={C:0};y=()=>{f.C=l.velocity+S*l.delta},T=p=>Math.exp(-S*p)*(S*f.C*p-l.velocity)}else{let f=S*Math.sqrt(g*g-1);B=M=>{let b=Math.exp(-v*M),C=Math.min(f*M,300);return l.target-b*((l.velocity+v*l.delta)*Math.sinh(C)+f*l.delta*Math.cosh(C))/f};let p={P:0,sinh:0,cosh:0};y=()=>{p.P=(l.velocity+v*l.delta)/f,p.sinh=v*p.P-l.delta*f,p.cosh=v*l.delta-p.P*f},T=M=>{let b=Math.exp(-v*M),C=Math.min(f*M,300);return b*(p.sinh*Math.sinh(C)+p.cosh*Math.cosh(C))}}y();let _=m&&a||null,w={calculatedDuration:_,retarget:(f,p)=>{l.target=f[f.length-1],l.delta=l.target-f[0],l.velocity=d(p),r.restSpeed&&r.restDelta||re(),w.calculatedDuration=_,n.done=!1,y()},velocity:f=>V(T(f)),next:f=>{let p=B(f);if(m)n.done=f>=a;else{let M=V(T(f));n.done=Math.abs(M)<=l.restSpeed&&Math.abs(l.target-p)<=l.restDelta}return n.value=n.done?l.target:p,n},toString:()=>{let f=Math.min(Z(w),2e4),p=U(M=>w.next(f*M).value,f,30);return f+"ms "+p},toTransition:()=>{}};return w}L.applyToOptions=e=>{let t=Re(e,100,L);return e.ease=t.ease,e.duration=V(t.duration),e.type="keyframes",e};var ut=e=>e!==null;function ke(e,{repeat:t,repeatType:r="loop"},i,o=1){let n=e.filter(ut),x=o<0||t&&r!=="loop"&&t%2===1?0:n.length-1;return!x||i===void 0?n[x]:i}function dt(e,t){return{kind:e,animation:t,timestamp:me.now(),frameTimestamp:O.timestamp,frameIsProcessing:O.isProcessing}}function Ge(e,t,r){let i=globalThis.__MOTION_INSPECT__;if(i)try{i({...dt("animation-start",e),options:r?{...t,...r}:t})}catch{}}var J=class{constructor(){this.isResolved=!1}get finished(){return this._finished||(this._finished=this.isResolved?Promise.resolve():new Promise(t=>{this._resolve=t})),this._finished}updateFinished(){this._finished=this._resolve=void 0,this.isResolved=!1}notifyFinished(){this.isResolved=!0,this._resolve?.()}then(t,r){return this.finished.then(t,r)}};function de(e){for(let t=1;t<e.length;t++)e[t]??(e[t]=e[t-1])}var X=e=>e.startsWith("--");function Ne(e,t,r){X(t)?e.style.setProperty(t,r):e.style[t]=r}var Le={};function Q(e,t){let r=ne(e);return()=>Le[t]??r()}var We=Q(()=>window.ScrollTimeline!==void 0,"scrollTimeline");var Y=Q(()=>{try{document.createElement("div").animate({opacity:0},{easing:"linear(0, 1)"})}catch{return!1}return!0},"linearEasing");var P=([e,t,r,i])=>`cubic-bezier(${e}, ${t}, ${r}, ${i})`;var xe={linear:"linear",ease:"ease",easeIn:"ease-in",easeOut:"ease-out",easeInOut:"ease-in-out",circIn:P([0,.65,.55,1]),circOut:P([.55,0,1,.45]),backIn:P([.31,.01,.66,-.59]),backOut:P([.33,1.53,.69,.99])};function ge(e,t){if(e)return typeof e=="function"?Y()?U(e,t):"ease-out":G(e)?P(e):Array.isArray(e)?e.map(r=>ge(r,t)||xe.easeOut):xe[e]}function ze(e,t,r,{delay:i=0,duration:o=300,repeat:n=0,repeatType:c="loop",ease:x="easeOut",times:s}={},a=void 0){let m={[t]:r};s&&(m.offset=s);let u=ge(x,o);Array.isArray(u)&&(m.easing=u);let d={delay:i,duration:o,easing:Array.isArray(u)?"linear":u,fill:"both",iterations:n+1,direction:c==="reverse"?"alternate":"normal"};return a&&(d.pseudoElement=a),e.animate(m,d)}function Ke(e){return typeof e=="function"&&"applyToOptions"in e}function _e({type:e,...t}){return Ke(e)&&Y()?e.applyToOptions(t):(t.duration??(t.duration=300),t.ease??(t.ease="easeOut"),t)}var W=class extends J{constructor(t){if(super(),this.finishedTime=null,this.isStopped=!1,this.manualStartTime=null,!t)return;let{element:r,name:i,keyframes:o,pseudoElement:n,allowFlatten:c=!1,finalKeyframe:x,onComplete:s}=t;this.isPseudoElement=!!n,this.allowFlatten=c,this.options=t,A(typeof t.type!="string",`Mini animate() doesn't support "type" as a string.`,"mini-spring");let a=_e(t);this.animation=ze(r,i,o,a,n),a.autoplay===!1&&this.animation.pause(),this.animation.onfinish=()=>{if(this.finishedTime=this.time,!n){let m=ke(o,this.options,x,this.speed);this.updateMotionValue&&this.updateMotionValue(m),Ne(r,i,m),this.animation.cancel()}s?.(),this.notifyFinished()},Ge(this,t,a)}play(){this.isStopped||(this.manualStartTime=null,this.animation.play(),this.state==="finished"&&this.updateFinished())}pause(){this.animation.pause()}complete(){this.animation.finish?.()}cancel(){try{this.animation.cancel()}catch{}}stop(){if(this.isStopped)return;this.isStopped=!0;let{state:t}=this;t==="idle"||t==="finished"||(this.updateMotionValue?this.updateMotionValue():this.commitStyles(),this.isPseudoElement||this.cancel())}commitStyles(){let t=this.options?.element;!this.isPseudoElement&&t?.isConnected&&this.animation.commitStyles?.()}get duration(){let t=this.animation.effect?.getComputedTiming?.().duration||0;return E(Number(t))}get iterationDuration(){let{delay:t=0}=this.options||{};return this.duration+E(t)}get time(){return E(Number(this.animation.currentTime)||0)}set time(t){let r=this.finishedTime!==null;this.manualStartTime=null,this.finishedTime=null,this.animation.currentTime=V(t),r&&this.animation.pause()}get speed(){return this.animation.playbackRate}set speed(t){t<0&&(this.finishedTime=null),this.animation.playbackRate=t}get state(){return this.finishedTime!==null?"finished":this.animation.playState}get startTime(){return this.manualStartTime??Number(this.animation.startTime)}set startTime(t){this.manualStartTime=this.animation.startTime=t}attachTimeline({timeline:t,rangeStart:r,rangeEnd:i,observe:o}){return this.allowFlatten&&this.animation.effect?.updateTiming({easing:"linear"}),this.animation.onfinish=null,t&&We()?(this.animation.timeline=t,r&&(this.animation.rangeStart=r),i&&(this.animation.rangeEnd=i),D):o(this)}};var ee=class{constructor(t){this.stop=()=>this.runAll("stop"),this.animations=t.filter(Boolean)}get finished(){return Promise.all(this.animations.map(t=>t.finished))}getAll(t){return this.animations[0][t]}setAll(t,r){for(let i=0;i<this.animations.length;i++)this.animations[i][t]=r}attachTimeline(t){let r=this.animations.map(i=>i.attachTimeline(t));return()=>{r.forEach((i,o)=>{i&&i(),this.animations[o].stop()})}}get time(){return this.getAll("time")}set time(t){this.setAll("time",t)}get speed(){return this.getAll("speed")}set speed(t){this.setAll("speed",t)}get state(){return this.getAll("state")}get startTime(){return this.getAll("startTime")}get duration(){return qe(this.animations,"duration")}get iterationDuration(){return qe(this.animations,"iterationDuration")}runAll(t){this.animations.forEach(r=>r[t]())}play(){this.runAll("play")}pause(){this.runAll("pause")}cancel(){this.runAll("cancel")}complete(){this.runAll("complete")}};function qe(e,t){let r=0;for(let i=0;i<e.length;i++){let o=e[i][t];o!==null&&o>r&&(r=o)}return r}var z=class extends ee{then(t,r){return this.finished.finally(t).then(()=>{})}};var je=new WeakMap,he=(e,t="")=>`${e}:${t}`;function ye(e){let t=je.get(e);return t||(t=new Map,je.set(e,t)),t}function $e(e,t){if(e?.inherit&&t){let{inherit:r,...i}=e;return{...t,...i}}return e}function ve(e,t){let r=e?.[t]??e?.default??e;return r!==e?$e(r,e):r}var He=["borderTopLeftRadius","borderTopRightRadius","borderBottomRightRadius","borderBottomLeftRadius"];var Ue=new Set(["borderWidth","borderTopWidth","borderRightWidth","borderBottomWidth","borderLeftWidth","borderRadius",...He,"width","maxWidth","height","maxHeight","top","right","bottom","left","inset","insetBlock","insetBlockStart","insetBlockEnd","insetInline","insetInlineStart","insetInlineEnd","padding","paddingTop","paddingRight","paddingBottom","paddingLeft","paddingBlock","paddingBlockStart","paddingBlockEnd","paddingInline","paddingInlineStart","paddingInlineEnd","margin","marginTop","marginRight","marginBottom","marginLeft","marginBlock","marginBlockStart","marginBlockEnd","marginInline","marginInlineStart","marginInlineEnd","fontSize","backgroundPositionX","backgroundPositionY"]);function Te(e,t){for(let r=0;r<e.length;r++)typeof e[r]=="number"&&Ue.has(t)&&(e[r]=e[r]+"px")}function K(e,t,r){if(e==null)return[];if(e instanceof EventTarget)return[e];if(typeof e=="string"){let i=document;t&&(i=t.current);let o=r?.[e]??i.querySelectorAll(e);return o?Array.from(o):[]}return Array.from(e).filter(i=>i!=null)}function te(e,t){let r=window.getComputedStyle(e);return X(t)?r.getPropertyValue(t):r[t]}function Ze(e,t){if(e==="first")return 0;{let r=t-1;return e==="last"?r:r/2}}function Se(e=.1,{startDelay:t=0,from:r=0,ease:i}={}){return(o,n)=>{let c=typeof r=="number"?r:Ze(r,n),x=Math.abs(c-o),s=e*x;if(i){let a=n*e;s=se(i)(s/a)*a}return t+s}}function Je(e,t,r,i){if(e==null)return[];let o=K(e,i),n=o.length;A(!!n,"No valid elements provided.","no-valid-elements");let c=[];for(let s=0;s<n;s++){let a=o[s],m={...r};typeof m.delay=="function"&&(m.delay=m.delay(s,n));for(let u in t){let d=t[u];Array.isArray(d)||(d=[d]);let g={...ve(m,u)};g.duration&&(g.duration=V(g.duration)),g.delay&&(g.delay=V(g.delay));let S=ye(a),v=he(u,g.pseudoElement||""),l=S.get(v);l&&l.stop(),c.push({map:S,key:v,unresolvedKeyframes:d,options:{...g,element:a,name:u,allowFlatten:!m.type&&!m.ease}})}}for(let s=0;s<c.length;s++){let{unresolvedKeyframes:a,options:m}=c[s],{element:u,name:d,pseudoElement:g}=m;!g&&a[0]===null&&(a[0]=te(u,d)),de(a),Te(a,d),!g&&a.length<2&&a.unshift(te(u,d)),m.keyframes=a}let x=[];for(let s=0;s<c.length;s++){let{map:a,key:m,options:u}=c[s],d=new W(u);a.set(m,d),d.finished.finally(()=>a.delete(m)),x.push(d)}return x}var xt=e=>{function t(r,i,o){return new z(Je(r,i,o,e))}return t},be=xt();var gt={some:0,all:1};function Me(e,t,{root:r,margin:i,amount:o="some"}={}){let n=K(e),c=new WeakMap,x=a=>{a.forEach(m=>{let u=c.get(m.target);if(m.isIntersecting!==!!u)if(m.isIntersecting){let d=t(m.target,m);typeof d=="function"?c.set(m.target,d):s.unobserve(m.target)}else typeof u=="function"&&(u(m),c.delete(m.target))})},s=new IntersectionObserver(x,{root:r,rootMargin:i,threshold:typeof o=="number"?o:gt[o]});return n.forEach(a=>s.observe(a)),()=>s.disconnect()}return rt(ht);})();
+
 /* uFuzzy v1.0.19 · https://github.com/leeoniya/uFuzzy · ricerca tollerante ai refusi (8,5 KB, nessuna dipendenza).
    Copia non modificata di dist/uFuzzy.iife.min.js. Licenza MIT, qui sotto per intero come richiede la licenza.
 
@@ -145,6 +200,162 @@ const fuzzy = (() => {
       return ranges && ranges.length ? uFuzzy.highlight(t, ranges, (part, hit) => (hit ? `<mark>${esc(part)}</mark>` : esc(part))) : esc(t);
     },
   };
+})();
+
+/* Movimento con Motion (04-motion.js): molle fisiche sulla Web Animations API del browser. Ogni animazione è
+   interrompibile (se ne parte un'altra riprende da dov'è) e usa solo transform e opacity, quindi gira fuori dal
+   thread principale anche mentre la pagina carica. Con «riduci movimento» non parte niente: le pagine restano ferme
+   e ogni stato arriva subito. Senza Web Animations API (browser vecchi) idem: il sito funziona uguale. */
+const motion = (() => {
+  const M = typeof Motion === "object" && Motion ? Motion : null;
+  const can = !!M && typeof Element.prototype.animate === "function";
+  const on = can && !reduce;
+  /* Con «riduci movimento» niente spostamenti né molle: restano solo dissolvenze brevi (0,2 s) dove aiutano a capire
+     cosa è cambiato (dossier che si apre, elenco filtrato). Niente contenuti nascosti in attesa di comparire. */
+  const calm = can && reduce;
+  if (on) document.documentElement.classList.add("mo");
+  const spring = (visualDuration, bounce = 0) => (on ? { type: M.spring, visualDuration, bounce } : {});
+  const SNAPPY = () => spring(0.32, 0), SOFT = () => spring(0.46, 0.14), POP = () => spring(0.34, 0.42);
+
+  /* Animazione sicura: niente se il movimento è ridotto o l'elemento non c'è; mai un errore che rompa la pagina.
+     Motion a fine corsa scrive i valori finali nello style dell'elemento: qui si tolgono (sono gli stessi del CSS),
+     altrimenti un transform «none» in linea blocca per sempre :hover, :active e gli stati del CSS. keep = li lascia. */
+  const list = (el) => (el instanceof Element ? [el] : Array.from(el || []));
+  function go(el, keyframes, options, keep = false) {
+    const els = list(el);
+    if ((!on && !calm) || !els.length) return null;
+    if (calm) {
+      if (!("opacity" in keyframes)) return null;
+      keyframes = { opacity: keyframes.opacity };
+      options = { duration: 0.2, ease: "easeOut" };
+    }
+    try {
+      const a = M.animate(els, keyframes, options);
+      if (!keep) a.finished.then(() => els.forEach((n) => { for (const k in keyframes) n.style[k] = ""; }), () => {});
+      return a;
+    } catch { return null; }
+  }
+  /* ferma subito le animazioni in corso e toglie gli stili lasciati in linea (riapertura durante una chiusura…) */
+  function reset(...els) {
+    els.flat().filter(Boolean).forEach((n) => { n.getAnimations().forEach((a) => a.cancel()); n.style.opacity = ""; n.style.transform = ""; });
+  }
+
+  /* — ingresso della prima pagina: apertura, poi le schede a cascata; il resto entra quando arriva nello schermo — */
+  function entrance() {
+    if (!on) return false;
+    const lead = $(".lead");
+    if (lead) {
+      const parts = $$(".lead__text > *", lead);
+      go(parts, { opacity: [0, 1], transform: ["translateY(14px)", "none"] }, { ...SOFT(), delay: M.stagger(0.05) });
+      const planet = $(".planet", lead);
+      if (planet) go(planet, { opacity: [0, 1], transform: ["scale(.9) rotate(-8deg)", "none"] }, { ...spring(0.7, 0.2), delay: 0.08 });
+      const moons = $$(".moon", lead);
+      if (moons.length) go(moons, { opacity: [0, 1] }, { duration: 0.35, delay: M.stagger(0.07, { startDelay: 0.35 }) });
+    }
+    const pageHead = $$(".page-title, .page-sub, .page-meta, .chips");
+    go(pageHead, { opacity: [0, 1], transform: ["translateY(12px)", "none"] }, { ...SOFT(), delay: M.stagger(0.05) });
+    /* gruppi che entrano insieme quando compaiono: le schede in cascata, i blocchi in blocco */
+    const groups = [
+      [".cards", ":scope > .card"], [".logbook", ":scope > .log"], [".rows--grid", ":scope > .row"],
+      [".follow__list", ":scope > .follow__item"], [".resume__list", ":scope > .resume__item"],
+    ];
+    /* Si nasconde solo ciò che sta sotto lo schermo e si mostra quando ci arriva. Se l'osservatore non scatta (fondo
+       della pagina, stampa, salto con un link) ci pensano scrollend, il fondo pagina e la stampa: mai un buco. */
+    const hidden = new Set();
+    const below = (el) => el.getBoundingClientRect().top > innerHeight * 0.92;
+    const reveal = (els, kf, opts) => { els.forEach((x) => { hidden.delete(x); x.style.opacity = ""; }); go(els, kf, opts); };
+    for (const [box, kids] of groups) {
+      $$(box).forEach((g) => {
+        const items = $$(kids, g).filter((x) => !x.hidden);
+        if (!items.length || !below(g)) return;
+        items.forEach((x) => { x.style.opacity = "0"; hidden.add(x); });
+        M.inView(g, () => {
+          reveal(items.slice(0, 12), { opacity: [0, 1], transform: ["translateY(18px) scale(.985)", "none"] }, { ...SOFT(), delay: M.stagger(0.045) });
+          items.slice(12).forEach((x) => { hidden.delete(x); x.style.opacity = ""; });
+        }, { margin: "0px 0px -6% 0px" });
+      });
+    }
+    $$(".sky, .block, .front__aside .clips, .hist").forEach((el) => {
+      if (!below(el)) return;
+      el.style.opacity = "0"; hidden.add(el);
+      M.inView(el, () => reveal([el], { opacity: [0, 1], transform: ["translateY(22px)", "none"] }, SOFT()), { margin: "0px 0px -4% 0px" });
+    });
+    const rescue = () => hidden.forEach((x) => {
+      const r = x.getBoundingClientRect();
+      if (r.top < innerHeight && r.bottom > 0) { hidden.delete(x); x.style.opacity = ""; }
+    });
+    addEventListener("scrollend", rescue, { passive: true });
+    addEventListener("beforeprint", () => hidden.forEach((x) => { x.style.opacity = ""; }));
+    return true;
+  }
+
+  /* — il dossier: entra con una molla da destra (o dal basso, sul telefono), esce veloce — */
+  const narrow = () => matchMedia("(max-width: 640px)").matches;
+  const EASE_OUT = [0.23, 1, 0.32, 1];                 // ease-out forte: parte subito, si posa piano
+  function sheetIn(sheet, scrim) {
+    if ((!on && !calm) || !sheet) return;
+    /* Riaperto mentre usciva: Motion ferma l'uscita e (con null) riparte dal punto in cui era, senza salti. */
+    const back = sheet.getAnimations().length > 0;
+    go(scrim, { opacity: [back ? null : 0, 1] }, { duration: 0.22, ease: EASE_OUT });
+    go(sheet, { transform: [back ? null : narrow() ? "translateY(40px)" : "translateX(48px)", "none"], opacity: [back ? null : 0.6, 1] }, SNAPPY());
+    const body = $$(".reader__body > *", sheet).slice(0, 6);
+    if (body.length && !back) go(body, { opacity: [0, 1], transform: ["translateY(10px)", "none"] }, { ...SOFT(), delay: M.stagger(0.035, { startDelay: 0.06 }) });
+  }
+  function sheetOut(sheet, scrim) {
+    if (!on) return Promise.resolve();
+    /* uscita più corta dell'entrata (chi chiude ha già deciso); gli stili restano finché il pannello non è nascosto */
+    const a = go(sheet, { transform: narrow() ? "translateY(28px)" : "translateX(36px)", opacity: 0 }, { duration: 0.2, ease: EASE_OUT }, true);
+    go(scrim, { opacity: 0 }, { duration: 0.2, ease: EASE_OUT }, true);
+    return a ? a.finished.catch(() => {}) : Promise.resolve();
+  }
+  /* passo alla notizia dopo (d = 1) o prima (d = -1): il contenuto scivola nel verso del gesto. Mai da opacità 0:
+     il vecchio contenuto sparisce subito, quindi il nuovo parte già visibile e il pannello non resta mai vuoto. */
+  function step(scroller, d) {
+    if (!on || !scroller) return;
+    const photo = $(".reader__photo", scroller);
+    if (photo) go(photo, { opacity: [0.55, 1], transform: ["scale(1.015)", "none"] }, SNAPPY());
+    const kids = $$(".reader__body > *", scroller).slice(0, 5);
+    go(kids, { opacity: [0.35, 1], transform: [`translateX(${d * 22}px)`, "none"] }, { ...SNAPPY(), delay: M.stagger(0.025) });
+  }
+
+  /* — la ricerca è la tavolozza dei comandi (/ o ⌘K): dalla tastiera si apre e si chiude senza animazione, come
+       Raycast; toccando la lente entra con un colpo di molla corto. I risultati mentre si scrive non si animano mai. — */
+  function finderIn(box) { go(box, { opacity: [0, 1], transform: ["translateY(-8px) scale(.985)", "none"] }, spring(0.2, 0)); }
+
+  /* — piccoli momenti: la stella scelta nel cielo, il «segui», l'anteprima, le schede che si riordinano — */
+  function pop(el) { go(el, { transform: ["scale(1)", "scale(1.75)", "scale(1.55)"] }, POP()); }
+  function peek(el) {
+    const kids = el && $$(":scope > div > *, :scope > .btn", el);
+    go(kids, { opacity: [0.2, 1], transform: ["translateY(6px)", "none"] }, { ...SNAPPY(), delay: M.stagger(0.025) });
+  }
+  function fresh(el) { go(el, { opacity: [0, 1], transform: ["translate(-50%, 24px) scale(.95)", "translate(-50%, 0) scale(1)"] }, POP()); }
+  /* elenco filtrato (chip delle sezioni): le schede rimaste si ricompongono in cascata */
+  function filtered(items) {
+    const shown = items.filter((n) => !n.hidden);
+    /* Il filtro rimescola le schede: nessuna deve restare nascosta in attesa dell'ingresso (che guardava le posizioni di
+       prima) né a metà di un'animazione del filtro precedente. */
+    items.forEach((n) => { n.getAnimations().forEach((a) => a.cancel()); n.style.opacity = ""; n.style.transform = ""; });
+    const first = shown.filter((n) => n.getBoundingClientRect().top < innerHeight * 1.2).slice(0, 12);
+    go(first, { opacity: [0, 1], transform: ["translateY(10px) scale(.985)", "none"] }, { ...SNAPPY(), delay: M.stagger(0.02) });
+  }
+  function box(el) { go(el, { opacity: [0, 1], transform: ["translateY(10px) scale(.99)", "none"] }, SOFT()); }
+
+  /* — il cielo si accende quando arriva nello schermo: prima le notizie più recenti (a destra, dove si apre la mappa),
+       poi a ritroso nel tempo. Si vede una volta sola per visita: è l'unico momento «spettacolare» del sito. — */
+  function stars(els, stage) {
+    if (!on || !els.length) return;
+    const target = els.map((s) => { const cs = getComputedStyle(s); return [cs.opacity, cs.transform === "none" ? "none" : cs.transform]; });
+    els.forEach((s) => { s.style.opacity = "0"; });
+    const gap = Math.min(0.012, 0.9 / els.length), n = els.length;
+    const light = () => els.forEach((s, i) => go(s, { opacity: [0, target[i][0]], transform: ["scale(.3)", target[i][1]] },
+      { ...spring(0.5, 0.3), delay: (n - 1 - i) * gap }));
+    const r = stage.getBoundingClientRect();
+    if (r.top < innerHeight && r.bottom > 0) light();
+    else M.inView(stage, () => { light(); }, { margin: "0px 0px -10% 0px" });
+    addEventListener("beforeprint", () => els.forEach((s) => { s.style.opacity = ""; }), { once: true });
+  }
+
+  return { on, entrance, sheetIn, sheetOut, step, finderIn, pop, peek, fresh, filtered, box, reset, stars };
 })();
 
 /* La tua cronostoria: cosa hai aperto e quando. Solo localStorage, nessun server. */
@@ -417,8 +628,8 @@ const follow = (() => {
       toggle(t.dataset.followToggle);
       return;
     }
-    if (e.target.closest("[data-follow-edit]")) { editing = true; paintHome(); const c = $("[data-follow] .chip"); if (c) c.focus(); return; }
-    if (e.target.closest("[data-follow-done]")) { editing = false; paintHome(); const b = $("[data-follow] .follow__link, [data-follow] a"); if (b) b.focus(); return; }
+    if (e.target.closest("[data-follow-edit]")) { editing = true; paintHome(); motion.box($("[data-follow]")); const c = $("[data-follow] .chip"); if (c) c.focus(); return; }
+    if (e.target.closest("[data-follow-done]")) { editing = false; paintHome(); motion.box($("[data-follow]")); const b = $("[data-follow] .follow__link, [data-follow] a"); if (b) b.focus(); return; }
     if (e.target.closest("[data-follow-later]")) { s.later = Date.now(); save(); return; }
     if (e.target.closest("[data-follow-all]")) { const ids = stories().map((x) => x.id); if (ids.length) reader.open(ids[0], ids); return; }
     const a = e.target.closest("[data-follow] a[data-story]");
@@ -488,9 +699,9 @@ const reader = (() => {
     });
     el.addEventListener("keydown", (e) => {
       if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); close(); return; }
-      if (e.key === "ArrowLeft" && !e.altKey && !e.metaKey) { e.preventDefault(); step(-1); return; }
-      if (e.key === "ArrowRight" && !e.altKey && !e.metaKey) { e.preventDefault(); step(1); return; }
-      if ((e.key === "j" || e.key === "k") && !e.altKey && !e.metaKey && !e.ctrlKey) { e.preventDefault(); step(e.key === "j" ? 1 : -1); return; }
+      if (e.key === "ArrowLeft" && !e.altKey && !e.metaKey) { e.preventDefault(); step(-1, true); return; }
+      if (e.key === "ArrowRight" && !e.altKey && !e.metaKey) { e.preventDefault(); step(1, true); return; }
+      if ((e.key === "j" || e.key === "k") && !e.altKey && !e.metaKey && !e.ctrlKey) { e.preventDefault(); step(e.key === "j" ? 1 : -1, true); return; }
       trapTab(sheet, e);
     });
     /* col dito: un colpo laterale netto passa alla notizia dopo o prima (il bordo sinistro resta al gesto «indietro» di iOS) */
@@ -639,27 +850,41 @@ const reader = (() => {
     if (first) {
       lastFocus = document.activeElement && document.activeElement !== document.body ? document.activeElement : null;
       isOpen = true;
-      const openIt = () => {
+      const openIt = (spring) => {
         if (!isOpen) return;                          // chiuso prima che la transizione partisse
+        closing++;                                    // un'uscita ancora in corso non deve più chiudere niente
+        el.classList.remove("is-leaving");
+        if (!spring) motion.reset(sheet, $(".reader__scrim", el));
         paint();
         modal.lock();
         el.classList.add("is-open");
+        if (spring) motion.sheetIn(sheet, $(".reader__scrim", el));
         sheet.focus({ preventScroll: true });
       };
-      if (fliesFrom(from)) morph(from, openIt); else openIt();
+      if (fliesFrom(from)) morph(from, () => openIt(false)); else openIt(true);
       requestAnimationFrame(() => { if (isOpen && !el.contains(document.activeElement)) sheet.focus({ preventScroll: true }); });
-    } else if (canVT) withVT(paint, "vt-step");
+    } else if (motion.on) { const d = step_dir; paint(); if (d) motion.step(scroller, d); }   // d = 0: dalla tastiera, nessuna animazione
+    else if (canVT) withVT(paint, "vt-step");
     else paint();
     document.title = `${s.title} · Sportwire`;
     store.open(s, "d");
     return true;
   }
 
+  let closing = 0;
   function hide() {
     if (!isOpen) return;
     stopListen();
     isOpen = false;
-    el.classList.remove("is-open");
+    const my = ++closing;
+    if (motion.on) {                                    // esce veloce con Motion, poi si chiude davvero
+      el.classList.add("is-leaving");
+      motion.sheetOut(sheet, $(".reader__scrim", el)).then(() => {
+        if (my !== closing || isOpen) return;
+        el.classList.remove("is-leaving", "is-open");  // prima si nasconde (subito, senza transizioni)…
+        motion.reset(sheet, $(".reader__scrim", el));  // …poi si tolgono gli stili dell'uscita
+      });
+    } else el.classList.remove("is-open");
     modal.unlock();
     current = null;
     document.title = document.body.dataset.title || document.title;
@@ -686,12 +911,15 @@ const reader = (() => {
     if (history.state && history.state.sw && parse()) history.back();
     else { clean(); hide(); }
   }
-  function step(d) {
+  let step_dir = 0;
+  function step(d, byKey) {
     if (!current) return;
     const i = list.indexOf(current.id);
     const n = list[i + d];
     if (i < 0 || !n) return;
+    step_dir = byKey ? 0 : d;                           // frecce e j/k si ripetono molto: niente animazione
     if (show(n)) history.replaceState({ sw: 1 }, "", hashFor(n));
+    step_dir = 0;
   }
 
   const sync = () => {
@@ -844,13 +1072,14 @@ const finder = (() => {
     reader.open(id, ids.length > 1 ? ids : null);
   }
 
-  function openIt() {
+  function openIt(byKey) {
     if (isOpen) return;
     if (!el) build();
     lastFocus = document.activeElement;
     isOpen = true;
     modal.lock();
     el.classList.add("is-open");
+    if (!byKey) motion.finderIn($(".finder__box", el));
     input.value = "";
     run("");
     requestAnimationFrame(() => input.focus());
@@ -1049,9 +1278,10 @@ const sky = (() => {
   }
 
   function select(r, byKey) {
+    const changed = r !== selected;
     selected = r;
     focusOn(r);
-    if (r) showPeek(r.s);
+    if (r) { showPeek(r.s); if (changed && !byKey) { motion.pop(r.el); motion.peek(peek); } }
     if (r && byKey) { stars.forEach((x) => { x.el.tabIndex = x === r ? 0 : -1; }); r.el.focus({ preventScroll: false }); }
   }
 
@@ -1076,6 +1306,7 @@ const sky = (() => {
     const lead = build(NEWS.data);
     root.hidden = false;
     drawn = true;
+    motion.stars(stars.slice().sort((a, b) => a.x - b.x).map((r) => r.el), stage);
     scrollToNow(lead);
     if (lead) { selected = lead; focusOn(lead, false); showPeek(lead.s); }
 
@@ -1320,9 +1551,10 @@ const history_ = (() => {
 (() => {
   const home = document.body.dataset.page === "home";
 
-  /* 1. ingresso: solo dissolvenza, un solo observer */
+  /* 1. ingresso: con Motion l'apertura entra a cascata e le schede con una molla quando arrivano nello schermo
+        (08-motion-ui.js); senza Motion resta la dissolvenza semplice qui sotto. */
   const targets = $$(".lead, .resume, .sky, .cards > .card, .front__aside, .block, .rows--grid, .hist");
-  if (!reduce && "IntersectionObserver" in window) {
+  if (!motion.entrance() && !reduce && "IntersectionObserver" in window) {
     const io = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -6% 0px", threshold: 0 });   // soglia 0: un elemento altissimo (cronologia lunga) non potrebbe mai superare una percentuale
     targets.forEach((n) => { n.classList.add("reveal"); io.observe(n); });
   }
@@ -1347,11 +1579,12 @@ const history_ = (() => {
       const f = btn.dataset.filter;
       $$(".chip", chips).forEach((c) => c.setAttribute("aria-pressed", String(c === btn)));
       if (chips.scrollWidth > chips.clientWidth) chips.scrollTo({ left: btn.offsetLeft - chips.clientWidth / 2 + btn.offsetWidth / 2, behavior: reduce ? "auto" : "smooth" });
-      withVT(() => {
+      const apply = () => {
         let shown = 0;
         items.forEach((n) => { const on = f === "*" || (f === "__mine" ? n.classList.contains("is-mine") : n.dataset.k === f); n.hidden = !on; if (on) shown++; });
         if (empty) empty.hidden = shown > 0;
-      });
+      };
+      if (motion.on) { apply(); motion.filtered(items); } else withVT(apply);
     });
   }
 
@@ -1392,7 +1625,7 @@ const history_ = (() => {
     const typing = /^(INPUT|TEXTAREA|SELECT)$/.test((e.target.tagName || "")) || e.target.isContentEditable;
     if ((e.key === "k" && (e.metaKey || e.ctrlKey)) || (e.key === "/" && !typing && !e.metaKey && !e.ctrlKey)) {
       if (reader.isOpen()) return;
-      e.preventDefault(); finder.isOpen() ? finder.close() : finder.open();
+      e.preventDefault(); finder.isOpen() ? finder.close() : finder.open(true);
     }
   });
 
@@ -1421,7 +1654,7 @@ const history_ = (() => {
         b.innerHTML = '<span class="pulse" aria-hidden="true"></span>Nuova edizione · aggiorna';
         b.addEventListener("click", () => location.reload());
         document.body.append(b);
-        requestAnimationFrame(() => b.classList.add("is-in"));
+        requestAnimationFrame(() => { b.classList.add("is-in"); motion.fresh(b); });
       } catch { /* offline: la pagina resta valida */ }
     };
     setInterval(check, 300000);

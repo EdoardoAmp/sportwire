@@ -154,8 +154,8 @@ const follow = (() => {
       toggle(t.dataset.followToggle);
       return;
     }
-    if (e.target.closest("[data-follow-edit]")) { editing = true; paintHome(); const c = $("[data-follow] .chip"); if (c) c.focus(); return; }
-    if (e.target.closest("[data-follow-done]")) { editing = false; paintHome(); const b = $("[data-follow] .follow__link, [data-follow] a"); if (b) b.focus(); return; }
+    if (e.target.closest("[data-follow-edit]")) { editing = true; paintHome(); motion.box($("[data-follow]")); const c = $("[data-follow] .chip"); if (c) c.focus(); return; }
+    if (e.target.closest("[data-follow-done]")) { editing = false; paintHome(); motion.box($("[data-follow]")); const b = $("[data-follow] .follow__link, [data-follow] a"); if (b) b.focus(); return; }
     if (e.target.closest("[data-follow-later]")) { s.later = Date.now(); save(); return; }
     if (e.target.closest("[data-follow-all]")) { const ids = stories().map((x) => x.id); if (ids.length) reader.open(ids[0], ids); return; }
     const a = e.target.closest("[data-follow] a[data-story]");

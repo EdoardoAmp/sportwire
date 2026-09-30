@@ -10,6 +10,36 @@
   .js .reveal { opacity: 1; }
 }
 
+/* — Motion (08-motion-ui.js) —
+   Quando le animazioni le fa Motion (classe .mo sull'html), il CSS non deve animare le stesse cose una seconda volta:
+   dossier e ricerca si aprono e chiudono con le molle di Motion, le schede entrano con Motion. Senza .mo restano le
+   transizioni CSS di prima (browser senza Web Animations API o con «riduci movimento»). */
+.mo .reader, .mo .finder { transition: none; opacity: 1; }
+.mo .reader:not(.is-open) .reader__scrim, .mo .finder:not(.is-open) .finder__scrim { opacity: 0; }
+.mo .reader__sheet, .mo .reader.is-open .reader__sheet { transform: none; transition: none; }
+.mo .finder__box, .mo .finder.is-open .finder__box { transform: none; transition: none; }
+.mo .reader.is-leaving { visibility: visible; pointer-events: none; }
+.mo .fresh { transition: none; }
+.mo .sky__canvas .star { animation: none; }                                     /* le accende Motion (stars) */
+.mo .sky__canvas .star--live { animation: pulse 2.4s ease-out 1.4s infinite; }
+
+/* Passaggio del mouse e pressione con le molle di Motion (01-springs.css): la scheda si solleva con un filo di rimbalzo,
+   e torna giù morbida. Solo con un puntatore vero: sul telefono il tocco non lascia schede «sollevate». */
+@media (hover: hover) and (pointer: fine) {
+  .card { transition: background var(--t-mid) var(--ease), box-shadow var(--t-mid) var(--ease), transform var(--spring-quick); }
+  .card:hover { transform: translateY(-4px); }
+  .card__media img { transition: opacity .5s var(--ease), transform var(--spring); }
+  .card:hover .card__media img.is-loaded { transform: scale(1.045); }
+  .row, .follow__item, .resume__item, .mini a { transition: background var(--t-mid) var(--ease), transform var(--spring-quick); }
+  .row:hover, .follow__item:hover, .resume__item:hover { transform: translateY(-2px); }
+  .btn { transition: background var(--t-fast), box-shadow var(--t-mid), color var(--t-fast), transform var(--spring-quick); }
+  .btn--primary:hover { transform: translateY(-1px); }
+  .star { transition: transform var(--spring-quick), box-shadow var(--t-fast), opacity var(--t-mid), background var(--t-fast); }
+}
+/* pressione: cede in fretta (120ms), torna su con la molla della regola di base: asimmetrico, come un tasto vero */
+.card:active, .row:active, .follow__item:active, .resume__item:active { transform: scale(.985); transition: transform 120ms var(--ease-out); }
+:is(.btn, .chip, .tool, .hit):active { transform: scale(.97); transition: transform 120ms var(--ease-out); }
+
 /* Transizioni di vista (withVT in 00-core.js: partono solo se il browser le ha e il movimento non è ridotto).
    Un momento orchestrato: la foto della scheda vola nel dossier. Il resto è dissolvenza, mai scivolamenti. */
 ::view-transition-group(*) { animation-duration: 420ms; animation-timing-function: var(--ease); }
