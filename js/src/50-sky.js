@@ -207,7 +207,7 @@ const sky = (() => {
     const lead = build(NEWS.data);
     root.hidden = false;
     drawn = true;
-    motion.stars(stars.slice().sort((a, b) => a.x - b.x).map((r) => r.el), stage);
+    motion.stars(canvas, stage);
     scrollToNow(lead);
     if (lead) { selected = lead; focusOn(lead, false); showPeek(lead.s); }
 

@@ -51,10 +51,9 @@ const motion = (() => {
     const pageHead = $$(".page-title, .page-sub, .page-meta, .chips");
     go(pageHead, { opacity: [0, 1], transform: ["translateY(12px)", "none"] }, { ...SOFT(), delay: M.stagger(0.05) });
     /* gruppi che entrano insieme quando compaiono: le schede in cascata, i blocchi in blocco */
-    const groups = [
-      [".cards", ":scope > .card"], [".logbook", ":scope > .log"], [".rows--grid", ":scope > .row"],
-      [".follow__list", ":scope > .follow__item"], [".resume__list", ":scope > .resume__item"],
-    ];
+    /* Cascata solo per i gruppi piccoli di schede grandi; il registro (12 righe) e gli elenchi lunghi entrano in blocco:
+       una animazione invece di dodici, mentre la pagina sta scorrendo. */
+    const groups = [[".cards", ":scope > .card"], [".follow__list", ":scope > .follow__item"], [".resume__list", ":scope > .resume__item"]];
     /* Si nasconde solo ciò che sta sotto lo schermo e si mostra quando ci arriva. Se l'osservatore non scatta (fondo
        della pagina, stampa, salto con un link) ci pensano scrollend, il fondo pagina e la stampa: mai un buco. */
     const hidden = new Set();
@@ -63,25 +62,25 @@ const motion = (() => {
     for (const [box, kids] of groups) {
       $$(box).forEach((g) => {
         const items = $$(kids, g).filter((x) => !x.hidden);
-        if (!items.length || !below(g)) return;
+        if (!items.length || !below(g)) return;       // una sola misura per gruppo, al caricamento
         items.forEach((x) => { x.style.opacity = "0"; hidden.add(x); });
         M.inView(g, () => {
-          reveal(items.slice(0, 12), { opacity: [0, 1], transform: ["translateY(18px) scale(.985)", "none"] }, { ...SOFT(), delay: M.stagger(0.045) });
-          items.slice(12).forEach((x) => { hidden.delete(x); x.style.opacity = ""; });
+          reveal(items.slice(0, 6), { opacity: [0, 1], transform: ["translateY(16px)", "none"] }, { ...SOFT(), delay: M.stagger(0.04) });
+          items.slice(6).forEach((x) => { hidden.delete(x); x.style.opacity = ""; });
         }, { margin: "0px 0px -6% 0px" });
       });
     }
-    $$(".sky, .block, .front__aside .clips, .hist").forEach((el) => {
+    $$(".sky, .block, .front__aside, .hist").forEach((el) => {
       if (!below(el)) return;
       el.style.opacity = "0"; hidden.add(el);
       M.inView(el, () => reveal([el], { opacity: [0, 1], transform: ["translateY(22px)", "none"] }, SOFT()), { margin: "0px 0px -4% 0px" });
     });
-    const rescue = () => hidden.forEach((x) => {
-      const r = x.getBoundingClientRect();
-      if (r.top < innerHeight && r.bottom > 0) { hidden.delete(x); x.style.opacity = ""; }
-    });
-    addEventListener("scrollend", rescue, { passive: true });
-    addEventListener("beforeprint", () => hidden.forEach((x) => { x.style.opacity = ""; }));
+    /* Rete di sicurezza senza misure di layout: arrivati al piè di pagina (o in stampa) tutto ciò che è ancora nascosto
+       si mostra. inView usa IntersectionObserver, che il browser calcola fuori dal thread principale. */
+    const showAll = () => { hidden.forEach((x) => { x.style.opacity = ""; }); hidden.clear(); };
+    const foot = $(".foot");
+    if (foot) M.inView(foot, () => { showAll(); });
+    addEventListener("beforeprint", showAll);
     return true;
   }
 
@@ -136,19 +135,21 @@ const motion = (() => {
   }
   function box(el) { go(el, { opacity: [0, 1], transform: ["translateY(10px) scale(.99)", "none"] }, SOFT()); }
 
-  /* — il cielo si accende quando arriva nello schermo: prima le notizie più recenti (a destra, dove si apre la mappa),
-       poi a ritroso nel tempo. Si vede una volta sola per visita: è l'unico momento «spettacolare» del sito. — */
-  function stars(els, stage) {
-    if (!on || !els.length) return;
-    const target = els.map((s) => { const cs = getComputedStyle(s); return [cs.opacity, cs.transform === "none" ? "none" : cs.transform]; });
-    els.forEach((s) => { s.style.opacity = "0"; });
-    const gap = Math.min(0.012, 0.9 / els.length), n = els.length;
-    const light = () => els.forEach((s, i) => go(s, { opacity: [0, target[i][0]], transform: ["scale(.3)", target[i][1]] },
-      { ...spring(0.5, 0.3), delay: (n - 1 - i) * gap }));
+  /* — il cielo si accende quando arriva nello schermo: una tenda che si apre da destra (le notizie più recenti) verso
+       sinistra, a ritroso nel tempo. UNA sola animazione sul contenitore (clip-path, fatto dal compositore), non una per
+       stella: con 200 stelle animate una per una il browser ricalcolava lo stile di tutte a ogni fotogramma e lo
+       scorrimento della pagina andava a scatti. Si vede una volta sola per visita. — */
+  function stars(canvas, stage) {
+    if (!on || !canvas) return;
+    canvas.style.clipPath = "inset(0 0 0 100%)";
+    const light = () => {
+      canvas.style.clipPath = "";
+      go(canvas, { clipPath: ["inset(0 0 0 100%)", "inset(0 0 0 0%)"], opacity: [0.2, 1] }, { duration: 1.1, ease: [0.23, 1, 0.32, 1] });
+    };
     const r = stage.getBoundingClientRect();
     if (r.top < innerHeight && r.bottom > 0) light();
     else M.inView(stage, () => { light(); }, { margin: "0px 0px -10% 0px" });
-    addEventListener("beforeprint", () => els.forEach((s) => { s.style.opacity = ""; }), { once: true });
+    addEventListener("beforeprint", () => { canvas.style.clipPath = ""; }, { once: true });
   }
 
   return { on, entrance, sheetIn, sheetOut, step, finderIn, pop, peek, fresh, filtered, box, reset, stars };

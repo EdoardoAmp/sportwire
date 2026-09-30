@@ -243,9 +243,11 @@ def function_checks(browser) -> int:
         # tocco vicino a una stella isolata: deve scegliere quella (le stelle sono minuscole, il dito no)
         if mobile:
             spot = pg.evaluate("""() => {
-              const S = [...document.querySelectorAll('.star')].map((e) => { const q = e.getBoundingClientRect(); return { id: e.dataset.sid, x: q.left + q.width / 2, y: q.top + q.height / 2 }; });
               const st = document.querySelector('[data-sky-stage]'); st.scrollIntoView({ block: 'center', behavior: 'instant' });
-              for (const a of S) {
+              const S = [...document.querySelectorAll('.star')].map((e) => { const q = e.getBoundingClientRect(); return { id: e.dataset.sid, x: q.left + q.width / 2, y: q.top + q.height / 2 }; });
+              /* sotto i nomi delle corsie il tocco non vale (per scelta): si prova una stella nella parte scoperta */
+              const lab = document.querySelector('.sky__labels').getBoundingClientRect().right, R = st.getBoundingClientRect().right;
+              for (const a of S.filter((s) => s.x > lab + 24 && s.x < R - 24)) {
                 const near = Math.min(...S.filter((b) => b.id !== a.id).map((b) => Math.hypot(a.x - b.x, a.y - b.y)));
                 if (near > 44) return { id: a.id };
               }
