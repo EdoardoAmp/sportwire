@@ -525,9 +525,10 @@ def test_render_escapes_hostile_feed_content():
 
 
 def test_pages_use_the_static_brand_card_never_a_publisher_photo():
-    """og:image = scheda del sito (og/*.png, < 200 KB, 1200×630), mai una foto di un editore in hotlink."""
+    """og:image = scheda del sito (og/*.png, < 200 KB, 1200×630), mai una foto di un editore in hotlink.
+    Solo libreria standard: il workflow che pubblica il sito non ha Pillow (le dimensioni si leggono dall'intestazione PNG)."""
     import re
-    from PIL import Image
+    import struct
     pages = [f for f in os.listdir(ROOT) if f.endswith(".html")]
     assert pages
     site = build.SITE_URL
@@ -541,7 +542,10 @@ def test_pages_use_the_static_brand_card_never_a_publisher_photo():
     for name in ("index.png", "cronologia.png"):
         path = os.path.join(ROOT, "og", name)
         assert os.path.getsize(path) < 200_000, name
-        assert Image.open(path).size == (1200, 630), name
+        with open(path, "rb") as fh:
+            head = fh.read(24)
+        assert head[:8] == b"\x89PNG\r\n\x1a\n" and head[12:16] == b"IHDR", name
+        assert struct.unpack(">II", head[16:24]) == (1200, 630), name
 
 
 def test_home_brief_line_says_when_the_edition_was_made():
