@@ -78,6 +78,7 @@
   --scrim:     oklch(0.10 0.020 268 / 0.82);
   --veil:      oklch(1 0 0 / 0.05);
   --accent-line: oklch(0.80 0.155 68 / 0.22);   /* filo ambra attorno ai riquadri che contano (in breve, suggerimento) */
+  --bar:         oklch(0.205 0.026 268 / 0.96);  /* fondo della barra: quasi pieno, niente vetro sfocato */
 
   --f-display: 'Archivo Variable', 'Arial Narrow', Impact, system-ui, sans-serif;
   --f-text:    'Geist Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -196,7 +197,7 @@ ul, ol { padding: 0; list-style: none; }
 .bar::before { content: ""; position: absolute; z-index: -1; left: 0; right: 0; top: -14px; height: calc(var(--bar-h) + 34px); pointer-events: none;
   background: linear-gradient(180deg, oklch(0.155 0.024 268 / .94) 0%, oklch(0.155 0.024 268 / .75) 55%, oklch(0.155 0.024 268 / 0) 100%); }
 .pill { pointer-events: auto; display: flex; align-items: center; gap: 4px; max-width: 100%; padding: 6px; border-radius: var(--r-pill);
-  background: oklch(0.20 0.026 268 / .74); -webkit-backdrop-filter: blur(18px) saturate(1.35); backdrop-filter: blur(18px) saturate(1.35);
+  background: var(--bar);
   box-shadow: 0 14px 44px -14px oklch(0.04 0.02 268 / .9); }
 .brand { display: flex; align-items: center; justify-content: center; gap: .55rem; min-height: 44px; min-width: 44px; padding: 0 .95rem 0 .6rem; border-radius: var(--r-pill); font: 800 1.2rem/1 var(--f-display); font-stretch: 78%; letter-spacing: .01em; flex: none; }
 .brand__mark { color: var(--ink); }
